@@ -33,7 +33,7 @@ public class JDBCBean {
      */
     public JDBCBean() {
         try {
-            String driver = "org.mariadb.jdbc.driver";
+            String driver = "org.mariadb.jdbc.Driver";
             Class.forName(driver);
             String dbUrl = "jdbc:mariadb://localhost:3306/buchladen";
             conn = DriverManager.getConnection(dbUrl, "dba", "dba");
@@ -43,9 +43,7 @@ public class JDBCBean {
             this.getProductListFromJCDB();
         } catch (ClassNotFoundException | SQLException ex) {
             log.log(Level.SEVERE, null, ex);
-        }
-        
-       
+        }  
     }
 
     public void getProductListFromJCDB() {
