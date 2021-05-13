@@ -38,25 +38,25 @@ public final class JDBCLogin {
             Class.forName(driver);
             String dbUrl = "jdbc:mariadb://localhost:3306/buchladen";
             conn = DriverManager.getConnection(dbUrl, "dba", "dba");
-            log.info("JDBC-Verbindung hergestellt!");
-            println("JDBC Verbindung");
+            //log.info("JDBC-Verbindung hergestellt!");
+            //println("JDBC Verbindung");
             userList = new ArrayList<>();
             this.getuserListfromJDBC();
-            log.info("Nach Fkt aufruf");
-            println("Nach fkt println");
+            //log.info("Nach Fkt aufruf");
+            //println("Nach fkt println");
         } catch (ClassNotFoundException | SQLException ex) {
             log.log(Level.SEVERE, null, ex);
         }  
     }
 
     public void getuserListfromJDBC() {
-        log.info("Fkt getuserListJDBC");
+        //log.info("Fkt getuserListJDBC");
         try {
             String sql = "SELECT * FROM account";
             ResultSet rs = conn.createStatement().executeQuery(sql);
             
             while(rs.next()) {
-                log.info("Fülle Daten");
+                //log.info("Fülle Daten");
                 userList.add(new Login(
                     rs.getString("ACCName"),
                     rs.getString("ACCPWD")
