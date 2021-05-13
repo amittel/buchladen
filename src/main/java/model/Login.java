@@ -5,14 +5,11 @@
  */
 package model;
 
-import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 
 /**
  *
  * @author Arnulf
  */
-@Named(value = "login")
 public class Login {
 
     private String ACCName;
