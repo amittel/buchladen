@@ -5,11 +5,14 @@
  */
 package model;
 
+import javax.inject.Named;
+
 
 /**
  *
  * @author Arnulf
  */
+@Named(value = "Login")
 public class Login {
 
     private String ACCName;
@@ -24,13 +27,6 @@ public class Login {
      * Creates a new instance of Login
      */
     public Login() {
-    }
-
-    /**
-     * @return the ACCName
-     */
-    public String getACCName() {
-        return ACCName;
     }
 
     /**
@@ -52,6 +48,13 @@ public class Login {
      */
     public void setACCPWD(String ACCPWD) {
         this.ACCPWD = ACCPWD;
+    }
+    
+    /**
+     * @return the ACCName
+     */
+    public String getACCName() {
+        return ACCName;
     }
     
 }

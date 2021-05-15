@@ -5,6 +5,7 @@
  */
 package controller;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Named;
@@ -22,8 +23,7 @@ public class LoginBean {
     
     private final JDBCLogin jdbcLogin;
     private List<Login> userList;
-
-
+    private String username;
 
     /**
      * Creates a new instance of LoginBean
@@ -39,5 +39,22 @@ public class LoginBean {
 
     public void setUserList(List<Login> userList) {
         this.userList = userList;
+    }
+    
+    public String login(String username, String password){
+        System.out.println(username);
+        for (Login person: userList) {
+            if (person.getACCName().contains(username) && person.getACCPWD().contains(password)){
+                System.out.println("Logindaten richtig");
+                return "hallo.xhtml";
+            }else{
+                System.out.println("Logindaten falsch");
+            }
+        } 
+        return "0";
+    }
+    
+    public void logLogin (ActionEvent event){
+        System.out.println(username);
     }
 }

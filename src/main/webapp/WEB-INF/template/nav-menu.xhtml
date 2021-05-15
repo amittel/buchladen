@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">Startseite</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <!-- *******************************
+    
+                               Model Definition fürs Login
+                               Hier steht der Inhalt des Modals
+    
+                    *********************************** -->
+                    <div class="modal" id="myModal-login">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Benutzer Login</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <h:form>
+                                        <div class="mb-3">
+                                            <label for="user" class="form-label">Benutzer</label>
+                                            <h:inputText binding="#{input1}" class="form-control" id="user" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="user" class="form-label">Passwort</label>
+                                            <h:inputText binding="#{input2}" class="form-control" id="password" />
+                                        </div>
+                                        <h:commandButton
+                                            value="Anmelden"
+                                            action="#{loginBean.login(input1.value, input2.value)}"
+                                            class="btn btn-primary"
+                                        />
+        
+                                    </h:form>
+                                </div>
+
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- *******************************
+    
+                               Model Definition fürs Registrieren
+                               Hier steht der Inhalt des Modals
+    
+                    *********************************** -->
+                    <div class="modal" id="myModal-reg">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Neues Konto anlegen</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="user" class="form-label">Anrede</label>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="optradio">Herr</input>
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="optradio">Frau</input>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="user" class="form-label">Vorname</label>
+                                            <input type="user" class="form-control" id="user" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="user" class="form-label">Nachname</label>
+                                            <input type="user" class="form-control" id="user" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="user" class="form-label">Adresse</label>
+                                            <input type="user" class="form-control" id="user" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="user" class="form-label">Wohnort</label>
+                                            <input type="user" class="form-control" id="user" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="user" class="form-label">PLZ</label>
+                                            <input type="user" class="form-control" id="user" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="user" class="form-label">Email</label>
+                                            <input type="user" class="form-control" id="user" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="pass" class="form-label">Passwort</label>
+                                            <input type="password" class="form-control" id="pass"/>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Registrieren</button>
+                                    </form>
+                                </div>
+
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- *******************************
+    
+                            Modal Button fürs Login
+    
+                    *********************************** -->
+                    <a class="nav-link" href="#">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-login">
+                            Anmelden
+                        </button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <!-- *******************************
+    
+                            Modal Button fürs Registriene
+    
+                    *********************************** -->
+                    <a class="nav-link" href="#">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-reg">
+                            Registrieren
+                        </button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>    
+            </ul>
+        </div>  
+    </nav>
+</html>
+
