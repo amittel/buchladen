@@ -154,7 +154,7 @@
                     *********************************** -->
                     
                     <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-reg" rendered="#{loginBean.loggedIN}">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-reg" >
                             Registrieren
                         </button>
                     </a>
@@ -167,7 +167,7 @@
                 </li>
                 <li class="nav-item">
                     <h:form>
-                        <h:commandButton value="Logout" action="#{loginBean.logout()}"/>
+                        <h:commandButton value="Logout" class="btn btn-primary" action="#{loginBean.logout()}" rendered="#{loginBean.loggedIN}"/>
                     </h:form>
                     
                 </li>
