@@ -32,6 +32,7 @@
                                 <!-- Modal body -->
                                 <div class="modal-body">
                                     <h:form>
+                                        <h:messages globalOnly="true" style="color:red;margin:8px;" />
                                         <div class="mb-3">
                                             <label for="user" class="form-label">Benutzer</label>
                                             <h:message for="user-login"/>
@@ -135,9 +136,12 @@
     
                     *********************************** -->
                     <a class="nav-link" href="#">
+                        
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-login">
-                            Anmelden
-                        </button>
+                            Anmelden           </button>
+                 
+                            
+                        
                     </a>
                 </li>
                 <li class="nav-item">
@@ -146,15 +150,25 @@
                             Modal Button fürs Registriene
     
                     *********************************** -->
+                    
                     <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-reg">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-reg" >
                             Registrieren
                         </button>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>    
+                    <a class="nav-link" href="#">
+                    <button type="button" class="btn btn-primary" >
+                            Kategorie
+                        </button></a>
+                </li>
+                <li class="nav-item">
+                    <h:form>
+                        <h:commandButton value="Logout" class="btn btn-primary" action="#{loginBean.logout()}" rendered="#{loginBean.loggedIN}"/>
+                    </h:form>
+                    
+                </li>
             </ul>
         </div>  
     </nav>

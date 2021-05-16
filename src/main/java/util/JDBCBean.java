@@ -21,7 +21,7 @@ import model.Product;
  *
  * @author Arnulf
  */
-@Named(value = "jDBCBean")
+@Named(value = "jDBCBeanProdukt")
 @Dependent
 public class JDBCBean {
 
