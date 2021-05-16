@@ -29,6 +29,10 @@ public class LoginBean {
     private String username;
     private String password;
 
+    FacesContext context = FacesContext.getCurrentInstance();
+
+    boolean loggedIn = context != null && context.getExternalContext().getSessionMap().get("user") != null;
+
     /**
      * Creates a new instance of LoginBean
      */
@@ -46,8 +50,6 @@ public class LoginBean {
     }
 
     public void login(String username, String password) {
-
-        FacesContext context = FacesContext.getCurrentInstance();
 
         System.out.println("Username: " + username);
         for (Login person : userList) {
@@ -69,8 +71,14 @@ public class LoginBean {
         //return "index.xhtml";
     }
 
-    public void logLogin(ActionEvent event) {
-        System.out.println(username);
+    public void logout() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().invalidateSession();
+        try {
+            context.getExternalContext().redirect("index.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUsername() {
@@ -79,6 +87,10 @@ public class LoginBean {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean getLoggedIN() {
+        return loggedIn;
     }
 
     public String getPassword() {
