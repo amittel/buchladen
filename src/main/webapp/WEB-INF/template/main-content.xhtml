@@ -3,62 +3,62 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <!-- ***********************************************************
+     
+                                Menu 
+     
+     *********************************************************** -->
+    <div class="container" style="margin-top:30px">
+        <div class="row">
+            <!-- ***********************************************************
     
-        <!-- ***********************************************************
-         
-                                    Menu 
-         
-         *********************************************************** -->
-        <div class="container" style="margin-top:30px">
-            <div class="row">
-                <!-- ***********************************************************
-        
-                        Kategorie Leiste 
-        
-        *********************************************************** -->
-                <div class="col-sm-4">
-                    <!-- Anderes Zeug vielleicht hier-->
-                    <h3>Kategorie</h3>
-                    <ul class="nav nav-pills flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Best Seller</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Thriller</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Drama</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#">Disabled</a>
-                        </li>
-                    </ul>
-                    <hr class="d-sm-none"></hr>
+                    Kategorie Leiste 
+    
+    *********************************************************** -->
+            <div class="col-sm-4">
+                <!-- Anderes Zeug vielleicht hier-->
+                <h3>Kategorie</h3>
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Best Seller</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Thriller</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Drama</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                </ul>
+                <hr class="d-sm-none"></hr>
+            </div>
+
+            <!-- Hier Bücher anzeigen -->
+            <div class="col-sm-8">
+                <div class="container">
+                    <h2>Best Seller</h2> 
+                     <img src="img/book-covers/daheim.jpg" class="rounded" alt=""></img>
+                     <img src="img/book-covers/ueber-menschen.jpg" class="rounded" alt=""></img>
+
+                    <ui:insert name="content" >
+                        content
+                    </ui:insert>
+
                 </div>
 
-                <!-- Hier Bücher anzeigen -->
-                <div class="col-sm-8">
-                    <div class="container">
-                       <!-- <h2>Best Seller</h2> 
-                        <img src="img/book-covers/daheim.jpg" class="rounded" alt=""></img>
-                        <img src="img/book-covers/ueber-menschen.jpg" class="rounded" alt=""></img>-->
-                        
-                        <ui:insert name="content" >
-                    content
-                </ui:insert>
-                        
-                    </div>
-
-                    <h:dataTable value="#{loginBean.accountList}" var="account">
-                        <h:column>
-                            <h:outputText value="#{account.ACCName}"/>
-                        </h:column>
-                        <h:column>
-                            <h:outputText value="#{account.accpwd}"/>
-                        </h:column>
-                    </h:dataTable>
-                </div>                 
-            </div>
+                <h:dataTable value="#{loginBean.accountList}" var="account">
+                    <h:column>
+                        <h:outputText value="#{account.ACCName}"/>
+                    </h:column>
+                    <h:column>
+                        <h:outputText value="#{account.accpwd}"/>
+                    </h:column>
+                </h:dataTable>
+            </div>                 
         </div>
+    </div>
 </html>
 

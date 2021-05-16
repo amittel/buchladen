@@ -31,15 +31,15 @@ public class loginBean{
     private String password;
     private boolean isLoggedIn = false;
     
-    private final JDBCLogin jdbcBean;
-    private List<Account> accountList;
+    //private final JDBCLogin jdbcBean;
+    //private List<Account> accountList;
 
     /**
      * Creates a new instance of loginBean
      */
     public loginBean() {
-        jdbcBean = new JDBCLogin();
-        accountList = jdbcBean.getAccountList();
+        //jdbcBean = new JDBCLogin();
+        //accountList = jdbcBean.getAccountList();
     } 
     
     public List<Account> getAccountList(){
@@ -59,7 +59,7 @@ public class loginBean{
         return account.getResultList();
     }
     
-    public void loginUser() {
+    public String loginUser() {
         // Als return bekommne wir Liste mit nur einem Element
         // Deswegen .get(0) mit Index 0
         // Alles andere ist outOfBounds
@@ -75,14 +75,18 @@ public class loginBean{
                 System.out.println(username);
                 System.out.println(account.get(0).getACCAdmin());
                 System.out.println(account.get(0).getAccpwd());
+                
+                return "/hallo.xhtml";
             } else {
                 System.out.println("User existiert");
                 System.out.println("Falsches Passwort");
+                return "/index.xhtml";
             }
 
         } else {
             System.out.println("User existiert nicht");
             this.isLoggedIn = false;
+            return "/index.xhtml";
         }
 
     }

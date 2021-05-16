@@ -32,7 +32,6 @@
                                 <!-- Modal body -->
                                 <div class="modal-body">
                                     <h:form>
-                                        <h:messages globalOnly="true" style="color:red;margin:8px;" />
                                         <div class="mb-3">
                                             <label for="user" class="form-label">Benutzer</label>
                                             <h:message for="user-login"/>
@@ -80,7 +79,7 @@
 
                                 <!-- Modal body -->
                                 <div class="modal-body">
-                                    <form>
+                                    <h:form>
                                         <div class="mb-3">
                                             <label for="accname-reg" class="form-label">Username</label>
                                             <h:inputText value="#{registerBean.accname}" class="form-control" id="accname-reg" />
@@ -106,6 +105,14 @@
                                             <h:inputText value="#{registerBean.plz}" class="form-control" id="plz-reg" />
                                         </div>
                                         <div class="mb-3">
+                                            <label for="bundesland-reg" class="form-label">Bundesland</label>
+                                            <h:inputText value="#{registerBean.bundesland}" class="form-control" id="bundesland-reg" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="land-reg" class="form-label">Land</label>
+                                            <h:inputText value="#{registerBean.land}" class="form-control" id="land-reg" />
+                                        </div>
+                                        <div class="mb-3">
                                             <label for="email-reg" class="form-label">Email</label>
                                             <h:inputText value="#{registerBean.email}" class="form-control" id="email-reg" />
                                         </div>
@@ -117,8 +124,8 @@
                                             value="Registrieren"
                                             action="#{registerBean.registerUser}"
                                             class="btn btn-primary"
-                                        />
-                                    </form>
+                                            />
+                                    </h:form>
                                 </div>
 
                                 <!-- Modal footer -->
@@ -135,42 +142,41 @@
                             Modal Button fürs Login
     
                     *********************************** -->
-                    <a class="nav-link" href="#">
-                        
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-login">
-                            Anmelden           </button>
-                 
-                            
-                        
-                    </a>
+                    <h:form>
+                        <a class="nav-link" href="#">
+                            <h:commandButton type="button" value="Anmelden" class="btn btn-primary" onclick="$('#myModal-login').modal('show')" rendered="#{!loginBean.isLoggedIn}">
+
+                            </h:commandButton>
+                            <h:commandButton value="Abmelden" class="btn btn-primary" action="#{loginBean.logoutUser()}" rendered="#{loginBean.isLoggedIn}"/>
+                        </a>
+                    </h:form>
+
                 </li>
+
                 <li class="nav-item">
                     <!-- *******************************
     
                             Modal Button fürs Registriene
     
                     *********************************** -->
-                    
+                    <h:form>
+                        <a class="nav-link" href="#">
+                            <h:commandButton type="button" value="Registrieren" class="btn btn-primary" onclick="$('#myModal-reg').modal('show')" rendered="#{!loginBean.isLoggedIn}"/>
+                            <h:commandButton value="Produkte" class="btn btn-primary" rendered="#{loginBean.isLoggedIn}"/>
+                        </a>
+                    </h:form>             
+
+                </li>  
+
+                <li class="nav-item">
                     <a class="nav-link" href="#">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal-reg" >
-                            Registrieren
-                        </button>
+                        <h:form>
+                            <h:commandButton type="button" value="Kategorie" class="btn btn-primary"/>
+                        </h:form>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                    <button type="button" class="btn btn-primary" >
-                            Kategorie
-                        </button></a>
-                </li>
-                <li class="nav-item">
-                    <h:form>
-                        <h:commandButton value="Logout" class="btn btn-primary" action="#{loginBean.logout()}" rendered="#{loginBean.loggedIN}"/>
-                    </h:form>
-                    
-                </li>
+
             </ul>
         </div>  
     </nav>
 </html>
-

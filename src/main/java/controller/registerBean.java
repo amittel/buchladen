@@ -30,7 +30,6 @@ public class registerBean {
     // Kunde Entity
     private String vname;
     private String nname;
-    private String anrede;  // enum
     private String email;
 
     // Adress Entity
@@ -45,7 +44,7 @@ public class registerBean {
     private String accname;
     private String accadmin; // enum
 
-    private boolean emailUsed = true;
+    private boolean usernameUsed = true;
 
     // Neue Instanzvariable von util/JDBCLogin
     private final JDBCLogin jdbcLogin;
@@ -65,26 +64,32 @@ public class registerBean {
 
     public void registerUser() {
         try {
-            System.out.println("In registerBean");
             
-            String sql = "SELECT * FROM account";
-            ResultSet rs = jdbcLogin.conn.createStatement().executeQuery(sql);
+            PreparedStatement prepStmt;
+            // usernameUsed = isUsed();
             
-            while(rs.next()) {
-                System.out.println(rs.getString("ACCName"));;
-            }
             
-            //PreparedStatement prepStmt;
-            // emailUsed = isUsed();
-            // Registrieren
-            //String userAccount = "INSERT INTO account(ACCName, ACCPWD, ACCAdmin) VALUES ('javaSql','dba','User')";
-            // INSERT INTO `account`(`ACCName`, `ACCPWD`, `ACCAdmin`) VALUES ('javaSql','dba','User')
-            //prepStmt = jdbcLogin.conn.prepareStatement(userAccount);
-            //prepStmt.setString(0, this.getAccname());
-            //prepStmt.setString(1, this.getPassword());
-            // prepStmt.setString(2, this.getAccadmin());
-            //prepStmt.executeUpdate();
-            // ResultSet rs = jdbcLogin.conn.createStatement().executeQuery(userAccount);
+            // Account Entity
+            String userAccount = "INSERT INTO account(ACID, ACCName, ACCPWD, ACCAdmin) VALUES (NULL, ?, ?, ?)";
+            
+            prepStmt = jdbcLogin.conn.prepareStatement(userAccount);
+            prepStmt.setString(1, this.getAccname());   
+            prepStmt.setString(2, this.getPassword());
+            prepStmt.setString(3, "User");
+            prepStmt.executeUpdate();
+            
+            // Adresse Entity
+            String adressAccount = "INSERT INTO adresse(ADRID, AStrasse, AOrt, APLZ, ABundesland, ALand) VALUES (NULL, ?, ?, ?, ?, ?)";
+            prepStmt = jdbcLogin.conn.prepareStatement(adressAccount);
+            prepStmt.setString(1, this.getStrasse());   
+            prepStmt.setString(2, this.getOrt());
+            prepStmt.setString(3, this.getPlz());
+            prepStmt.setString(4, this.getBundesland());
+            prepStmt.setString(5, this.getLand());
+            prepStmt.executeUpdate();
+            
+            // Kunde Entity - Foreigns Keys zusammenführen
+            
         } catch (SQLException ex) {
             Logger.getLogger(registerBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -104,14 +109,6 @@ public class registerBean {
 
     public void setNname(String nname) {
         this.nname = nname;
-    }
-
-    public String getAnrede() {
-        return anrede;
-    }
-
-    public void setAnrede(String anrede) {
-        this.anrede = anrede;
     }
 
     public String getEmail() {
@@ -186,12 +183,12 @@ public class registerBean {
         this.accadmin = accadmin;
     }
 
-    public boolean isEmailUsed() {
-        return emailUsed;
+    public boolean isUsernameUsed() {
+        return usernameUsed;
     }
 
-    public void setEmailUsed(boolean emailUsed) {
-        this.emailUsed = emailUsed;
+    public void setEmailUsed(boolean usernameUsed) {
+        this.usernameUsed = usernameUsed;
     }
 
 }

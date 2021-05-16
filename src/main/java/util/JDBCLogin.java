@@ -43,13 +43,13 @@ public final class JDBCLogin {
             log.info("Buchladen JDBC-Verbindung hergestellt!");
             println("JDBC Verbindung");
             
-            accountList = new ArrayList<>();
-            this.getaccountListfromJDBC();
+            // accountList = new ArrayList<>();
+            // this.getaccountListfromJDBC();
         } catch (ClassNotFoundException | SQLException ex) {
             log.log(Level.SEVERE, null, ex);
         }  
     }
-
+/*
     public void getaccountListfromJDBC() {
         try {
             String sql = "SELECT * FROM account";
@@ -74,5 +74,5 @@ public final class JDBCLogin {
         this.accountList = accountList;
     }
 
-    
+   */ 
 }
