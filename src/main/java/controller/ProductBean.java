@@ -19,15 +19,15 @@ import util.JDBCBean;
 @RequestScoped
 public class ProductBean {
 
-    private final JDBCBean jdbcBean;
+    private final JDBCBean jdbcBeanProdukt;
     private List<Product> productList;
     
     /**
      * Creates a new instance of ProductBean
      */
     public ProductBean() {
-        jdbcBean = new JDBCBean();
-        productList = jdbcBean.getProductList();
+        jdbcBeanProdukt = new JDBCBean();
+        productList = jdbcBeanProdukt.getProductList();
     }
 
     /**

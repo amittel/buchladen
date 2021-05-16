@@ -6,10 +6,13 @@
 package controller;
 
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import model.Login;
 import util.JDBCLogin;
 
@@ -20,10 +23,11 @@ import util.JDBCLogin;
 @Named(value = "loginBean")
 @RequestScoped
 public class LoginBean {
-    
+
     private final JDBCLogin jdbcLogin;
     private List<Login> userList;
     private String username;
+    private String password;
 
     /**
      * Creates a new instance of LoginBean
@@ -32,7 +36,7 @@ public class LoginBean {
         jdbcLogin = new JDBCLogin();
         userList = jdbcLogin.getUserList();
     }
-    
+
     public List<Login> getUserList() {
         return userList;
     }
@@ -40,21 +44,48 @@ public class LoginBean {
     public void setUserList(List<Login> userList) {
         this.userList = userList;
     }
-    
-    public String login(String username, String password){
-        System.out.println(username);
-        for (Login person: userList) {
-            if (person.getACCName().contains(username) && person.getACCPWD().contains(password)){
-                System.out.println("Logindaten richtig");
-                return "hallo.xhtml";
-            }else{
-                System.out.println("Logindaten falsch");
+
+    public void login(String username, String password) {
+
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        System.out.println("Username: " + username);
+        for (Login person : userList) {
+            if (person.getACCPWD().equals(password) && person.getACCName().equals(username)) {
+                context.getExternalContext().getSessionMap().put("user", username);
+                try {
+                    context.getExternalContext().redirect("hallo.xhtml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                //Send an error message on Login Failure 
+                context.addMessage(null, new FacesMessage("Authentication Failed. Check username or password."));
+                System.out.println("Login Flasch!");
+
             }
-        } 
-        return "0";
+        }
+
+        //return "index.xhtml";
     }
-    
-    public void logLogin (ActionEvent event){
+
+    public void logLogin(ActionEvent event) {
         System.out.println(username);
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
