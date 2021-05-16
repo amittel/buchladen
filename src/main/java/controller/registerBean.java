@@ -43,11 +43,16 @@ public class registerBean {
     private String password;
     private String accname;
     private String accadmin; // enum
+    private int fk_aid;
+    private int fk_acc;
+
+    ResultSet rs;
 
     private boolean usernameUsed = true;
 
     // Neue Instanzvariable von util/JDBCLogin
     private final JDBCLogin jdbcLogin;
+
     /**
      * Creates a new instance of registerBean
      */
@@ -64,14 +69,12 @@ public class registerBean {
 
     public void registerUser() {
         try {
-            
+
             PreparedStatement prepStmt;
             // usernameUsed = isUsed();
-            
-            
+
             // Account Entity
             String userAccount = "INSERT INTO account(ACID, ACCName, ACCPWD, ACCAdmin) VALUES (NULL, ?, ?, ?)";
-            
             prepStmt = jdbcLogin.conn.prepareStatement(userAccount);
             prepStmt.setString(1, this.getAccname());   
             prepStmt.setString(2, this.getPassword());
@@ -89,7 +92,32 @@ public class registerBean {
             prepStmt.executeUpdate();
             
             // Kunde Entity - Foreigns Keys zusammenführen
+
+            // Adresse FK auslesen
+            String get_fk_aid = "SELECT MAX(ADRID) as aid FROM `adresse`";
+            rs = jdbcLogin.conn.createStatement().executeQuery(get_fk_aid);
+            while (rs.next() == true) {
+                this.fk_aid = rs.getInt("aid");
+            }
+
+            // Account FK auslesen
+            String get_fk_acc = "SELECT MAX(ACID) as acid FROM `account`";
+            rs = jdbcLogin.conn.createStatement().executeQuery(get_fk_acc);
+            while (rs.next() == true) {
+                this.fk_acc = rs.getInt("acid");
+            }
             
+            // Kunde Entity
+            String kunde = "INSERT INTO `kunde`(`KID`, `KVName`, `KName`, `KEmail`, `KTel`, `FK_AID`, `FK_ACC`) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
+            prepStmt = jdbcLogin.conn.prepareStatement(kunde);
+            prepStmt.setString(1, this.getVname());   
+            prepStmt.setString(2, this.getNname());
+            prepStmt.setString(3, this.getEmail());
+            prepStmt.setString(4, "0");   
+            prepStmt.setInt(5, this.fk_aid);
+            prepStmt.setInt(6, this.fk_acc);
+            prepStmt.executeUpdate();
+
         } catch (SQLException ex) {
             Logger.getLogger(registerBean.class.getName()).log(Level.SEVERE, null, ex);
         }
