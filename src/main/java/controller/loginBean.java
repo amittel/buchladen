@@ -5,11 +5,14 @@
  */
 package controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
@@ -23,43 +26,45 @@ import util.JDBCLogin;
  */
 @Named(value = "loginBean")
 @RequestScoped
-public class loginBean{
-    
+public class loginBean {
+
+    FacesContext context = FacesContext.getCurrentInstance();
+
     @PersistenceUnit
     private EntityManagerFactory emf;
     private String username;
     private String password;
-    private boolean isLoggedIn = false;
-    
+   //  private boolean isLoggedIn = false;
+    private boolean isLoggedIn = context != null && context.getExternalContext().getSessionMap().get("user") != null;
+
     //private final JDBCLogin jdbcBean;
     //private List<Account> accountList;
-
     /**
      * Creates a new instance of loginBean
      */
     public loginBean() {
         //jdbcBean = new JDBCLogin();
         //accountList = jdbcBean.getAccountList();
-    } 
-    
-    public List<Account> getAccountList(){
+    }
+
+    public List<Account> getAccountList() {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Account> query 
+        TypedQuery<Account> query
                 = em.createNamedQuery("Account.findAll", Account.class);
-        
+
         return query.getResultList();
     }
-    
-    public List<Account> getAccount(String username){
+
+    public List<Account> getAccount(String username) {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Account> account 
+        TypedQuery<Account> account
                 = em.createNamedQuery("Account.findByACCName", Account.class);
         account.setParameter("aCCName", username);
-        
+
         return account.getResultList();
     }
-    
-    public String loginUser() {
+
+    public void loginUser() {
         // Als return bekommne wir Liste mit nur einem Element
         // Deswegen .get(0) mit Index 0
         // Alles andere ist outOfBounds
@@ -70,29 +75,39 @@ public class loginBean{
         if (!account.isEmpty()) {
             if (account.get(0).getAccpwd().equals(password)) {
                 this.isLoggedIn = true;
-
+                context.getExternalContext().getSessionMap().put("user", username);
                 System.out.println("loginUser ...");
                 System.out.println(username);
                 System.out.println(account.get(0).getACCAdmin());
                 System.out.println(account.get(0).getAccpwd());
-                
-                return "/hallo.xhtml";
+
+                try {
+                    context.getExternalContext().redirect("hallo.xhtml");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else {
                 System.out.println("User existiert");
                 System.out.println("Falsches Passwort");
-                return "/index.xhtml";
+                context.addMessage(null, new FacesMessage("Authentication Failed. Check username or password."));
             }
 
         } else {
             System.out.println("User existiert nicht");
             this.isLoggedIn = false;
-            return "/index.xhtml";
+            context.addMessage(null, new FacesMessage("Authentication Failed. Check username or password."));
         }
-
     }
-    
-    public void logoutUser(){
+
+    public void logoutUser() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().invalidateSession();
         this.isLoggedIn = false;
+        try {
+            context.getExternalContext().redirect("index.xhtml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUsername() {

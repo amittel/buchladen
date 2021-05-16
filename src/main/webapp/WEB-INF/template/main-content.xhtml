@@ -38,25 +38,18 @@
 
             <!-- Hier Bücher anzeigen -->
             <div class="col-sm-8">
-                <div class="container">
-                    <h2>Best Seller</h2> 
-                     <img src="img/book-covers/daheim.jpg" class="rounded" alt=""></img>
-                     <img src="img/book-covers/ueber-menschen.jpg" class="rounded" alt=""></img>
 
+                <div class="container"> 
                     <ui:insert name="content" >
                         content
                     </ui:insert>
+                    <h2>Best Seller</h2> 
+                    <img src="img/book-covers/daheim.jpg" class="rounded" alt=""></img>
+                    <img src="img/book-covers/ueber-menschen.jpg" class="rounded" alt=""></img>
 
                 </div>
 
-                <h:dataTable value="#{loginBean.accountList}" var="account">
-                    <h:column>
-                        <h:outputText value="#{account.ACCName}"/>
-                    </h:column>
-                    <h:column>
-                        <h:outputText value="#{account.accpwd}"/>
-                    </h:column>
-                </h:dataTable>
+
             </div>                 
         </div>
     </div>

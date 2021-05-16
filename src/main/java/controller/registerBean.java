@@ -48,7 +48,7 @@ public class registerBean {
 
     ResultSet rs;
 
-    private boolean usernameUsed = true;
+    private boolean usernameUsed = false;
 
     // Neue Instanzvariable von util/JDBCLogin
     private final JDBCLogin jdbcLogin;
@@ -63,60 +63,78 @@ public class registerBean {
     }
 
     // Wenn Email bereits registriet return true
-    public void isUsed() {
-        System.out.println("In registerBean");
+    public boolean isUsed(String accname) {
+
+        try {
+            String get_acc_names = "SELECT ACCName FROM account";
+            rs = jdbcLogin.conn.createStatement().executeQuery(get_acc_names);
+            while (rs.next() == true) {
+                if (rs.getString("ACCName").equals(accname)) {
+                    System.out.println("User existiert bereits");
+                    return true;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(registerBean.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+        System.out.println("Neuer User wird angelegt.");
+        return false;
     }
 
     public void registerUser() {
         try {
 
             PreparedStatement prepStmt;
-            // usernameUsed = isUsed();
+            usernameUsed = isUsed(this.getAccname());
 
-            // Account Entity
-            String userAccount = "INSERT INTO account(ACID, ACCName, ACCPWD, ACCAdmin) VALUES (NULL, ?, ?, ?)";
-            prepStmt = jdbcLogin.conn.prepareStatement(userAccount);
-            prepStmt.setString(1, this.getAccname());   
-            prepStmt.setString(2, this.getPassword());
-            prepStmt.setString(3, "User");
-            prepStmt.executeUpdate();
-            
-            // Adresse Entity
-            String adressAccount = "INSERT INTO adresse(ADRID, AStrasse, AOrt, APLZ, ABundesland, ALand) VALUES (NULL, ?, ?, ?, ?, ?)";
-            prepStmt = jdbcLogin.conn.prepareStatement(adressAccount);
-            prepStmt.setString(1, this.getStrasse());   
-            prepStmt.setString(2, this.getOrt());
-            prepStmt.setString(3, this.getPlz());
-            prepStmt.setString(4, this.getBundesland());
-            prepStmt.setString(5, this.getLand());
-            prepStmt.executeUpdate();
-            
-            // Kunde Entity - Foreigns Keys zusammenführen
+            if (!usernameUsed) {
+                // Account Entity
+                String userAccount = "INSERT INTO account(ACID, ACCName, ACCPWD, ACCAdmin) VALUES (NULL, ?, ?, ?)";
+                prepStmt = jdbcLogin.conn.prepareStatement(userAccount);
+                prepStmt.setString(1, this.getAccname());
+                prepStmt.setString(2, this.getPassword());
+                prepStmt.setString(3, "User");
+                prepStmt.executeUpdate();
 
-            // Adresse FK auslesen
-            String get_fk_aid = "SELECT MAX(ADRID) as aid FROM `adresse`";
-            rs = jdbcLogin.conn.createStatement().executeQuery(get_fk_aid);
-            while (rs.next() == true) {
-                this.fk_aid = rs.getInt("aid");
+                // Adresse Entity
+                String adressAccount = "INSERT INTO adresse(ADRID, AStrasse, AOrt, APLZ, ABundesland, ALand) VALUES (NULL, ?, ?, ?, ?, ?)";
+                prepStmt = jdbcLogin.conn.prepareStatement(adressAccount);
+                prepStmt.setString(1, this.getStrasse());
+                prepStmt.setString(2, this.getOrt());
+                prepStmt.setString(3, this.getPlz());
+                prepStmt.setString(4, this.getBundesland());
+                prepStmt.setString(5, this.getLand());
+                prepStmt.executeUpdate();
+
+                // Kunde Entity - Foreigns Keys zusammenführen
+                // Adresse FK auslesen
+                String get_fk_aid = "SELECT MAX(ADRID) as aid FROM `adresse`";
+                rs = jdbcLogin.conn.createStatement().executeQuery(get_fk_aid);
+                while (rs.next() == true) {
+                    this.fk_aid = rs.getInt("aid");
+                }
+
+                // Account FK auslesen
+                String get_fk_acc = "SELECT MAX(ACID) as acid FROM `account`";
+                rs = jdbcLogin.conn.createStatement().executeQuery(get_fk_acc);
+                while (rs.next() == true) {
+                    this.fk_acc = rs.getInt("acid");
+                }
+
+                // Kunde Entity
+                String kunde = "INSERT INTO `kunde`(`KID`, `KVName`, `KName`, `KEmail`, `KTel`, `FK_AID`, `FK_ACC`) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
+                prepStmt = jdbcLogin.conn.prepareStatement(kunde);
+                prepStmt.setString(1, this.getVname());
+                prepStmt.setString(2, this.getNname());
+                prepStmt.setString(3, this.getEmail());
+                prepStmt.setString(4, "0");
+                prepStmt.setInt(5, this.fk_aid);
+                prepStmt.setInt(6, this.fk_acc);
+                prepStmt.executeUpdate();
+            } else {
+                // System.out.println("User bereits vorhanden!");
             }
-
-            // Account FK auslesen
-            String get_fk_acc = "SELECT MAX(ACID) as acid FROM `account`";
-            rs = jdbcLogin.conn.createStatement().executeQuery(get_fk_acc);
-            while (rs.next() == true) {
-                this.fk_acc = rs.getInt("acid");
-            }
-            
-            // Kunde Entity
-            String kunde = "INSERT INTO `kunde`(`KID`, `KVName`, `KName`, `KEmail`, `KTel`, `FK_AID`, `FK_ACC`) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
-            prepStmt = jdbcLogin.conn.prepareStatement(kunde);
-            prepStmt.setString(1, this.getVname());   
-            prepStmt.setString(2, this.getNname());
-            prepStmt.setString(3, this.getEmail());
-            prepStmt.setString(4, "0");   
-            prepStmt.setInt(5, this.fk_aid);
-            prepStmt.setInt(6, this.fk_acc);
-            prepStmt.executeUpdate();
 
         } catch (SQLException ex) {
             Logger.getLogger(registerBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -210,13 +228,4 @@ public class registerBean {
     public void setAccadmin(String accadmin) {
         this.accadmin = accadmin;
     }
-
-    public boolean isUsernameUsed() {
-        return usernameUsed;
-    }
-
-    public void setEmailUsed(boolean usernameUsed) {
-        this.usernameUsed = usernameUsed;
-    }
-
 }

@@ -35,13 +35,16 @@
                                         <div class="mb-3">
                                             <label for="user" class="form-label">Benutzer</label>
                                             <h:message for="user-login"/>
-                                            <h:inputText value="#{loginBean.username}"
-                                                         class="form-control" id="user-login" required="true" requiredMessage="Please enter your Lastname"
-                                                         />
+                                            <h:inputText value="#{loginBean.username}" class="form-control" id="user-login" >
+                                                <f:validateLength minimum ="3" maximum ="10" for="user-login"/>
+                                            </h:inputText>
+                                           
                                         </div>
                                         <div class="mb-3">
                                             <label for="password-login" class="form-label">Passwort</label>
-                                            <h:inputText value="#{loginBean.password}" class="form-control" id="password-login" />
+                                            <h:inputText value="#{loginBean.password}" class="form-control" id="password-login" >
+                                            </h:inputText>
+                                            
                                         </div>
                                         <h:commandButton
                                             value="Anmelden"
