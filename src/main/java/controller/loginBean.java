@@ -34,6 +34,7 @@ public class loginBean {
     private EntityManagerFactory emf;
     private String username;
     private String password;
+    private String vname;
    //  private boolean isLoggedIn = false;
     private boolean isLoggedIn = context != null && context.getExternalContext().getSessionMap().get("user") != null;
 
