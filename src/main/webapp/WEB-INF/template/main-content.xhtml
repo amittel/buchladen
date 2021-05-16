@@ -43,12 +43,12 @@
                         <img src="img/book-covers/ueber-menschen.jpg" class="rounded" alt=""></img>
                     </div>
 
-                    <h:dataTable value="#{loginBean.userList}" var="user">
+                    <h:dataTable value="#{loginBean.accountList}" var="account">
                         <h:column>
-                            <h:outputText value="#{user.ACCName}"/>
+                            <h:outputText value="#{account.ACCName}"/>
                         </h:column>
                         <h:column>
-                            <h:outputText value="#{user.ACCPWD}"/>
+                            <h:outputText value="#{account.accpwd}"/>
                         </h:column>
                     </h:dataTable>
                 </div>                 

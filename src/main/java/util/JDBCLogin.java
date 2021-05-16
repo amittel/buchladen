@@ -16,7 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
-import model.Login;
+import model.Account;
 
 /**
  *
@@ -26,53 +26,53 @@ import model.Login;
 @Dependent
 public final class JDBCLogin {
 
-    private static final Logger log = Logger.getLogger(JDBCBean.class.getName());
-    private Connection conn = null;
-    private  List<Login> userList;
+    // private
+    public Logger log = Logger.getLogger(JDBCLogin.class.getName());
+    public Connection conn = null;
+    private  List<Account> accountList;
     /**
      * Creates a new instance of JDBCLogin
      */
+    
     public JDBCLogin() {
         try {
             String driver = "org.mariadb.jdbc.Driver";
             Class.forName(driver);
             String dbUrl = "jdbc:mariadb://localhost:3306/buchladen";
             conn = DriverManager.getConnection(dbUrl, "dba", "dba");
-            //log.info("JDBC-Verbindung hergestellt!");
-            //println("JDBC Verbindung");
-            userList = new ArrayList<>();
-            this.getuserListfromJDBC();
-            //log.info("Nach Fkt aufruf");
-            //println("Nach fkt println");
+            log.info("Buchladen JDBC-Verbindung hergestellt!");
+            println("JDBC Verbindung");
+            
+            accountList = new ArrayList<>();
+            this.getaccountListfromJDBC();
         } catch (ClassNotFoundException | SQLException ex) {
             log.log(Level.SEVERE, null, ex);
         }  
     }
 
-    public void getuserListfromJDBC() {
-        //log.info("Fkt getuserListJDBC");
+    public void getaccountListfromJDBC() {
         try {
             String sql = "SELECT * FROM account";
             ResultSet rs = conn.createStatement().executeQuery(sql);
             
             while(rs.next()) {
                 //log.info("Fülle Daten");
-                userList.add(new Login(
-                    rs.getString("ACCName"),
-                    rs.getString("ACCPWD")
+                accountList.add(new Account(
+                    rs.getString("ACCName")
                 ));
             }
             log.info("Datensätze abgefragt aus Produkt.");
         } catch (SQLException ex) {
             log.log(Level.SEVERE, null, ex);
         }}
-
-    public List<Login> getUserList() {
-        return userList;
+    
+    public List<Account> getAccountList() {
+        return accountList;
     }
 
-    public void setUserList(List<Login> userList) {
-        this.userList = userList;
+    public void setAccountList(List<Account> accountList) {
+        this.accountList = accountList;
     }
+
     
 }
