@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.ManagedBean;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
@@ -24,10 +25,11 @@ import javax.enterprise.context.SessionScoped;
  * @author vm-dba
  */
 @Named(value = "registerBean")
+@ManagedBean
 @RequestScoped
 public class registerBean {
 
-/*    // Kunde Entity
+    // Kunde Entity
     private String vname;
     private String nname;
     private String email;
@@ -49,7 +51,7 @@ public class registerBean {
     ResultSet rs;
 
     private boolean usernameUsed = false;
-*/
+
     // Neue Instanzvariable von util/JDBCLogin
     //private final JDBCLogin jdbcLogin;
 
@@ -139,7 +141,10 @@ public class registerBean {
         } catch (SQLException ex) {
             Logger.getLogger(registerBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
+    
+     public void registerUser() {
+     }
 
     public String getVname() {
         return vname;
@@ -227,5 +232,5 @@ public class registerBean {
 
     public void setAccadmin(String accadmin) {
         this.accadmin = accadmin;
-    }*/
+    }
 }
