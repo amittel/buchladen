@@ -78,7 +78,10 @@ public class loginBean {
             if(userDB.getACCName().equals(username) && userDB.getAccpwd().equals(password)) {
                 // User ok for login and redirect
                 this.isLoggedIn = true;
+                context.getExternalContext().getFlash().setKeepMessages(true);
                 context.getExternalContext().getSessionMap().put("user", username);
+                FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Login erfolgreich", "login");
+                context.addMessage("sucessInfo",faceMsg);
                 
                 try {
                     context.getExternalContext().redirect("hallo.xhtml");
