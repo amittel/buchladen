@@ -42,8 +42,8 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="password-login" class="form-label">Passwort</label>
-                                            <h:inputText value="#{loginBean.password}" class="form-control" id="password-login" >
-                                            </h:inputText>
+                                            <h:inputSecret value="#{loginBean.password}" class="form-control" id="password-login" >
+                                            </h:inputSecret>
                                             
                                         </div>
                                         <h:commandButton
@@ -57,7 +57,7 @@
 
                                 <!-- Modal footer -->
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
                                 </div>
 
                             </div>
@@ -121,7 +121,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="passwort-reg" class="form-label">Passwort</label>
-                                            <h:inputText value="#{registerBean.password}" class="form-control" id="passwort-reg" />
+                                            <h:inputSecret value="#{registerBean.password}" class="form-control" id="passwort-reg" />
                                         </div>
                                         <h:commandButton
                                             value="Registrieren"
@@ -133,7 +133,7 @@
 
                                 <!-- Modal footer -->
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
                                 </div>
 
                             </div>

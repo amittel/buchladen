@@ -54,8 +54,7 @@ public class loginBean {
      * Creates a new instance of loginBean
      */
     public loginBean() {
-        //jdbcBean = new JDBCLogin();
-        //accountList = jdbcBean.getAccountList();
+
     }
 
     public List<Account> getAccountList() {
