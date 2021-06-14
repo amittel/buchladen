@@ -27,7 +27,7 @@ import javax.enterprise.context.SessionScoped;
 @RequestScoped
 public class registerBean {
 
-    // Kunde Entity
+/*    // Kunde Entity
     private String vname;
     private String nname;
     private String email;
@@ -49,7 +49,7 @@ public class registerBean {
     ResultSet rs;
 
     private boolean usernameUsed = false;
-
+*/
     // Neue Instanzvariable von util/JDBCLogin
     //private final JDBCLogin jdbcLogin;
 

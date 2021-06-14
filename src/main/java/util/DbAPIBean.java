@@ -48,14 +48,53 @@ public class DbAPIBean implements Serializable {
     public DbAPIBean() {
     }
 
-    public Account getAccount(String username) {
+    private void findAnAccount(String username) {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Account> query
                 = em.createNamedQuery("Account.findByACCName", Account.class);
         query.setParameter("aCCName", username);
 
-        return query.getSingleResult();
+        account = query.getSingleResult();
     }
+
+    public void setBookList(List<Buch> bookList) {
+        this.bookList = bookList;
+    }
+
+    public void setAccountList(List<String> accountList) {
+        this.accountList = accountList;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public void setEmf(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
+
+    public void setUt(UserTransaction ut) {
+        this.ut = ut;
+    }
+
+    public static Logger getLog() {
+        return log;
+    }
+
+    public List<Buch> getBookList() {
+        return bookList;
+    }
+
+    public List<String> getAccountList() {
+        return accountList;
+    }
+
+    public Account getAccount(String username) {
+        this.findAnAccount(username);
+        return account;
+    }
+
+
 
 }
 

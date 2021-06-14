@@ -8,6 +8,7 @@ package controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import javax.annotation.ManagedBean;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
@@ -27,6 +28,7 @@ import util.DbAPIBean;
  * @author vm-dba
  */
 @Named(value = "loginBean")
+@ManagedBean
 @RequestScoped
 public class loginBean {
 
@@ -76,6 +78,8 @@ public class loginBean {
             if(userDB.getACCName().equals(username) && userDB.getAccpwd().equals(password)) {
                 // User ok for login and redirect
                 this.isLoggedIn = true;
+                context.getExternalContext().getSessionMap().put("user", username);
+                
                 try {
                     context.getExternalContext().redirect("hallo.xhtml");
                 } catch (IOException e) {
