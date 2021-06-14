@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
-import util.JDBCLogin;
+//import util.JDBCLogin;
 
 /**
  *
@@ -51,7 +51,7 @@ public class registerBean {
     private boolean usernameUsed = false;
 
     // Neue Instanzvariable von util/JDBCLogin
-    private final JDBCLogin jdbcLogin;
+    //private final JDBCLogin jdbcLogin;
 
     /**
      * Creates a new instance of registerBean
@@ -59,15 +59,15 @@ public class registerBean {
     public registerBean() {
         // Erstelle neues Objekt
         // Verbindung zum Server wird hier aufgebaut
-        jdbcLogin = new JDBCLogin();
+        //jdbcLogin = new JDBCLogin();
     }
-
+/*
     // Wenn Email bereits registriet return true
     public boolean isUsed(String accname) {
 
         try {
             String get_acc_names = "SELECT ACCName FROM account";
-            rs = jdbcLogin.conn.createStatement().executeQuery(get_acc_names);
+      /     rs = jdbcLogin.conn.createStatement().executeQuery(get_acc_names);
             while (rs.next() == true) {
                 if (rs.getString("ACCName").equals(accname)) {
                     System.out.println("User existiert bereits");
@@ -227,5 +227,5 @@ public class registerBean {
 
     public void setAccadmin(String accadmin) {
         this.accadmin = accadmin;
-    }
+    }*/
 }
