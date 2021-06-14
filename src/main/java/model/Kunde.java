@@ -37,7 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Kunde.findByKid", query = "SELECT k FROM Kunde k WHERE k.kid = :kid"),
     @NamedQuery(name = "Kunde.findByKVName", query = "SELECT k FROM Kunde k WHERE k.kVName = :kVName"),
     @NamedQuery(name = "Kunde.findByKName", query = "SELECT k FROM Kunde k WHERE k.kName = :kName"),
-    @NamedQuery(name = "Kunde.findByKAnrede", query = "SELECT k FROM Kunde k WHERE k.kAnrede = :kAnrede"),
     @NamedQuery(name = "Kunde.findByKEmail", query = "SELECT k FROM Kunde k WHERE k.kEmail = :kEmail"),
     @NamedQuery(name = "Kunde.findByKTel", query = "SELECT k FROM Kunde k WHERE k.kTel = :kTel")})
 public class Kunde implements Serializable {
@@ -58,11 +57,6 @@ public class Kunde implements Serializable {
     @Size(min = 1, max = 40)
     @Column(name = "KName")
     private String kName;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 4)
-    @Column(name = "KAnrede")
-    private String kAnrede;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -89,11 +83,10 @@ public class Kunde implements Serializable {
         this.kid = kid;
     }
 
-    public Kunde(Integer kid, String kVName, String kName, String kAnrede, String kEmail, String kTel) {
+    public Kunde(Integer kid, String kVName, String kName, String kEmail, String kTel) {
         this.kid = kid;
         this.kVName = kVName;
         this.kName = kName;
-        this.kAnrede = kAnrede;
         this.kEmail = kEmail;
         this.kTel = kTel;
     }
@@ -120,14 +113,6 @@ public class Kunde implements Serializable {
 
     public void setKName(String kName) {
         this.kName = kName;
-    }
-
-    public String getKAnrede() {
-        return kAnrede;
-    }
-
-    public void setKAnrede(String kAnrede) {
-        this.kAnrede = kAnrede;
     }
 
     public String getKEmail() {

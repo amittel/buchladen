@@ -69,9 +69,9 @@ public class Verlag implements Serializable {
     private String vwww;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkVid")
     private Collection<Buch> buchCollection;
-    @JoinColumn(name = "FK_ADRID", referencedColumnName = "ADRID")
+    @JoinColumn(name = "FK_ADRID", referencedColumnName = "VADRID")
     @ManyToOne(optional = false)
-    private Adresse fkAdrid;
+    private VerlagAdresse fkAdrid;
 
     public Verlag() {
     }
@@ -137,11 +137,11 @@ public class Verlag implements Serializable {
         this.buchCollection = buchCollection;
     }
 
-    public Adresse getFkAdrid() {
+    public VerlagAdresse getFkAdrid() {
         return fkAdrid;
     }
 
-    public void setFkAdrid(Adresse fkAdrid) {
+    public void setFkAdrid(VerlagAdresse fkAdrid) {
         this.fkAdrid = fkAdrid;
     }
 

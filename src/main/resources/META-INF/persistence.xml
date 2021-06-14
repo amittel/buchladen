@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.2" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-    <!-- Define Persistence Unit -->
-    <persistence-unit name="my_persistence_unit" transaction-type="JTA">
-        <jta-data-source>jdbc/buchladen</jta-data-source>
-        <class>model.Bestelldetail</class>
-        <class>model.Buch</class>
-        <class>model.Account</class>
-        <class>model.Verlag</class>
-        <class>model.Adresse</class>
-        <class>model.Bestellung</class>
-        <class>model.Buchautor</class>
-        <class>model.Autor</class>
-        <class>model.Kunde</class>
-        <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/buchladen"/>
-            <property name="javax.persistence.jdbc.user" value="dba"/>
-            <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.password" value="dba"/>
-        </properties>
-    </persistence-unit>
+  <!-- Define Persistence Unit -->
+  <persistence-unit name="my_persistence_unit" transaction-type="JTA">
+    <jta-data-source>jdbc/buchladen</jta-data-source>
+    <class>model.Bestelldetail</class>
+    <class>model.Buch</class>
+    <class>model.Account</class>
+    <class>model.Verlag</class>
+    <class>model.Adresse</class>
+    <class>model.Bestellung</class>
+    <class>model.Buchautor</class>
+    <class>model.Autor</class>
+    <class>model.Kunde</class>
+    <class>model.VerlagAdresse</class>
+    <class>model.Kategorie</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/buchladen"/>
+      <property name="javax.persistence.jdbc.user" value="dba"/>
+      <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="dba"/>
+    </properties>
+  </persistence-unit>
 </persistence>

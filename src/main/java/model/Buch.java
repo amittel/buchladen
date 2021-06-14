@@ -74,6 +74,9 @@ public class Buch implements Serializable {
     private BigDecimal bPreis;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkBid")
     private Collection<Buchautor> buchautorCollection;
+    @JoinColumn(name = "FK_KATID", referencedColumnName = "KATID")
+    @ManyToOne(optional = false)
+    private Kategorie fkKatid;
     @JoinColumn(name = "FK_VID", referencedColumnName = "VID")
     @ManyToOne(optional = false)
     private Verlag fkVid;
@@ -151,6 +154,14 @@ public class Buch implements Serializable {
 
     public void setBuchautorCollection(Collection<Buchautor> buchautorCollection) {
         this.buchautorCollection = buchautorCollection;
+    }
+
+    public Kategorie getFkKatid() {
+        return fkKatid;
+    }
+
+    public void setFkKatid(Kategorie fkKatid) {
+        this.fkKatid = fkKatid;
     }
 
     public Verlag getFkVid() {

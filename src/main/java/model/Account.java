@@ -65,12 +65,8 @@ public class Account implements Serializable {
     public Account() {
     }
 
-    public Account(String aCCName) {
-        this.acid = acid;
-    }
-    
     public Account(Integer acid) {
-        this.aCCName = aCCName;
+        this.acid = acid;
     }
 
     public Account(Integer acid, String aCCName, String accpwd, String aCCAdmin) {

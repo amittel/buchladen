@@ -82,8 +82,6 @@ public class Adresse implements Serializable {
     private Date aDatum;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkAid")
     private Collection<Kunde> kundeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fkAdrid")
-    private Collection<Verlag> verlagCollection;
 
     public Adresse() {
     }
@@ -165,15 +163,6 @@ public class Adresse implements Serializable {
 
     public void setKundeCollection(Collection<Kunde> kundeCollection) {
         this.kundeCollection = kundeCollection;
-    }
-
-    @XmlTransient
-    public Collection<Verlag> getVerlagCollection() {
-        return verlagCollection;
-    }
-
-    public void setVerlagCollection(Collection<Verlag> verlagCollection) {
-        this.verlagCollection = verlagCollection;
     }
 
     @Override
