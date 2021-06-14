@@ -49,12 +49,17 @@ public class DbAPIBean implements Serializable {
     }
 
     private void findAnAccount(String username) {
+        try{
         EntityManager em = emf.createEntityManager();
         TypedQuery<Account> query
                 = em.createNamedQuery("Account.findByACCName", Account.class);
         query.setParameter("aCCName", username);
-
+        
         account = query.getSingleResult();
+        log.info("findAnAccount() -> Account erhalten!");
+        } catch(Exception ex){
+            log.info("Es gibt keinen Account für diesen Benutzernamen");
+        }
     }
 
     public void setBookList(List<Buch> bookList) {
@@ -82,6 +87,7 @@ public class DbAPIBean implements Serializable {
     }
 
     public List<Buch> getBookList() {
+        log.info("log: in DbAPIBean");
         return bookList;
     }
 
@@ -93,9 +99,6 @@ public class DbAPIBean implements Serializable {
         this.findAnAccount(username);
         return account;
     }
-
-
-
 }
 
 // get set
