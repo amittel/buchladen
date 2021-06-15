@@ -58,27 +58,27 @@ public class DbAPIBean implements Serializable {
     }
 
     private void findAnAccount(String username) {
-        try{
-        EntityManager em = emf.createEntityManager();
-        TypedQuery<Account> query
-                = em.createNamedQuery("Account.findByACCName", Account.class);
-        query.setParameter("aCCName", username);
-        
-        account = query.getSingleResult();
-        log.info("findAnAccount() -> Account erhalten!");
-        } catch(Exception ex){
+        try {
+            EntityManager em = emf.createEntityManager();
+            TypedQuery<Account> query
+                    = em.createNamedQuery("Account.findByACCName", Account.class);
+            query.setParameter("aCCName", username);
+
+            account = query.getSingleResult();
+            log.info("findAnAccount() -> Account erhalten!");
+        } catch (Exception ex) {
             log.info("Es gibt keinen Account für diesen Benutzernamen");
         }
     }
-    
-     public boolean insertRegisterData(Account account, Kunde kunde, Adresse adresse) {
-        
-        log.info("Account Name: "+account.getACCName());
+
+    public boolean insertRegisterData(Account account, Kunde kunde, Adresse adresse) {
+
+        log.info("Account Name: " + account.getACCName());
         //TODO: Add to form!
         account.setACCAdmin("User");
         kunde.setKTel("0000");
         EntityManager entityManager = emf.createEntityManager();
-        try {           
+        try {
             ut.begin();
             //Ablauf: Erst Account, dann Adresse anlegen, dann Kunde (hat beide Fremdschlüssel!)
             entityManager.joinTransaction();
@@ -88,24 +88,21 @@ public class DbAPIBean implements Serializable {
             kunde.setFkAid(adresse);
             entityManager.persist(kunde);
             ut.commit();
-           
+
             return true;
-        } 
-        catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException | NotSupportedException | RollbackException | SystemException e) {
+        } catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException | NotSupportedException | RollbackException | SystemException e) {
             System.out.println("Insert Acc+Kunde Fehler: " + e.toString());
-            try {            
+            try {
                 ut.rollback();
-            } 
-            catch (IllegalStateException | SecurityException | SystemException ex) {
+            } catch (IllegalStateException | SecurityException | SystemException ex) {
                 //do nothing
             }
-        }
-        finally{
+        } finally {
             entityManager.close();
         }
-      
+
         return false;
-    } 
+    }
 
     public void setBookList(List<Buch> bookList) {
         this.bookList = bookList;
@@ -126,7 +123,7 @@ public class DbAPIBean implements Serializable {
     public void setUt(UserTransaction ut) {
         this.ut = ut;
     }
-    
+
     public void setAdressList(List<Adresse> adressList) {
         this.adressList = adressList;
     }
@@ -146,7 +143,7 @@ public class DbAPIBean implements Serializable {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Account> query
                 = em.createNamedQuery("Account.findAll", Account.class);
-        return query.getResultList();    
+        return query.getResultList();
     }
 
     public Account getAccount(String username) {
@@ -160,18 +157,18 @@ public class DbAPIBean implements Serializable {
                 = em.createNamedQuery("Adresse.findAll", Adresse.class);
         return query.getResultList();
     }
-    
+
     public String getBundesland() {
         EntityManager em = emf.createEntityManager();
         //Query query
-                //= (TypedQuery<String>) em.createQuery("SELECT COLUMN_TYPE as AllPossibleEnumValues FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'buchladen' AND TABLE_NAME = 'adresse' AND COLUMN_NAME = 'ABundesland'");
-          
+        //= (TypedQuery<String>) em.createQuery("SELECT COLUMN_TYPE as AllPossibleEnumValues FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'buchladen' AND TABLE_NAME = 'adresse' AND COLUMN_NAME = 'ABundesland'");
+
         Query query1;
         query1 = em.createQuery("SELECT COLUMN_TYPE as AllPossibleEnumValues FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = buchladen AND TABLE_NAME = adresse AND COLUMN_NAME = ABundesland");
-      String result = (String) query1.getSingleResult();
-      System.out.println("Max Employee Salary :" + result);
-        
+        String result = (String) query1.getSingleResult();
+        System.out.println("Max Employee Salary :" + result);
+
         return "Test";
-        
+
     }
 }

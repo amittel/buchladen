@@ -39,7 +39,7 @@ public class bookBean {
     }
     
     public List<Buch>getBookList(){
-        log.info("getBookList");
+        // log.info("getBookList");
         this.bookList = dbBean.getBookList();  
         return this.bookList;
     }  
