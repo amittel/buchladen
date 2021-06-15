@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 import model.Account;
@@ -116,5 +117,19 @@ public class DbAPIBean implements Serializable {
         TypedQuery<Adresse> query
                 = em.createNamedQuery("Adresse.findAll", Adresse.class);
         return query.getResultList();
-    }   
+    }
+    
+    public String getBundesland() {
+        EntityManager em = emf.createEntityManager();
+        //Query query
+                //= (TypedQuery<String>) em.createQuery("SELECT COLUMN_TYPE as AllPossibleEnumValues FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'buchladen' AND TABLE_NAME = 'adresse' AND COLUMN_NAME = 'ABundesland'");
+          
+        Query query1;
+        query1 = em.createQuery("SELECT COLUMN_TYPE as AllPossibleEnumValues FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = buchladen AND TABLE_NAME = adresse AND COLUMN_NAME = ABundesland");
+      String result = (String) query1.getSingleResult();
+      System.out.println("Max Employee Salary :" + result);
+        
+        return "Test";
+        
+    }
 }

@@ -58,6 +58,8 @@ public class registerBean {
 
     private boolean usernameUsed = false;
 
+    private String laenderListe;
+    
     private List<Adresse> adressList;
 
     @Inject
@@ -69,9 +71,8 @@ public class registerBean {
      * Creates a new instance of registerBean
      */
     public registerBean() {
-        // Erstelle neues Objekt
-        // Verbindung zum Server wird hier aufgebaut
-        //jdbcLogin = new JDBCLogin();
+        //laenderListe = dbBean.getBundesland();
+        //log.info(laenderListe);
     }
 
     /*
@@ -165,6 +166,12 @@ public class registerBean {
         }
         
         // return adressList;
+    }
+    
+    public void bundesland() {
+        laenderListe = dbBean.getBundesland();
+        log.info(laenderListe);
+        
     }
 /*
     public void setAdressList(List<Adresse> adressList) {
