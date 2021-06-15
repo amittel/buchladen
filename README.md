@@ -10,3 +10,8 @@
   * Alle Wörter mit Umlauten.
   * Keine Leerzeichen am Anfang & Ende
   * Kein Bindestrich/anderes Sonderzeichen am Ende
+
+### Passwort
+* `^[a-zA-Z0-9]{8,}$`
+  * Minimum 8 Zeichen
+  * Klein- & Großbuchstaben & Zahlen
