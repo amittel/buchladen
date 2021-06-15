@@ -101,7 +101,9 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="ort-reg" class="form-label">Ort</label>
-                                            <h:inputText value="#{registerBean.adresse.AOrt}" class="form-control" id="ort-reg" />
+                                            <h:inputText value="#{registerBean.adresse.AOrt}" class="form-control" id="ort-reg" >
+                                                <f:validator validatorId="buchladen.validateOrt" />
+                                            </h:inputText>
                                         </div>
                                         <div class="mb-3">
                                             <label for="plz-reg" class="form-label">PLZ</label>
