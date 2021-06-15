@@ -76,7 +76,7 @@ public class Adresse implements Serializable {
     @Column(name = "ALand")
     private String aLand;
     @Basic(optional = false)
-    @NotNull
+    //@NotNull
     @Column(name = "ADatum")
     @Temporal(TemporalType.TIMESTAMP)
     private Date aDatum;

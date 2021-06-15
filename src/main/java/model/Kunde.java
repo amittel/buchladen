@@ -63,7 +63,7 @@ public class Kunde implements Serializable {
     @Column(name = "KEmail")
     private String kEmail;
     @Basic(optional = false)
-    @NotNull
+    // Not in form!!! @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "KTel")
     private String kTel;

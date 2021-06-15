@@ -117,7 +117,7 @@ public class registerBean {
      */
     public void registerUser() {
 
-        boolean success = dbBean.insertRegisterData(account, kunde);
+        boolean success = dbBean.insertRegisterData(account, kunde, adresse);
 
         if (success) {
             // User ok for login and redirect

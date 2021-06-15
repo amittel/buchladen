@@ -71,17 +71,23 @@ public class DbAPIBean implements Serializable {
         }
     }
     
-     public boolean insertRegisterData(Account account, Kunde kunde) {
+     public boolean insertRegisterData(Account account, Kunde kunde, Adresse adresse) {
         
-        
+        log.info("Account Name: "+account.getACCName());
+        //TODO: Add to form!
+        account.setACCAdmin("User");
+        kunde.setKTel("0000");
         EntityManager entityManager = emf.createEntityManager();
         try {           
-            ut.begin( );          
+            ut.begin();
+            //Ablauf: Erst Account, dann Adresse anlegen, dann Kunde (hat beide Fremdschlüssel!)
             entityManager.joinTransaction();
             entityManager.persist(account);
+            entityManager.persist(adresse);
             kunde.setFkAcc(account);
+            kunde.setFkAid(adresse);
             entityManager.persist(kunde);
-            ut.commit( );
+            ut.commit();
            
             return true;
         } 

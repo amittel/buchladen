@@ -57,7 +57,7 @@ public class Account implements Serializable {
     @Column(name = "ACCPWD")
     private String accpwd;
     @Basic(optional = false)
-    @NotNull
+    // Is not form!!! @NotNull
     @Size(min = 1, max = 8)
     @Column(name = "ACCAdmin")
     private String aCCAdmin;
