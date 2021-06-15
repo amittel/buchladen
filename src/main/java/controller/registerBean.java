@@ -13,10 +13,12 @@ import static java.sql.DriverManager.println;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
+import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
@@ -74,7 +76,10 @@ public class registerBean {
     private Account account;
     @Inject
     private Kunde kunde;
+
     private boolean isLoggedIn;
+    
+    private ArrayList<String> bland = new ArrayList<String>();
 
     FacesContext context = FacesContext.getCurrentInstance();
 
@@ -82,17 +87,26 @@ public class registerBean {
      * Creates a new instance of registerBean
      */
     public registerBean() {
-        //laenderListe = dbBean.getBundesland();
-        //log.info(laenderListe);
+        
     }
+    
+    /* Sehr ineffiziente Methode um Bundesländer aus Struktur zu bekommen!*/
+    /*
+    @PostConstruct
+    public void init() {
+        this.adressList = dbBean.getAdressList();
+        // ArrayList<String> bland = new ArrayList<String>();
+        
+        for (Adresse ad : adressList) {
+            if (!this.bland.contains(ad.getABundesland())) {
+                this.bland.add(ad.getABundesland());
+            }  
+        }
 
-    public Adresse getAdresse() {
-        return adresse;
-    }
-
-    public void setAdresse(Adresse adresse) {
-        this.adresse = adresse;
-    }
+        for (String s : this.bland){
+            System.out.println(s);
+        }
+    }*/
 
     /*
     // Wenn Email bereits registriet return true
@@ -201,6 +215,37 @@ public class registerBean {
         }*/
     }
 
+    public void bundesland() {
+        laenderListe = dbBean.getBundesland();
+        log.info(laenderListe);
+
+    }
+
+    // Getter und Setter auo generated
+    public String getLaenderListe() {
+        return laenderListe;
+    }
+
+    public void setLaenderListe(String laenderListe) {
+        this.laenderListe = laenderListe;
+    }
+
+    public List<Adresse> getAdressList() {
+        return adressList;
+    }
+
+    public void setAdressList(List<Adresse> adressList) {
+        this.adressList = adressList;
+    }
+
+    public Adresse getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(Adresse adresse) {
+        this.adresse = adresse;
+    }
+
     public Account getAccount() {
         return account;
     }
@@ -217,116 +262,11 @@ public class registerBean {
         this.kunde = kunde;
     }
 
-    public void foo() {
-        log.info("getAdressList");
-        System.out.println("TEST");
-
-        this.adressList = dbBean.getAdressList();
-        log.info("getAdressList");
-        for (Adresse ad : adressList) {
-            System.out.println(ad.getABundesland());
-        }
-
-        // return adressList;
+    public ArrayList<String> getBland() {
+        return bland;
     }
 
-    public void bundesland() {
-        laenderListe = dbBean.getBundesland();
-        log.info(laenderListe);
-
+    public void setBland(ArrayList<String> bland) {
+        this.bland = bland;
     }
-
-    /*
-    public void setAdressList(List<Adresse> adressList) {
-        this.adressList = adressList;
-    }
-     */
-/*
-    public String getVname() {
-        return vname;
-    }
-
-    public void setVname(String vname) {
-        this.vname = vname;
-    }
-
-    public String getNname() {
-        return nname;
-    }
-
-    public void setNname(String nname) {
-        this.nname = nname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getStrasse() {
-        return strasse;
-    }
-
-    public void setStrasse(String strasse) {
-        this.strasse = strasse;
-    }
-
-    public String getOrt() {
-        return ort;
-    }
-
-    public void setOrt(String ort) {
-        this.ort = ort;
-    }
-
-    public String getPlz() {
-        return plz;
-    }
-
-    public void setPlz(String plz) {
-        this.plz = plz;
-    }
-
-    public String getBundesland() {
-        return bundesland;
-    }
-
-    public void setBundesland(String bundesland) {
-        this.bundesland = bundesland;
-    }
-
-    public String getLand() {
-        return land;
-    }
-
-    public void setLand(String land) {
-        this.land = land;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getAccname() {
-        return accname;
-    }
-
-    public void setAccname(String accname) {
-        this.accname = accname;
-    }
-
-    public String getAccadmin() {
-        return accadmin;
-    }
-
-    public void setAccadmin(String accadmin) {
-        this.accadmin = accadmin;
-    }*/
 }
