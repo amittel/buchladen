@@ -17,10 +17,16 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import model.Account;
 import model.Adresse;
 import model.Buch;
+import model.Kunde;
 
 /**
  *
@@ -64,6 +70,36 @@ public class DbAPIBean implements Serializable {
             log.info("Es gibt keinen Account für diesen Benutzernamen");
         }
     }
+    
+     public boolean insertRegisterData(Account account, Kunde kunde) {
+        
+        
+        EntityManager entityManager = emf.createEntityManager();
+        try {           
+            ut.begin( );          
+            entityManager.joinTransaction();
+            entityManager.persist(account);
+            kunde.setFkAcc(account);
+            entityManager.persist(kunde);
+            ut.commit( );
+           
+            return true;
+        } 
+        catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException | NotSupportedException | RollbackException | SystemException e) {
+            System.out.println("Insert Acc+Kunde Fehler: " + e.toString());
+            try {            
+                ut.rollback();
+            } 
+            catch (IllegalStateException | SecurityException | SystemException ex) {
+                //do nothing
+            }
+        }
+        finally{
+            entityManager.close();
+        }
+      
+        return false;
+    } 
 
     public void setBookList(List<Buch> bookList) {
         this.bookList = bookList;

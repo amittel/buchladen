@@ -5,6 +5,7 @@
  */
 package controller;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,8 +20,12 @@ import javax.annotation.ManagedBean;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import model.Account;
 import model.Adresse;
+import model.Kunde;
 import util.DbAPIBean;
 
 /**
@@ -34,9 +39,9 @@ public class registerBean {
 
     private static final Logger log
             = Logger.getLogger(registerBean.class.getName());
-    
+
     // Kunde Entity
-    private String vname;
+    /*private String vname;
     private String nname;
     private String email;
 
@@ -52,20 +57,26 @@ public class registerBean {
     private String accname;
     private String accadmin; // enum
     private int fk_aid;
-    private int fk_acc;
-
+    private int fk_acc;*/
     ResultSet rs;
 
     private boolean usernameUsed = false;
 
     private String laenderListe;
-    
+
     private List<Adresse> adressList;
 
     @Inject
     private DbAPIBean dbBean; //Zentraler DB-Zugriff
     @Inject
-    private Adresse adress; //Login-Objekt
+    private Adresse adresse; //Login-Objekt
+    @Inject
+    private Account account;
+    @Inject
+    private Kunde kunde;
+    private boolean isLoggedIn;
+
+    FacesContext context = FacesContext.getCurrentInstance();
 
     /**
      * Creates a new instance of registerBean
@@ -73,6 +84,14 @@ public class registerBean {
     public registerBean() {
         //laenderListe = dbBean.getBundesland();
         //log.info(laenderListe);
+    }
+
+    public Adresse getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(Adresse adresse) {
+        this.adresse = adresse;
     }
 
     /*
@@ -95,9 +114,36 @@ public class registerBean {
         System.out.println("Neuer User wird angelegt.");
         return false;
     }
-
+     */
     public void registerUser() {
-        try {
+
+        boolean success = dbBean.insertRegisterData(account, kunde);
+
+        if (success) {
+            // User ok for login and redirect
+            this.isLoggedIn = true;
+            context.getExternalContext().getFlash().setKeepMessages(true);
+            context.getExternalContext().getSessionMap().put("user", account.getACCName());
+            FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registrierung erfolgreich", "login");
+            context.addMessage("sucessInfo", faceMsg);
+
+            try {
+                context.getExternalContext().redirect("hallo.xhtml");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            //Something wrong
+            FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registrierung FEHLER", "Reg");
+            context.addMessage("errorInfo", faceMsg);
+            try {
+                context.getExternalContext().redirect("index.xhtml");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        /* try {
 
             PreparedStatement prepStmt;
             usernameUsed = isUsed(this.getAccname());
@@ -152,35 +198,50 @@ public class registerBean {
 
         } catch (SQLException ex) {
             Logger.getLogger(registerBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }*/
+        }*/
+    }
 
-        public void foo() {
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Kunde getKunde() {
+        return kunde;
+    }
+
+    public void setKunde(Kunde kunde) {
+        this.kunde = kunde;
+    }
+
+    public void foo() {
         log.info("getAdressList");
         System.out.println("TEST");
-        
+
         this.adressList = dbBean.getAdressList();
         log.info("getAdressList");
-        for (Adresse ad: adressList){
-            System.out.println(ad.getABundesland());  
+        for (Adresse ad : adressList) {
+            System.out.println(ad.getABundesland());
         }
-        
+
         // return adressList;
     }
-    
+
     public void bundesland() {
         laenderListe = dbBean.getBundesland();
         log.info(laenderListe);
-        
+
     }
-/*
+
+    /*
     public void setAdressList(List<Adresse> adressList) {
         this.adressList = adressList;
     }
-*/
-    public void registerUser() {
-    }
-
+     */
+/*
     public String getVname() {
         return vname;
     }
@@ -267,5 +328,5 @@ public class registerBean {
 
     public void setAccadmin(String accadmin) {
         this.accadmin = accadmin;
-    }
+    }*/
 }
