@@ -136,7 +136,9 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="passwort-reg" class="form-label">Passwort</label>
-                                            <h:inputSecret value="#{registerBean.account.accpwd}" class="form-control" id="passwort-reg" />
+                                            <h:inputSecret value="#{registerBean.account.accpwd}" class="form-control" id="passwort-reg">
+                                                <f:validator validatorId="buchladen.validatePasswort" />
+                                            </h:inputSecret>
                                         </div>
                                         <h:commandButton
                                             value="Registrieren"

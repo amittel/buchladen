@@ -19,18 +19,18 @@ import javax.faces.validator.ValidatorException;
  *
  * @author Arnulf
  */
-@FacesValidator("buchladen.validateOrt")
-public class ValidateOrt implements Validator, Serializable {
+@FacesValidator("buchladen.validatePasswort")
+public class ValidatePasswort implements Validator, Serializable {
     
-    private static final Pattern pattern_ort = Pattern.compile("/^[a-zA-Z_äÄöÖüÜß]+(?:[\\s-][a-zA-Z]+)*$");
+    private static final Pattern pattern_password = Pattern.compile("^[a-zA-Z0-9]{8,}$");
     
     @Override
     public void validate(FacesContext ctx, UIComponent uic,Object obj) throws ValidatorException {
         String input = (String) obj;
-        Matcher match = pattern_ort.matcher(input);
+        Matcher match = pattern_password.matcher(input);
         
         if(!match.matches()) {
-            throw new ValidatorException(new FacesMessage("Geben Sie einen richtigen Ortsnamen ein!"));
+            throw new ValidatorException(new FacesMessage("Passwort muss mind. 8 Zeichen haben! Keine Sonderzeichen."));
         }
     
     }
