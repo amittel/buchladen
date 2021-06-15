@@ -18,6 +18,7 @@ import javax.persistence.PersistenceUnit;
 import javax.persistence.TypedQuery;
 import javax.transaction.UserTransaction;
 import model.Account;
+import model.Adresse;
 import model.Buch;
 
 /**
@@ -31,7 +32,8 @@ public class DbAPIBean implements Serializable {
     private static final Logger log
             = Logger.getLogger(DbAPIBean.class.getName());
     private List<Buch> bookList;
-    private List<String> accountList;
+    private List<Account> accountList;
+    private List<Adresse> adressList;
 
     @Inject
     private Account account;
@@ -66,7 +68,7 @@ public class DbAPIBean implements Serializable {
         this.bookList = bookList;
     }
 
-    public void setAccountList(List<String> accountList) {
+    public void setAccountList(List<Account> accountList) {
         this.accountList = accountList;
     }
 
@@ -81,24 +83,38 @@ public class DbAPIBean implements Serializable {
     public void setUt(UserTransaction ut) {
         this.ut = ut;
     }
+    
+    public void setAdressList(List<Adresse> adressList) {
+        this.adressList = adressList;
+    }
 
     public static Logger getLog() {
         return log;
     }
 
     public List<Buch> getBookList() {
-        log.info("log: in DbAPIBean");
-        return bookList;
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Buch> query
+                = em.createNamedQuery("Buch.findAll", Buch.class);
+        return query.getResultList();
     }
 
-    public List<String> getAccountList() {
-        return accountList;
+    public List<Account> getAccountList() {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Account> query
+                = em.createNamedQuery("Account.findAll", Account.class);
+        return query.getResultList();    
     }
 
     public Account getAccount(String username) {
         this.findAnAccount(username);
         return account;
     }
-}
 
-// get set
+    public List<Adresse> getAdressList() {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Adresse> query
+                = em.createNamedQuery("Adresse.findAll", Adresse.class);
+        return query.getResultList();
+    }   
+}

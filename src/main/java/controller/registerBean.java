@@ -12,13 +12,16 @@ import static java.sql.DriverManager.println;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
-//import util.JDBCLogin;
+import javax.inject.Inject;
+import model.Adresse;
+import util.DbAPIBean;
 
 /**
  *
@@ -29,6 +32,9 @@ import javax.enterprise.context.SessionScoped;
 @RequestScoped
 public class registerBean {
 
+    private static final Logger log
+            = Logger.getLogger(registerBean.class.getName());
+    
     // Kunde Entity
     private String vname;
     private String nname;
@@ -52,8 +58,12 @@ public class registerBean {
 
     private boolean usernameUsed = false;
 
-    // Neue Instanzvariable von util/JDBCLogin
-    //private final JDBCLogin jdbcLogin;
+    private List<Adresse> adressList;
+
+    @Inject
+    private DbAPIBean dbBean; //Zentraler DB-Zugriff
+    @Inject
+    private Adresse adress; //Login-Objekt
 
     /**
      * Creates a new instance of registerBean
@@ -63,7 +73,8 @@ public class registerBean {
         // Verbindung zum Server wird hier aufgebaut
         //jdbcLogin = new JDBCLogin();
     }
-/*
+
+    /*
     // Wenn Email bereits registriet return true
     public boolean isUsed(String accname) {
 
@@ -142,9 +153,26 @@ public class registerBean {
             Logger.getLogger(registerBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }*/
-    
-     public void registerUser() {
-     }
+
+        public void foo() {
+        log.info("getAdressList");
+        System.out.println("TEST");
+        
+        this.adressList = dbBean.getAdressList();
+        log.info("getAdressList");
+        for (Adresse ad: adressList){
+            System.out.println(ad.getABundesland());  
+        }
+        
+        // return adressList;
+    }
+/*
+    public void setAdressList(List<Adresse> adressList) {
+        this.adressList = adressList;
+    }
+*/
+    public void registerUser() {
+    }
 
     public String getVname() {
         return vname;

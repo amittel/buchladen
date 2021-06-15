@@ -8,6 +8,7 @@ package controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -32,18 +33,21 @@ import util.DbAPIBean;
 @RequestScoped
 public class loginBean {
 
+    private static final Logger log
+            = Logger.getLogger(loginBean.class.getName());
+    
     FacesContext context = FacesContext.getCurrentInstance();
-
-    @PersistenceUnit
-    private EntityManagerFactory emf;
+    
     private String username;
     private String password;
     private String vname;
    //  private boolean isLoggedIn = false;
     private boolean isLoggedIn = context != null && context.getExternalContext().getSessionMap().get("user") != null;
 
+    private List<Account> accountList;
+    
     @Inject
-    private DbAPIBean data; //Zentraler DB-Zugriff
+    private DbAPIBean dbBean; //Zentraler DB-Zugriff
     @Inject
     private Account account; //Login-Objekt
     
@@ -58,20 +62,15 @@ public class loginBean {
     }
 
     public List<Account> getAccountList() {
-        EntityManager em = emf.createEntityManager();
-        TypedQuery<Account> query
-                = em.createNamedQuery("Account.findAll", Account.class);
-
-        return query.getResultList();
+        this.accountList = dbBean.getAccountList();
+        return accountList;
     }
-
-
 
     public void loginUser() {
         // Als return bekommne wir Liste mit nur einem Element
         // Deswegen .get(0) mit Index 0
         // Alles andere ist outOfBounds
-        Account userDB = data.getAccount(username);
+        Account userDB = dbBean.getAccount(username);
 
         if(userDB.getAcid() != null) {
             if(userDB.getACCName().equals(username) && userDB.getAccpwd().equals(password)) {
@@ -87,48 +86,16 @@ public class loginBean {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            
             }
             else {
-            //Something wrong
-            
-            }
-        
-        
+            //Something wrong            
+            }    
         }
-
-
-        // Wenn Liste nicht leer ist, existiert User
-        // Führe dann weitere Scrhitte durch
-        /*if (!account.isEmpty()) {
-            if (account.get(0).getAccpwd().equals(password)) {
-                this.isLoggedIn = true;
-                context.getExternalContext().getSessionMap().put("user", username);
-                System.out.println("loginUser ...");
-                System.out.println(username);
-                System.out.println(account.get(0).getACCAdmin());
-                System.out.println(account.get(0).getAccpwd());
-
-                try {
-                    context.getExternalContext().redirect("hallo.xhtml");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                System.out.println("User existiert");
-                System.out.println("Falsches Passwort");
-                context.addMessage(null, new FacesMessage("Authentication Failed. Check username or password."));
-            }
-
-        } else {
-            System.out.println("User existiert nicht");
-            this.isLoggedIn = false;
-            context.addMessage(null, new FacesMessage("Authentication Failed. Check username or password."));
-        }*/
     }
 
     public void logoutUser() {
-        FacesContext context = FacesContext.getCurrentInstance();
+        log.info("Logging Out");
+        // FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().invalidateSession();
         this.isLoggedIn = false;
         try {

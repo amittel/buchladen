@@ -29,9 +29,7 @@ public class bookBean {
             = Logger.getLogger(bookBean.class.getName());
     
     private List<Buch> bookList;
-    
-    @PersistenceUnit
-    private EntityManagerFactory emf;
+        
     @Inject
     private DbAPIBean dbBean;
     /**
@@ -41,14 +39,8 @@ public class bookBean {
     }
     
     public List<Buch>getBookList(){
-        log.info("log: in bookBean vor dem Aufruf!");
-        this.bookList = dbBean.getBookList();
-        log.info("log: in bookBean nach dem Aufruf!");
-        
-        EntityManager em = emf.createEntityManager();
-        TypedQuery<Buch> query
-                = em.createNamedQuery("Buch.findAll", Buch.class);
-        // System.out.println(query.getResultList().get(0).getBName());
-        return query.getResultList();
+        log.info("getBookList");
+        this.bookList = dbBean.getBookList();  
+        return this.bookList;
     }  
 }
