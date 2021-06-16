@@ -85,7 +85,7 @@ public class WarenkorbBean implements Serializable {
             sessionAttribute = sessionMap.get("userID");
             currentUserId = sessionAttribute.toString();
 
-            state = dbBean.insertWarenkorbinDB(this.items, this.totalSum, currentUserId);
+            state = dbBean.insertWarenkorbinDB(this.items, this.totalSum, currentUserId, lieferdatum);
 
             System.out.println("state: " + state);
 

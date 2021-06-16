@@ -120,7 +120,7 @@ public class DbAPIBean implements Serializable {
         return false;
     }
 
-    public boolean insertWarenkorbinDB(List<WarenkorbItem> items, double totalSum, String currentUserId) {
+    public boolean insertWarenkorbinDB(List<WarenkorbItem> items, double totalSum, String currentUserId, String lieferdatum) {
 
         EntityManager em = emf.createEntityManager();
         // Workaround damit query klappt - wie anders lösen (?)
@@ -135,12 +135,12 @@ public class DbAPIBean implements Serializable {
         kunde = query.getSingleResult();
 
         // Debugging - gleiches Lieferdatum
-        String slieferDatum = "1998-12-30";
+        //String slieferDatum = "1998-12-30";
 
         Date dLieferDatum = new Date();
-        DateFormat myDate = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat myDate = new SimpleDateFormat("dd.MM.yyyy");
         try {
-            dLieferDatum = myDate.parse(slieferDatum);
+            dLieferDatum = myDate.parse(lieferdatum);
         } catch (ParseException ex) {
             Logger.getLogger(DbAPIBean.class.getName()).log(Level.SEVERE, null, ex);
         }
