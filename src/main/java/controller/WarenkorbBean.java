@@ -5,19 +5,28 @@
  */
 package controller;
 
+import static com.sun.faces.facelets.util.Path.context;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlDataTable;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import model.Bestelldetail;
+import model.Bestellung;
 import model.Buch;
+import model.Kunde;
 import model.WarenkorbItem;
+import util.DbAPIBean;
 
 /**
  *
@@ -30,22 +39,39 @@ public class WarenkorbBean implements Serializable {
 
     private static final Logger log
             = Logger.getLogger(WarenkorbBean.class.getName());
+    
+    FacesContext context = FacesContext.getCurrentInstance();
+    
+    @Inject
+    private DbAPIBean dbBean;
+    
+    @Inject
+    private Buch book;
+    
+
+    
+    
+    
 
     private String numberOfItems;
     private double totalSum = 0;
-
-    // Stellt den gesamten Warenkorb dar.
+    
+     // Stellt den gesamten Warenkorb dar.
     // Jedes Element in <items> bildet ein kaufbares Produkt ab.
     List<WarenkorbItem> items = new ArrayList<>();
 
-    @Inject
-    private Buch book;
+    private String lieferdatum;
+
+   
+
+
 
     /**
      * Creates a new instance of WarenkorbBean
      */
     public WarenkorbBean() {
         // totalSum = new BigDecimal(0);
+        
     }
 
     public void addToCart(Buch book, String strNumberOfItems) {
@@ -135,5 +161,24 @@ public class WarenkorbBean implements Serializable {
     public void setItems(List<WarenkorbItem> items) {
         this.items = items;
     }
+    
+    public String getLieferdatum() {
+        return lieferdatum;
+    }
+
+    public void setLieferdatum(String lieferdatum) {
+        this.lieferdatum = lieferdatum;
+    }
+    
+    public void insertWarenkorbinDB(String user) {
+        
+        //String user = context.getExternalContext().getSessionMap().get("user").toString();
+        System.out.println("Benuzter eingeloggt:"+user);
+        //dbBean.getKundenID(user);
+        //dbBean holen und insert mit ut.commit
+        //dbBean.insertWarenkorbinDB(List<WarenkorbItem> items, Kunde kunde);
+    }
+    
+   
 
 }

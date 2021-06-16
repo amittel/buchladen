@@ -8,6 +8,7 @@ package controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
 import javax.inject.Named;
@@ -127,5 +128,25 @@ public class loginBean {
 
     public void setIsLoggedIn(boolean isLoggedIn) {
         this.isLoggedIn = isLoggedIn;
+    }
+    
+     public void redirectBestellung(){
+       
+        System.out.println("Bestellen ()!");
+        if(isLoggedIn){
+            try {
+            //context.getExternalContext().getSessionMap().get("user") != null) {
+            context.getExternalContext().redirect("bestellen.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(WarenkorbBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("Login OK!");
+        }else{
+         FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bitte zuerst anmelden!", "login");
+            System.out.println("Login NICHT ok!");
+                context.addMessage("sucessInfo",faceMsg);
+        //context.getExternalContext().redirect("warenkorb.xhtml");
+        }
+        
     }
 }

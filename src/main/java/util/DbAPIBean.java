@@ -25,6 +25,8 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import model.Account;
 import model.Adresse;
+import model.Bestelldetail;
+import model.Bestellung;
 import model.Buch;
 import model.Kunde;
 
@@ -44,6 +46,15 @@ public class DbAPIBean implements Serializable {
 
     @Inject
     private Account account;
+    
+    @Inject 
+    private Kunde kunde;
+    
+    @Inject 
+    private Bestellung bestellung;
+    
+    @Inject 
+    private Bestelldetail bestelldetail;
 
     @PersistenceUnit
     private EntityManagerFactory emf;
