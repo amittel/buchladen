@@ -58,7 +58,9 @@ public class WarenkorbBean implements Serializable {
                 System.out.println("Dieses Buch ist bereits im Warenkorb!");
                 myItem.setNumberOfItems(
                         myItem.getNumberOfItems() + intNumberOfItems
-                );         
+                );  
+                //updateTotalPrice(this.items);
+                increaseTotalPrice(myItem);
                 return;
             }        
         }
@@ -70,32 +72,34 @@ public class WarenkorbBean implements Serializable {
         WarenkorbItem newItem = new WarenkorbItem(book, intNumberOfItems);
         // Füge erstelltes Objekt dem gesamten Warenkorb hinzu
         this.items.add(newItem); 
+        increaseTotalPrice(newItem);
+        // updateTotalPrice(this.items);
     }
 
     public void updateNumberOfItemIncrease(WarenkorbItem item, int newNumberOfItems){
         item.setNumberOfItems(newNumberOfItems);
-        increaseTotalPrice(items);
+        increaseTotalPrice(item);
     }
     
     public void updateNumberOfItemDecrease(WarenkorbItem item, int newNumberOfItems){
         item.setNumberOfItems(newNumberOfItems);
-        decreaseTotalPrice(items);
+        decreaseTotalPrice(item);
     }
         
-    public void increaseTotalPrice(List<WarenkorbItem> items){
+    public void increaseTotalPrice(WarenkorbItem bookItem){       
+        totalSum += bookItem.getBook().getBPreis().doubleValue(); 
+    }
+    
+    public void decreaseTotalPrice(WarenkorbItem bookItem){       
+        totalSum -= bookItem.getBook().getBPreis().doubleValue(); 
+    }
+    
+    public void updateTotalPrice(List<WarenkorbItem> items){
         
         for(WarenkorbItem myItem: items){
             totalSum += myItem.getBook().getBPreis().doubleValue() * myItem.getNumberOfItems();
         }
         System.out.println("totalSumIncrease: " + totalSum);
-    }
-    
-    public void decreaseTotalPrice(List<WarenkorbItem> items){
-        
-        for(WarenkorbItem myItem: items){
-            totalSum -= myItem.getBook().getBPreis().doubleValue() * myItem.getNumberOfItems();
-        }
-        System.out.println("totalSumDecrease: " + totalSum);
     }
     
     public Buch getBook() {
