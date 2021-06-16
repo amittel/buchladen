@@ -184,7 +184,10 @@ public class WarenkorbBean implements Serializable {
         if(sessionMap != null)
         {
         sessionAttribute = sessionMap.get("user");
+        
         System.out.println("Session value is...."+(String)sessionAttribute);
+         sessionAttribute = sessionMap.get("userID");
+        System.out.println("Session value is...."+sessionAttribute.toString());
         //return (String)sessionAttribute;
         }
         

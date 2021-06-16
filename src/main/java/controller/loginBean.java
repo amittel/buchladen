@@ -72,13 +72,16 @@ public class loginBean {
         // Deswegen .get(0) mit Index 0
         // Alles andere ist outOfBounds
         Account userDB = dbBean.getAccount(username);
+        
 
         if(userDB.getAcid() != null) {
             if(userDB.getACCName().equals(username) && userDB.getAccpwd().equals(password)) {
                 // User ok for login and redirect
                 this.isLoggedIn = true;
+                int userID = userDB.getAcid();
                 context.getExternalContext().getFlash().setKeepMessages(true);
                 context.getExternalContext().getSessionMap().put("user", username);
+                context.getExternalContext().getSessionMap().put("userID", userID);
                 FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Login erfolgreich", "login");
                 context.addMessage("sucessInfo",faceMsg);
                 
