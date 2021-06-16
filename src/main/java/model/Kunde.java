@@ -38,7 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Kunde.findByKVName", query = "SELECT k FROM Kunde k WHERE k.kVName = :kVName"),
     @NamedQuery(name = "Kunde.findByKName", query = "SELECT k FROM Kunde k WHERE k.kName = :kName"),
     @NamedQuery(name = "Kunde.findByKEmail", query = "SELECT k FROM Kunde k WHERE k.kEmail = :kEmail"),
-    @NamedQuery(name = "Kunde.findByKTel", query = "SELECT k FROM Kunde k WHERE k.kTel = :kTel")})
+    @NamedQuery(name = "Kunde.findByKTel", query = "SELECT k FROM Kunde k WHERE k.kTel = :kTel"),
+    @NamedQuery(name = "Kunde.findByFK_ACC", query = "SELECT k FROM Kunde k WHERE k.fkAcc = :fkAcc")})
+
 public class Kunde implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -180,5 +182,5 @@ public class Kunde implements Serializable {
     public String toString() {
         return "model.Kunde[ kid=" + kid + " ]";
     }
-    
+
 }

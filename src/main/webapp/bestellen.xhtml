@@ -49,12 +49,7 @@
                             </h:column> 
                         </h:dataTable>
                     </h:form>
-
-
-
-
                 </div>
-
             </div>
             <div class="row">
                 <div class="col">
@@ -63,7 +58,7 @@
 
                         <f:facet name="header">Lieferdatum</f:facet>
                         <h:form>
-                        <h:inputText  value="#{warenkorbBean.lieferdatum}"/>
+                            <h:inputText  value="#{warenkorbBean.lieferdatum}"/>
                         </h:form>
                     </h:panelGrid>
                 </div>
@@ -77,14 +72,17 @@
                         <h:outputText  value="#{warenkorbBean.totalSum}"/>
 
                     </h:panelGrid>
-
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <h:form>
-                        <h:commandButton value="Kaufen!" action="#{warenkorbBean.insertWarenkorbinDB()}"   class="btn btn-primary"/>
-                    
+                        <h:commandButton 
+                            value="Kaufen!"
+                            action="#{warenkorbBean.insertWarenkorbinDB()}"  
+                            class="btn btn-primary"
+                            disabled="#{warenkorbBean.toggleBuyButton}"
+                            />
                     </h:form>
                 </div>
             </div>

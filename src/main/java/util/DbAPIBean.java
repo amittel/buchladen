@@ -6,7 +6,14 @@
 package util;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.inject.Named;
@@ -29,6 +36,7 @@ import model.Bestelldetail;
 import model.Bestellung;
 import model.Buch;
 import model.Kunde;
+import model.WarenkorbItem;
 
 /**
  *
@@ -46,14 +54,11 @@ public class DbAPIBean implements Serializable {
 
     @Inject
     private Account account;
-    
-    @Inject 
+    @Inject
     private Kunde kunde;
-    
-    @Inject 
+    @Inject
     private Bestellung bestellung;
-    
-    @Inject 
+    @Inject
     private Bestelldetail bestelldetail;
 
     @PersistenceUnit
@@ -110,6 +115,78 @@ public class DbAPIBean implements Serializable {
             }
         } finally {
             entityManager.close();
+        }
+
+        return false;
+    }
+
+    public boolean insertWarenkorbinDB(List<WarenkorbItem> items, double totalSum, String currentUserId) {
+
+        EntityManager em = emf.createEntityManager();
+        // Workaround damit query klappt - wie anders lösen (?)
+        account.setAcid(Integer.parseInt(currentUserId));
+
+        // KundenID mit Hilfe von currentUserId beschaffen
+        TypedQuery<Kunde> query
+                = em.createNamedQuery("Kunde.findByFK_ACC", Kunde.class);
+        query.setParameter("fkAcc", account);
+
+        // Erhalte Kundenobjekt
+        kunde = query.getSingleResult();
+
+        // Debugging - gleiches Lieferdatum
+        String slieferDatum = "1998-12-30";
+
+        Date dLieferDatum = new Date();
+        DateFormat myDate = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            dLieferDatum = myDate.parse(slieferDatum);
+        } catch (ParseException ex) {
+            Logger.getLogger(DbAPIBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        java.util.Date date = new java.util.Date();
+        java.sql.Date lieferDatum = new java.sql.Date(date.getTime());
+        System.out.println("date.getTime(): " + date.getTime());
+        System.out.println("Lieferdatum: " + lieferDatum);
+
+        try {
+            ut.begin();
+
+            // Durchlaufe jeden Artikel aus dem Warenkorb
+            // und speicher diesen als eigene Bestellung ab
+            em.joinTransaction();   // innerhalb der for-Schleife?
+
+            bestellung.setBLieferDatum(dLieferDatum);
+            bestellung.setBStatus("offen");
+            bestellung.setBKommentar("Platzhalter");
+            bestellung.setFkKid(kunde);
+            em.persist(bestellung);
+
+            for (WarenkorbItem myItem : items) {
+                // Neues Objekt erstellen, um 
+                // alle Objekte übernehmen zu können
+                // und überschreiben zu verhindern
+                Bestelldetail bestelldetail = new Bestelldetail();
+
+                bestelldetail.setFkBeid(bestellung);
+                bestelldetail.setFkBid(myItem.getBook());
+                bestelldetail.setBDMenge((short) myItem.getNumberOfItems());
+                em.persist(bestelldetail);
+            }
+            // In Datenbank übertragen
+            ut.commit();
+
+            return true;
+        } catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException | NotSupportedException | RollbackException | SystemException e) {
+            System.out.println("insert Bestellung fehlgeschlagen: " + e.toString());
+            try {
+                ut.rollback();
+            } catch (IllegalStateException | SecurityException | SystemException ex) {
+                //do nothing
+            }
+        } finally {
+            em.close();
         }
 
         return false;

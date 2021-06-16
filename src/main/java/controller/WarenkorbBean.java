@@ -41,39 +41,60 @@ public class WarenkorbBean implements Serializable {
 
     private static final Logger log
             = Logger.getLogger(WarenkorbBean.class.getName());
-    
+
     FacesContext context = FacesContext.getCurrentInstance();
-    
+
     @Inject
     private DbAPIBean dbBean;
-    
+
     @Inject
     private Buch book;
-    
-
-    
-    
-    
 
     private String numberOfItems;
     private double totalSum = 0;
-    
-     // Stellt den gesamten Warenkorb dar.
+
+    // Stellt den gesamten Warenkorb dar.
     // Jedes Element in <items> bildet ein kaufbares Produkt ab.
     List<WarenkorbItem> items = new ArrayList<>();
 
     private String lieferdatum;
-
-   
-
-
 
     /**
      * Creates a new instance of WarenkorbBean
      */
     public WarenkorbBean() {
         // totalSum = new BigDecimal(0);
-        
+
+    }
+
+    public String insertWarenkorbinDB() {
+
+        String currentUser;
+        String currentUserId;
+        boolean state = false;
+
+        // Magie um aktuell angemeldeten User zu erhalten
+        Object sessionAttribute = null;
+        FacesContext facescontext = FacesContext.getCurrentInstance();
+        ExternalContext externalcontext = facescontext.getExternalContext();
+        Map sessionMap = externalcontext.getSessionMap();
+        if (sessionMap != null) {
+            sessionAttribute = sessionMap.get("user");
+            currentUser = (String) sessionAttribute;
+
+            sessionAttribute = sessionMap.get("userID");
+            currentUserId = sessionAttribute.toString();
+
+            state = dbBean.insertWarenkorbinDB(this.items, this.totalSum, currentUserId);
+
+            System.out.println("state: " + state);
+
+            if (state == true) {
+                return "/danke.xhtml";
+                //context.getExternalContext().redirect("bestellen.xhtml");  
+            }
+        }
+        return "";
     }
 
     public void addToCart(Buch book, String strNumberOfItems) {
@@ -104,6 +125,10 @@ public class WarenkorbBean implements Serializable {
         for (int i = 0; i < intNumberOfItems; i++) {
             increaseTotalPrice(newItem);
         }
+    }
+
+    public boolean getToggleBuyButton() {
+        return this.items.isEmpty();
     }
 
     public void updateNumberOfItemIncrease(WarenkorbItem item, int newNumberOfItems) {
@@ -163,7 +188,7 @@ public class WarenkorbBean implements Serializable {
     public void setItems(List<WarenkorbItem> items) {
         this.items = items;
     }
-    
+
     public String getLieferdatum() {
         return lieferdatum;
     }
@@ -171,33 +196,4 @@ public class WarenkorbBean implements Serializable {
     public void setLieferdatum(String lieferdatum) {
         this.lieferdatum = lieferdatum;
     }
-    
-    public void insertWarenkorbinDB() {
-        
-        // String user2 = context.getExternalContext().getSessionMap().get("user");
-        //String yourVariable = (String) context.getExternalContext().getSessionMap().get("user");
-        
-        Object sessionAttribute = null;
-        FacesContext facescontext=FacesContext.getCurrentInstance();
-        ExternalContext externalcontext=facescontext.getExternalContext();
-        Map sessionMap=externalcontext.getSessionMap();
-        if(sessionMap != null)
-        {
-        sessionAttribute = sessionMap.get("user");
-        
-        System.out.println("Session value is...."+(String)sessionAttribute);
-         sessionAttribute = sessionMap.get("userID");
-        System.out.println("Session value is...."+sessionAttribute.toString());
-        //return (String)sessionAttribute;
-        }
-        
-        
-        //System.out.println("Benuzter eingeloggt:"+yourVariable);
-        //dbBean.getKundenID(user);
-        //dbBean holen und insert mit ut.commit
-        //dbBean.insertWarenkorbinDB(List<WarenkorbItem> items, Kunde kunde);
-    }
-    
-   
-
 }

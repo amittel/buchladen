@@ -48,7 +48,7 @@ public class Bestelldetail implements Serializable {
     @Column(name = "BDMenge")
     private short bDMenge;
     @Basic(optional = false)
-    @NotNull
+    // @NotNull s-- AUSKOMMENTIEREN WEIL ES EBEN SO IST!
     @Column(name = "BDDatum")
     @Temporal(TemporalType.TIMESTAMP)
     private Date bDDatum;

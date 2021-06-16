@@ -66,7 +66,7 @@ public class Bestellung implements Serializable {
     @Column(name = "BKommentar")
     private String bKommentar;
     @Basic(optional = false)
-    @NotNull
+    // @NotNull -- AUSKOMMENTIEREN WEIL ES EBEN SO IST!
     @Column(name = "BAenderungsDatum")
     @Temporal(TemporalType.TIMESTAMP)
     private Date bAenderungsDatum;
@@ -172,5 +172,5 @@ public class Bestellung implements Serializable {
     public String toString() {
         return "model.Bestellung[ beid=" + beid + " ]";
     }
-    
+
 }
