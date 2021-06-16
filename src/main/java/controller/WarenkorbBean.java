@@ -77,12 +77,12 @@ public class WarenkorbBean implements Serializable {
     }
 
     public void updateNumberOfItemIncrease(WarenkorbItem item, int newNumberOfItems){
-        item.setNumberOfItems(newNumberOfItems);
+        item.setNumberOfItems(newNumberOfItems+1);
         increaseTotalPrice(item);
     }
     
     public void updateNumberOfItemDecrease(WarenkorbItem item, int newNumberOfItems){
-        item.setNumberOfItems(newNumberOfItems);
+        item.setNumberOfItems(newNumberOfItems-1);
         decreaseTotalPrice(item);
     }
         

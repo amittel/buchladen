@@ -30,7 +30,8 @@
                             value="-" 
                             action="#{warenkorbBean.updateNumberOfItemDecrease(pitem, abc.value)}" 
                             class="btn btn-primary">
-                 
+                            
+                            <f:ajax event="click"  render="anzahlID"/>
                         </h:commandButton>
                         
                         <h:outputText  
@@ -43,6 +44,7 @@
                         <h:commandButton value="+" 
                                          action="#{warenkorbBean.updateNumberOfItemIncrease(pitem, abc.value)}" 
                                          class="btn btn-primary">
+                            <f:ajax event="click"  render="anzahlID"/>
                         </h:commandButton>
                         
                     </h:column>
