@@ -19,7 +19,7 @@ import javax.faces.validator.ValidatorException;
  *
  * @author Arnulf
  */
-@FacesValidator("buchladen.validatePasswort")
+@FacesValidator("validatePasswort")
 public class ValidatePasswort implements Validator, Serializable {
     
     private static final Pattern pattern_password = Pattern.compile("^[a-zA-Z0-9]{8,}$");

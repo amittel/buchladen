@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.component.html.HtmlDataTable;
 import javax.inject.Inject;
 import model.Buch;
 import model.WarenkorbItem;
@@ -22,33 +24,53 @@ import model.WarenkorbItem;
  */
 @Named(value = "warenkorbBean")
 @ManagedBean // (?)
-@Dependent
+@SessionScoped
 public class WarenkorbBean implements Serializable {
 
     private static final Logger log
             = Logger.getLogger(WarenkorbBean.class.getName());
     
-    int numberOfItems;
+    private String numberOfItems;
     // @Inject
     List<WarenkorbItem> items = new ArrayList<>();
+    
+    @Inject
+    private Buch book;
+    
 
     /**
      * Creates a new instance of WarenkorbBean
      */
     public WarenkorbBean() {
     }
-
-    public void addToCart(Buch book, int numberOfItems) {
-        // log.info("FOOOOOOOOOOOOOOOOOO");
-        log.info("numberOfItems:" + numberOfItems);
-        items.add(new WarenkorbItem(book, numberOfItems));
+    
+    public void init() {
+        
     }
 
-    public int getNumberOfItems() {
+    public void addToCart(Buch book, String anzahl) {
+        
+         //items.add(new WarenkorbItem(book,3));
+         //log.info(book.getBName());
+         String info = "Name: "+ book.getBName() + " ISBN: "+ book.getBisbn();
+         System.out.println(info);
+         //String anzahl = this.getNumberOfItems();
+         System.out.println("Anzahl Bücher: " +anzahl);
+    }
+
+    public Buch getBook() {
+        return book;
+    }
+
+    public void setBook(Buch book) {
+        this.book = book;
+    }
+
+    public String getNumberOfItems() {
         return numberOfItems;
     }
 
-    public void setNumberOfItems(int numberOfItems) {
+    public void setNumberOfItems(String numberOfItems) {
         this.numberOfItems = numberOfItems;
     }
     

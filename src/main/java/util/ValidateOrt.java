@@ -22,7 +22,7 @@ import javax.faces.validator.ValidatorException;
 @FacesValidator("buchladen.validateOrt")
 public class ValidateOrt implements Validator, Serializable {
     
-    private static final Pattern pattern_ort = Pattern.compile("/^[a-zA-Z_äÄöÖüÜß]+(?:[\\s-][a-zA-Z]+)*$");
+    private static final Pattern pattern_ort = Pattern.compile("^[a-zA-Z_äÄöÖüÜß]+(?:[\\s-][a-zA-Z]+)*$");
     
     @Override
     public void validate(FacesContext ctx, UIComponent uic,Object obj) throws ValidatorException {

@@ -36,15 +36,15 @@
                                     <h:form>
                                         <div class="mb-3">
                                             <label for="user" class="form-label">Benutzer</label>
-                                            <h:message for="user-login"/>
-                                            <h:inputText value="#{loginBean.username}" class="form-control" id="user-login" >
-                                                <f:validateLength minimum ="3" maximum ="10" for="user-login"/>
+                                            <!--<h:message for="user-login"/> -->
+                                            <h:inputText value="#{loginBean.username}" class="form-control" id="user-login" required="true" requiredMessage="Benutzername eingeben!" >
+                                               <f:validateLength minimum ="3" maximum ="10" for="user-login"/>
                                             </h:inputText>
 
                                         </div>
                                         <div class="mb-3">
                                             <label for="password-login" class="form-label">Passwort</label>
-                                            <h:inputSecret value="#{loginBean.password}" class="form-control" id="password-login" >
+                                            <h:inputSecret value="#{loginBean.password}" class="form-control" id="password-login" required="true" requiredMessage="Passwort eingeben!" >
                                             </h:inputSecret>
 
                                         </div>
@@ -87,29 +87,29 @@
                                     <h:form>
                                         <div class="mb-3">
                                             <label for="accname-reg" class="form-label">Username</label>
-                                            <h:inputText value="#{registerBean.account.ACCName}" class="form-control" id="accname-reg" />
+                                            <h:inputText value="#{registerBean.account.ACCName}" class="form-control" id="accname-reg" required="true" requiredMessage="Benutzername eingeben!" />
                                         </div>
                                         <div class="mb-3">
                                             <label for="vorname-reg" class="form-label">Vorname</label>
-                                            <h:inputText value="#{registerBean.kunde.KVName}" class="form-control" id="vorname-reg" />
+                                            <h:inputText value="#{registerBean.kunde.KVName}" class="form-control" id="vorname-reg" required="true" requiredMessage="Vorname eingeben!"/>
                                         </div>
                                         <div class="mb-3">
                                             <label for="nachname-reg" class="form-label">Nachname</label>
-                                            <h:inputText value="#{registerBean.kunde.KName}" class="form-control" id="nachname-reg" />
+                                            <h:inputText value="#{registerBean.kunde.KName}" class="form-control" id="nachname-reg" required="true" requiredMessage="Nachname eingeben!"/>
                                         </div>
                                         <div class="mb-3">
                                             <label for="strasse-reg" class="form-label">Straße</label>
-                                            <h:inputText value="#{registerBean.adresse.AStrasse}" class="form-control" id="strasse-reg" />
+                                            <h:inputText value="#{registerBean.adresse.AStrasse}" class="form-control" id="strasse-reg" required="true" requiredMessage="Straße eingeben!"/>
                                         </div>
                                         <div class="mb-3">
                                             <label for="ort-reg" class="form-label">Ort</label>
-                                            <h:inputText value="#{registerBean.adresse.AOrt}" class="form-control" id="ort-reg" >
+                                            <h:inputText value="#{registerBean.adresse.AOrt}" class="form-control" id="ort-reg" required="true" requiredMessage="Ort eingeben!">
                                                 <f:validator validatorId="buchladen.validateOrt" />
                                             </h:inputText>
                                         </div>
                                         <div class="mb-3">
                                             <label for="plz-reg" class="form-label">PLZ</label>
-                                            <h:inputText value="#{registerBean.adresse.aplz}" class="form-control" id="plz-reg" />
+                                            <h:inputText value="#{registerBean.adresse.aplz}" class="form-control" id="plz-reg" required="true" requiredMessage="PLZ eingeben!"/>
                                         </div>
                                         <div class="mb-3">
                                             <label for="bundesland-reg" class="form-label">Bundesland</label>
@@ -128,16 +128,16 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="land-reg" class="form-label">Land</label>
-                                            <h:inputText value="#{registerBean.adresse.ALand}" class="form-control" id="land-reg" />
+                                            <h:inputText value="#{registerBean.adresse.ALand}" class="form-control" id="land-reg" required="true" requiredMessage="Land eingeben!"/>
                                         </div>
                                         <div class="mb-3">
                                             <label for="email-reg" class="form-label">Email</label>
-                                            <h:inputText value="#{registerBean.kunde.KEmail}" class="form-control" id="email-reg" />
+                                            <h:inputText value="#{registerBean.kunde.KEmail}" class="form-control" id="email-reg" required="true" requiredMessage="Email eingeben!"/>
                                         </div>
                                         <div class="mb-3">
                                             <label for="passwort-reg" class="form-label">Passwort</label>
-                                            <h:inputSecret value="#{registerBean.account.accpwd}" class="form-control" id="passwort-reg">
-                                                <f:validator validatorId="buchladen.validatePasswort" />
+                                            <h:inputSecret value="#{registerBean.account.accpwd}" class="form-control" id="passwort-reg" required="true" requiredMessage="Passwort eingeben!">
+                                                <f:validator validatorId="validatePasswort" />
                                             </h:inputSecret>
                                         </div>
                                         <h:commandButton

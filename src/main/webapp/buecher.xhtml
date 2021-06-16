@@ -7,34 +7,53 @@
 
     <ui:composition template="WEB-INF/template/mytemplate.xhtml">
         <ui:define name="content">
-            <h:dataTable 
-                styleClass="table table-striped table-hover table-bordered"
-                value="#{bookBean.bookList}" var="book">
-                <h:column>
-                    <f:facet name="header">Buchtitel</f:facet>
-                    <h:outputText value="#{book.BName}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Preis</f:facet>
-                    <h:outputText value="#{book.BPreis}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">ISBN</f:facet>
-                    <h:outputText value="#{book.bisbn}"/>
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Menge</f:facet>
-                    <h:form>
-                        <h:inputText value="#{warenkorbBean.numberOfItems}"/>
-                    </h:form>
-                </h:column>
-                <h:column>
-                    <f:facet name="header"></f:facet>
-                    <h:form>
-                        <h:commandButton value="in den Warenkorb" action="#{warenkorbBean.addToCart(book, numberOfItems)}" class="btn btn-primary"/>
-                    </h:form>
-                </h:column>
-            </h:dataTable>
+            <h1>Bücherliste</h1>
+            <h:form id="buch">
+                <h:dataTable 
+                    id="buchtbl"
+                    
+                    styleClass="table table-striped table-hover table-bordered"
+                    value="#{bookBean.bookList}" var="book">
+
+                    <h:column>
+                        <f:facet name="header">Buchtitel</f:facet>
+                        <h:outputText value="#{book.BName}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Preis</f:facet>
+                        <h:outputText value="#{book.BPreis}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">ISBN</f:facet>
+                        <h:outputText value="#{book.bisbn}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Menge</f:facet>
+                       
+                            <h:inputText  binding="#{abc}" value="anzahl"/>
+                        
+                        
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header"></f:facet>
+
+                        <h:commandButton value="in den Warenkorb" action="#{warenkorbBean.addToCart(book, abc.value)}" class="btn btn-primary">
+                           <!-- <f:setPropertyActionListener target="#{warenkorbBean.numberOfItems}" value="anzahl"  />    -->
+
+                        </h:commandButton>
+
+                    </h:column>
+
+                </h:dataTable>
+            </h:form>
+            <h:form>
+                
+                <h:inputText id="etwas" value="#{warenkorbBean.setNumberOfItems('tada')}"/>
+                    <h:commandButton value="in den Warenkorb" action="#{warenkorbBean.addToCart(book)}" class="btn btn-primary">
+                               
+
+                        </h:commandButton>
+            </h:form>
         </ui:define>
     </ui:composition> 
 </html>
