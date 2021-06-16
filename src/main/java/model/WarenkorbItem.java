@@ -12,7 +12,7 @@ package model;
 public class WarenkorbItem {
     
     private Buch book;
-    private int numberOfItems = 0;
+    private int numberOfItems;
 
     public WarenkorbItem(){   
     }
