@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
@@ -19,6 +20,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlDataTable;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import model.Bestelldetail;
@@ -170,10 +172,24 @@ public class WarenkorbBean implements Serializable {
         this.lieferdatum = lieferdatum;
     }
     
-    public void insertWarenkorbinDB(String user) {
+    public void insertWarenkorbinDB() {
         
-        //String user = context.getExternalContext().getSessionMap().get("user").toString();
-        System.out.println("Benuzter eingeloggt:"+user);
+        // String user2 = context.getExternalContext().getSessionMap().get("user");
+        //String yourVariable = (String) context.getExternalContext().getSessionMap().get("user");
+        
+        Object sessionAttribute = null;
+        FacesContext facescontext=FacesContext.getCurrentInstance();
+        ExternalContext externalcontext=facescontext.getExternalContext();
+        Map sessionMap=externalcontext.getSessionMap();
+        if(sessionMap != null)
+        {
+        sessionAttribute = sessionMap.get("user");
+        System.out.println("Session value is...."+(String)sessionAttribute);
+        //return (String)sessionAttribute;
+        }
+        
+        
+        //System.out.println("Benuzter eingeloggt:"+yourVariable);
         //dbBean.getKundenID(user);
         //dbBean holen und insert mit ut.commit
         //dbBean.insertWarenkorbinDB(List<WarenkorbItem> items, Kunde kunde);
