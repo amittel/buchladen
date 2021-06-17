@@ -6,24 +6,18 @@
 
     <div class="container" style="margin-top:30px">
         <div class="row">
-
-
             <div class="col-sm-12">
 
                 <div class="container">                   
                     <!--Displays only Error Messages-->
                     <h:messages errorClass="alert alert-danger" layout="list" infoStyle="display:none" />
 
-                   <!--Displays only Info Messages-->
-                   <h:messages infoClass="alert alert-info infoStyle" layout="list" errorStyle="display:none" />
-                   <!--<h:messages infoClass="alert alert-info" errorClass="alert alert-danger" />-->
-
-
-                   
+                    <!--Displays only Info Messages-->
+                    <h:messages infoClass="alert alert-info infoStyle" layout="list" errorStyle="display:none" />
+                    <!--<h:messages infoClass="alert alert-info" errorClass="alert alert-danger" />-->
                     <ui:insert name="content" >
                         content
                     </ui:insert>
-
 
                 </div>
             </div>                 

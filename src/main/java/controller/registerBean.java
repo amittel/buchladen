@@ -156,63 +156,6 @@ public class registerBean {
                 e.printStackTrace();
             }
         }
-
-        /* try {
-
-            PreparedStatement prepStmt;
-            usernameUsed = isUsed(this.getAccname());
-
-            if (!usernameUsed) {
-                // Account Entity
-                String userAccount = "INSERT INTO account(ACID, ACCName, ACCPWD, ACCAdmin) VALUES (NULL, ?, ?, ?)";
-                prepStmt = jdbcLogin.conn.prepareStatement(userAccount);
-                prepStmt.setString(1, this.getAccname());
-                prepStmt.setString(2, this.getPassword());
-                prepStmt.setString(3, "User");
-                prepStmt.executeUpdate();
-
-                // Adresse Entity
-                String adressAccount = "INSERT INTO adresse(ADRID, AStrasse, AOrt, APLZ, ABundesland, ALand) VALUES (NULL, ?, ?, ?, ?, ?)";
-                prepStmt = jdbcLogin.conn.prepareStatement(adressAccount);
-                prepStmt.setString(1, this.getStrasse());
-                prepStmt.setString(2, this.getOrt());
-                prepStmt.setString(3, this.getPlz());
-                prepStmt.setString(4, this.getBundesland());
-                prepStmt.setString(5, this.getLand());
-                prepStmt.executeUpdate();
-
-                // Kunde Entity - Foreigns Keys zusammenführen
-                // Adresse FK auslesen
-                String get_fk_aid = "SELECT MAX(ADRID) as aid FROM `adresse`";
-                rs = jdbcLogin.conn.createStatement().executeQuery(get_fk_aid);
-                while (rs.next() == true) {
-                    this.fk_aid = rs.getInt("aid");
-                }
-
-                // Account FK auslesen
-                String get_fk_acc = "SELECT MAX(ACID) as acid FROM `account`";
-                rs = jdbcLogin.conn.createStatement().executeQuery(get_fk_acc);
-                while (rs.next() == true) {
-                    this.fk_acc = rs.getInt("acid");
-                }
-
-                // Kunde Entity
-                String kunde = "INSERT INTO `kunde`(`KID`, `KVName`, `KName`, `KEmail`, `KTel`, `FK_AID`, `FK_ACC`) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
-                prepStmt = jdbcLogin.conn.prepareStatement(kunde);
-                prepStmt.setString(1, this.getVname());
-                prepStmt.setString(2, this.getNname());
-                prepStmt.setString(3, this.getEmail());
-                prepStmt.setString(4, "0");
-                prepStmt.setInt(5, this.fk_aid);
-                prepStmt.setInt(6, this.fk_acc);
-                prepStmt.executeUpdate();
-            } else {
-                // System.out.println("User bereits vorhanden!");
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(registerBean.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
     }
 
     public void bundesland() {

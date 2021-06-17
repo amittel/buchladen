@@ -52,6 +52,7 @@ public class WarenkorbBean implements Serializable {
 
     private String numberOfItems;
     private double totalSum = 0;
+    private boolean minusButtonDisabled = false;
 
     // Stellt den gesamten Warenkorb dar.
     // Jedes Element in <items> bildet ein kaufbares Produkt ab.
@@ -87,9 +88,9 @@ public class WarenkorbBean implements Serializable {
 
             state = dbBean.insertWarenkorbinDB(this.items, this.totalSum, currentUserId, lieferdatum);
 
-            System.out.println("state: " + state);
-
             if (state == true) {
+                this.items.removeAll(items);
+                this.totalSum = 0;
                 return "/danke.xhtml";
                 //context.getExternalContext().redirect("bestellen.xhtml");  
             }
@@ -126,6 +127,15 @@ public class WarenkorbBean implements Serializable {
             increaseTotalPrice(newItem);
         }
     }
+    
+    public void deleteItemFromCart(WarenkorbItem currentItem){
+        for (int numberOfItems = 0; 
+                numberOfItems < currentItem.getNumberOfItems(); numberOfItems++){
+            this.decreaseTotalPrice(currentItem);
+        }
+        
+        this.items.remove(currentItem);
+    }
 
     public boolean getToggleBuyButton() {
         return this.items.isEmpty();
@@ -134,11 +144,18 @@ public class WarenkorbBean implements Serializable {
     public void updateNumberOfItemIncrease(WarenkorbItem item, int newNumberOfItems) {
         item.setNumberOfItems(newNumberOfItems + 1);
         increaseTotalPrice(item);
+
+        this.minusButtonDisabled = false;
     }
 
     public void updateNumberOfItemDecrease(WarenkorbItem item, int newNumberOfItems) {
-        item.setNumberOfItems(newNumberOfItems - 1);
-        decreaseTotalPrice(item);
+        if (newNumberOfItems - 1 <= 0) {
+            this.minusButtonDisabled = true;
+        } else {
+            item.setNumberOfItems(newNumberOfItems - 1);
+            decreaseTotalPrice(item);
+            this.minusButtonDisabled = false;
+        }
     }
 
     public void increaseTotalPrice(WarenkorbItem bookItem) {
@@ -196,4 +213,13 @@ public class WarenkorbBean implements Serializable {
     public void setLieferdatum(String lieferdatum) {
         this.lieferdatum = lieferdatum;
     }
+
+    public boolean isMinusButtonDisabled() {
+        return minusButtonDisabled;
+    }
+
+    public void setMinusButtonDisabled(boolean minusButtonDisabled) {
+        this.minusButtonDisabled = minusButtonDisabled;
+    }
+
 }

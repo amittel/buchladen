@@ -8,7 +8,7 @@
 
 
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <a class="navbar-brand" href="index.xhtml">Startseite</a>
+        <h:link class="navbar-brand" outcome="index.xhtml">Startseite</h:link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -156,7 +156,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- *******************************
     
                             Modal Button fürs Login
@@ -181,8 +180,7 @@
                     *********************************** -->
                     <h:form>
                         <a class="nav-link" href="#">
-                            <h:commandButton type="button" value="Registrieren" class="btn btn-primary" onclick="$('#myModal-reg').modal('show')" rendered="#{!loginBean.isLoggedIn}"/>
-                            
+                            <h:commandButton type="button" value="Registrieren" class="btn btn-primary" onclick="$('#myModal-reg').modal('show')" rendered="#{!loginBean.isLoggedIn}"/>                            
                         </a>
                     </h:form>             
 
@@ -194,10 +192,7 @@
                             <h:button value="Produkte" outcome="buecher.xhtml" class="btn btn-primary"/>
                         </h:form>
                     </a>
-                </li>
-
-                
-                
+                </li>                            
                 <li class="nav-item">
                     <a class="nav-link" href="#">
                         <h:form>
@@ -205,7 +200,6 @@
                         </h:form>
                     </a>
                 </li>
-
             </ul>
         </div>  
     </nav>
