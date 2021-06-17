@@ -15,3 +15,8 @@
 * `^[a-zA-Z0-9]{8,}$`
   * Minimum 8 Zeichen
   * Klein- & Großbuchstaben & Zahlen
+
+### Lieferdatum
+* `^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$`
+  * Form dd.mm.yyyy
+  * Jahr von 1900 bis 2000  
