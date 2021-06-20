@@ -102,6 +102,12 @@ public class WarenkorbBean implements Serializable {
 
         int intNumberOfItems = Integer.parseInt(strNumberOfItems);
 
+        // Menge an ausgewählten Büchern ist 0
+        // Nehme diese nicht in die Bestellung auf
+        if (intNumberOfItems == 0){
+            return;
+        }
+        
         for (WarenkorbItem myItem : this.items) {
             // Überprüfe ob Produkt bereits im Warenkorb enthalten ist
             if (myItem.getBook().getBid().equals(book.getBid())) {
@@ -127,18 +133,23 @@ public class WarenkorbBean implements Serializable {
             increaseTotalPrice(newItem);
         }
     }
-    
-    public void deleteItemFromCart(WarenkorbItem currentItem){
-        for (int numberOfItems = 0; 
-                numberOfItems < currentItem.getNumberOfItems(); numberOfItems++){
+
+    public void deleteItemFromCart(WarenkorbItem currentItem) {
+        for (int numberOfItems = 0;
+                numberOfItems < currentItem.getNumberOfItems(); numberOfItems++) {
             this.decreaseTotalPrice(currentItem);
         }
-        
+
         this.items.remove(currentItem);
     }
 
     public boolean getToggleBuyButton() {
         return this.items.isEmpty();
+    }
+
+    public boolean getInputZero(String myvalue) {
+        System.out.println("myvalue: " + myvalue);
+        return false;
     }
 
     public void updateNumberOfItemIncrease(WarenkorbItem item, int newNumberOfItems) {

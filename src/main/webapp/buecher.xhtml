@@ -45,7 +45,10 @@
                     <h:column>
                         <f:facet name="header"></f:facet>
 
-                        <h:commandButton value="in den Warenkorb" action="#{warenkorbBean.addToCart(book, abc.value)}" class="btn btn-primary">
+                        <h:commandButton value="in den Warenkorb" 
+                                         action="#{warenkorbBean.addToCart(book, abc.value)}" 
+                                         class="btn btn-primary"
+                                         >
                            <!-- <f:setPropertyActionListener target="#{warenkorbBean.numberOfItems}" value="anzahl"  />    -->
                         </h:commandButton>
                     </h:column>
