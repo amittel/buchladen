@@ -24,7 +24,6 @@ import javax.persistence.TypedQuery;
 import model.Account;
 import util.DbAPIBean;
 
-
 /**
  *
  * @author vm-dba
@@ -36,23 +35,22 @@ public class loginBean {
 
     private static final Logger log
             = Logger.getLogger(loginBean.class.getName());
-    
+
     FacesContext context = FacesContext.getCurrentInstance();
-    
+
     private String username;
     private String password;
     private String vname;
-   //  private boolean isLoggedIn = false;
+    //  private boolean isLoggedIn = false;
     private boolean isLoggedIn = context != null && context.getExternalContext().getSessionMap().get("user") != null;
 
     private List<Account> accountList;
-    
+
     @Inject
     private DbAPIBean dbBean; //Zentraler DB-Zugriff
     @Inject
     private Account account; //Login-Objekt
-    
-    
+
     //private final JDBCLogin jdbcBean;
     //private List<Account> accountList;
     /**
@@ -68,32 +66,30 @@ public class loginBean {
     }
 
     public void loginUser() {
-        // Als return bekommne wir Liste mit nur einem Element
-        // Deswegen .get(0) mit Index 0
-        // Alles andere ist outOfBounds
-        Account userDB = dbBean.getAccount(username);
-        
 
-        if(userDB.getAcid() != null) {
-            if(userDB.getACCName().equals(username) && userDB.getAccpwd().equals(password)) {
-                // User ok for login and redirect
+        Account userDB = dbBean.getAccount(username);
+
+        if (userDB.getAcid() != null) {
+            if (userDB.getACCName().equals(username) && userDB.getAccpwd().equals(password)) {
+                // User OK für login und redirect
                 this.isLoggedIn = true;
                 int userID = userDB.getAcid();
                 context.getExternalContext().getFlash().setKeepMessages(true);
                 context.getExternalContext().getSessionMap().put("user", username);
                 context.getExternalContext().getSessionMap().put("userID", userID);
                 FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Login erfolgreich", "login");
-                context.addMessage("sucessInfo",faceMsg);
-                
+                context.addMessage("sucessInfo", faceMsg);
+
                 try {
                     context.getExternalContext().redirect("hallo.xhtml");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else {
+                context.getExternalContext().getFlash().setKeepMessages(true);
+                FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login fehlgeschlagen!", "login");
+                context.addMessage("errorInfo", faceMsg);
             }
-            else {
-            //Something wrong            
-            }    
         }
     }
 
@@ -132,24 +128,24 @@ public class loginBean {
     public void setIsLoggedIn(boolean isLoggedIn) {
         this.isLoggedIn = isLoggedIn;
     }
-    
-     public void redirectBestellung(){
-       
+
+    public void redirectBestellung() {
+
         System.out.println("Bestellen ()!");
-        if(isLoggedIn){
+        if (isLoggedIn) {
             try {
-            //context.getExternalContext().getSessionMap().get("user") != null) {
-            context.getExternalContext().redirect("bestellen.xhtml");
+                //context.getExternalContext().getSessionMap().get("user") != null) {
+                context.getExternalContext().redirect("bestellen.xhtml");
             } catch (IOException ex) {
                 Logger.getLogger(WarenkorbBean.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println("Login OK!");
-        }else{
-         FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bitte zuerst anmelden!", "login");
+        } else {
+            FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bitte zuerst anmelden!", "login");
             System.out.println("Login NICHT ok!");
-                context.addMessage("sucessInfo",faceMsg);
-        //context.getExternalContext().redirect("warenkorb.xhtml");
+            context.addMessage("sucessInfo", faceMsg);
+            //context.getExternalContext().redirect("warenkorb.xhtml");
         }
-        
+
     }
 }

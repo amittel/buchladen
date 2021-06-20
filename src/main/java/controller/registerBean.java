@@ -87,7 +87,11 @@ public class registerBean {
             this.isLoggedIn = true;
             
             // Sorgt dafür, dass die Fehlermeldung auf der Seite erhalten bleibt
-            // und zu sehen ist.        
+            // und zu sehen ist.       
+            // Variables stored in the flash scope will survive a redirection and they will be discarded afterwards. 
+            // https://stackoverflow.com/questions/11194112/understand-flash-scope-in-jsf2
+            // .getFlash().setKeepMessages(true): 
+            // This line tells JSF you want to keep the FacesMessage in the flash scope. That's a requirement when making a redirection
             context.getExternalContext().getFlash().setKeepMessages(true);  // Return the ExternalContext instance for this FacesContext instance.
                                                                             // This class allows the Faces API to be unaware of the nature of its containing application environment.
             context.getExternalContext().getSessionMap().put("user", account.getACCName());
@@ -103,6 +107,10 @@ public class registerBean {
         } else {
             // Sorgt dafür, dass die Fehlermeldung auf der Seite erhalten bleibt
             // und zu sehen ist.
+            // Variables stored in the flash scope will survive a redirection and they will be discarded afterwards. 
+            // https://stackoverflow.com/questions/11194112/understand-flash-scope-in-jsf2
+            // .getFlash().setKeepMessages(true): 
+            // This line tells JSF you want to keep the FacesMessage in the flash scope. That's a requirement when making a redirection
             context.getExternalContext().getFlash().setKeepMessages(true); // Return the ExternalContext instance for this FacesContext instance.
                                                                            // This class allows the Faces API to be unaware of the nature of its containing application environment.
             // Setze den Ausgabetext der Fehlermeldung
