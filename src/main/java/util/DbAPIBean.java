@@ -94,6 +94,18 @@ public class DbAPIBean implements Serializable {
         account.setACCAdmin("User");
         kunde.setKTel("0000");
         EntityManager entityManager = emf.createEntityManager();
+
+        List<Account> myAccountList = this.getAccountList();
+
+        for (Account myacc : myAccountList) {
+            if (myacc.getACCName().equals(account.getACCName())) {
+                // Account existiert bereits!
+                // Lege keinen neuen Nutzer an
+                log.info("Accountname bereits vorhanden!");
+                return false;
+            }
+        }
+   
         try {
             ut.begin();
             //Ablauf: Erst Account, dann Adresse anlegen, dann Kunde (hat beide Fremdschlüssel!)
@@ -116,7 +128,7 @@ public class DbAPIBean implements Serializable {
         } finally {
             entityManager.close();
         }
-
+      
         return false;
     }
 
@@ -136,7 +148,6 @@ public class DbAPIBean implements Serializable {
 
         // Debugging - gleiches Lieferdatum
         //String slieferDatum = "1998-12-30";
-
         Date dLieferDatum = new Date();
         DateFormat myDate = new SimpleDateFormat("dd.MM.yyyy");
         try {

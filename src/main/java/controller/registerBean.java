@@ -41,25 +41,7 @@ public class registerBean {
 
     private static final Logger log
             = Logger.getLogger(registerBean.class.getName());
-
-    // Kunde Entity
-    /*private String vname;
-    private String nname;
-    private String email;
-
-    // Adress Entity
-    private String strasse;
-    private String ort;
-    private String plz;
-    private String bundesland; // enum
-    private String land;
-
-    // Account Entity
-    private String password;
-    private String accname;
-    private String accadmin; // enum
-    private int fk_aid;
-    private int fk_acc;*/
+    
     ResultSet rs;
 
     private boolean usernameUsed = false;
@@ -81,6 +63,10 @@ public class registerBean {
     
     private ArrayList<String> bland = new ArrayList<String>();
 
+    // Return the FacesContext instance for the request that is being processed by the current thread, if any.
+    // FacesContext contains all of the per-request state information related to the processing of a single 
+    // JavaServer Faces request, and the rendering of the corresponding response. 
+    // It is passed to, and potentially modified by, each phase of the request processing lifecycle.
     FacesContext context = FacesContext.getCurrentInstance();
 
     /**
@@ -89,55 +75,23 @@ public class registerBean {
     public registerBean() {
         
     }
-    
-    /* Sehr ineffiziente Methode um Bundesländer aus Struktur zu bekommen!*/
-    /*
-    @PostConstruct
-    public void init() {
-        this.adressList = dbBean.getAdressList();
-        // ArrayList<String> bland = new ArrayList<String>();
-        
-        for (Adresse ad : adressList) {
-            if (!this.bland.contains(ad.getABundesland())) {
-                this.bland.add(ad.getABundesland());
-            }  
-        }
 
-        for (String s : this.bland){
-            System.out.println(s);
-        }
-    }*/
-
-    /*
-    // Wenn Email bereits registriet return true
-    public boolean isUsed(String accname) {
-
-        try {
-            String get_acc_names = "SELECT ACCName FROM account";
-      /     rs = jdbcLogin.conn.createStatement().executeQuery(get_acc_names);
-            while (rs.next() == true) {
-                if (rs.getString("ACCName").equals(accname)) {
-                    System.out.println("User existiert bereits");
-                    return true;
-                }
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(registerBean.class.getName()).log(Level.SEVERE, null, ex);
-
-        }
-        System.out.println("Neuer User wird angelegt.");
-        return false;
-    }
-     */
     public void registerUser() {
-
+        
+        List<Account> myAccountList = dbBean.getAccountList();
+        
         boolean success = dbBean.insertRegisterData(account, kunde, adresse);
 
         if (success) {
-            // User ok for login and redirect
+            // User OK für login und redirect
             this.isLoggedIn = true;
-            context.getExternalContext().getFlash().setKeepMessages(true);
+            
+            // Sorgt dafür, dass die Fehlermeldung auf der Seite erhalten bleibt
+            // und zu sehen ist.        
+            context.getExternalContext().getFlash().setKeepMessages(true);  // Return the ExternalContext instance for this FacesContext instance.
+                                                                            // This class allows the Faces API to be unaware of the nature of its containing application environment.
             context.getExternalContext().getSessionMap().put("user", account.getACCName());
+            // Setze den Ausgabetext der Fehlermeldung
             FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registrierung erfolgreich", "login");
             context.addMessage("sucessInfo", faceMsg);
 
@@ -147,8 +101,12 @@ public class registerBean {
                 e.printStackTrace();
             }
         } else {
-            //Something wrong
-            FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registrierung FEHLER", "Reg");
+            // Sorgt dafür, dass die Fehlermeldung auf der Seite erhalten bleibt
+            // und zu sehen ist.
+            context.getExternalContext().getFlash().setKeepMessages(true); // Return the ExternalContext instance for this FacesContext instance.
+                                                                           // This class allows the Faces API to be unaware of the nature of its containing application environment.
+            // Setze den Ausgabetext der Fehlermeldung
+            FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Account bereits vorhanden!", "Reg");
             context.addMessage("errorInfo", faceMsg);
             try {
                 context.getExternalContext().redirect("index.xhtml");
@@ -161,7 +119,6 @@ public class registerBean {
     public void bundesland() {
         laenderListe = dbBean.getBundesland();
         log.info(laenderListe);
-
     }
 
     // Getter und Setter auo generated
