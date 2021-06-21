@@ -75,6 +75,8 @@ public class WarenkorbBean implements Serializable {
         boolean state = false;
 
         // Magie um aktuell angemeldeten User zu erhalten
+        // The SessionMap is a Map<String, Object> and you can access your stored objects 
+        // with the help of the get(Object key) method
         Object sessionAttribute = null;
         FacesContext facescontext = FacesContext.getCurrentInstance();
         ExternalContext externalcontext = facescontext.getExternalContext();
@@ -88,6 +90,7 @@ public class WarenkorbBean implements Serializable {
 
             state = dbBean.insertWarenkorbinDB(this.items, this.totalSum, currentUserId, lieferdatum);
 
+            // Löschen den gesamten Warenkorb
             if (state == true) {
                 this.items.removeAll(items);
                 this.totalSum = 0;
@@ -135,11 +138,13 @@ public class WarenkorbBean implements Serializable {
     }
 
     public void deleteItemFromCart(WarenkorbItem currentItem) {
+        // Reduziere den Gesamtpreis beim Löschvorgang
         for (int numberOfItems = 0;
                 numberOfItems < currentItem.getNumberOfItems(); numberOfItems++) {
             this.decreaseTotalPrice(currentItem);
         }
-
+        
+        // Löschung des Objekts
         this.items.remove(currentItem);
     }
 
@@ -177,6 +182,7 @@ public class WarenkorbBean implements Serializable {
         totalSum -= bookItem.getBook().getBPreis().doubleValue();
     }
 
+    // Überbleibsel -- später löschen!
     public void updateTotalPrice(List<WarenkorbItem> items) {
 
         for (WarenkorbItem myItem : items) {

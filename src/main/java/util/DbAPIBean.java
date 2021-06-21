@@ -145,6 +145,7 @@ public class DbAPIBean implements Serializable {
             Logger.getLogger(DbAPIBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        // Debugging - Testing
         java.util.Date date = new java.util.Date();
         java.sql.Date lieferDatum = new java.sql.Date(date.getTime());
         System.out.println("date.getTime(): " + date.getTime());

@@ -42,6 +42,8 @@ public class loginBean {
     private String password;
     private String vname;
     //  private boolean isLoggedIn = false;
+    
+    // If you want to store an object in jsf session do the following:
     private boolean isLoggedIn = context != null && context.getExternalContext().getSessionMap().get("user") != null;
 
     private List<Account> accountList;

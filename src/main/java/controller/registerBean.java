@@ -81,7 +81,6 @@ public class registerBean {
         boolean success = false;
 
         // Falls User in Datenbank enthalten alles ok
-        // Sonst catch Fall und Stop
         Account myaccount = dbBean.getAccount(account.getACCName());
         System.out.println("Acc Name :" + myaccount.getACCName());
 
