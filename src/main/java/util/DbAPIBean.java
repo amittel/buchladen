@@ -177,7 +177,8 @@ public class DbAPIBean implements Serializable {
             }
             // In Datenbank übertragen
             ut.commit();
-
+            
+            // em.close();
             return true;
         } catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException | NotSupportedException | RollbackException | SystemException e) {
             System.out.println("insert Bestellung fehlgeschlagen: " + e.toString());
