@@ -94,17 +94,6 @@ public class DbAPIBean implements Serializable {
         account.setACCAdmin("User");
         kunde.setKTel("0000");
         EntityManager entityManager = emf.createEntityManager();
-
-        List<Account> myAccountList = this.getAccountList();
-
-        for (Account myacc : myAccountList) {
-            if (myacc.getACCName().equals(account.getACCName())) {
-                // Account existiert bereits!
-                // Lege keinen neuen Nutzer an
-                log.info("Accountname bereits vorhanden!");
-                return false;
-            }
-        }
    
         try {
             ut.begin();

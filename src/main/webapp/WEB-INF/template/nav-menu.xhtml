@@ -37,14 +37,25 @@
                                         <div class="mb-3">
                                             <label for="user" class="form-label">Benutzer</label>
                                             <!--<h:message for="user-login"/> -->
-                                            <h:inputText value="#{loginBean.username}" class="form-control" id="user-login" required="true" requiredMessage="Benutzername eingeben!" >
-                                               <f:validateLength minimum ="3" maximum ="10" for="user-login"/>
+                                            <h:inputText value="#{loginBean.username}" 
+                                                         class="form-control" 
+                                                         id="user-login" 
+                                                         required="true" 
+                                                         requiredMessage="Benutzername eingeben!" >
+                                               <f:validateLength 
+                                                   minimum ="3" 
+                                                   maximum ="10" 
+                                                   for="user-login"/>
                                             </h:inputText>
 
                                         </div>
                                         <div class="mb-3">
                                             <label for="password-login" class="form-label">Passwort</label>
-                                            <h:inputSecret value="#{loginBean.password}" class="form-control" id="password-login" required="true" requiredMessage="Passwort eingeben!" >
+                                            <h:inputSecret value="#{loginBean.password}" 
+                                                           class="form-control" 
+                                                           id="password-login" 
+                                                           required="true" 
+                                                           requiredMessage="Passwort eingeben!" >
                                             </h:inputSecret>
 
                                         </div>

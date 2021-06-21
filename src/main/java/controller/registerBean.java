@@ -41,7 +41,7 @@ public class registerBean {
 
     private static final Logger log
             = Logger.getLogger(registerBean.class.getName());
-    
+
     ResultSet rs;
 
     private boolean usernameUsed = false;
@@ -60,7 +60,7 @@ public class registerBean {
     private Kunde kunde;
 
     private boolean isLoggedIn;
-    
+
     private ArrayList<String> bland = new ArrayList<String>();
 
     // Return the FacesContext instance for the request that is being processed by the current thread, if any.
@@ -73,19 +73,31 @@ public class registerBean {
      * Creates a new instance of registerBean
      */
     public registerBean() {
-        
+
     }
 
     public void registerUser() {
-        
-        List<Account> myAccountList = dbBean.getAccountList();
-        
-        boolean success = dbBean.insertRegisterData(account, kunde, adresse);
+
+        boolean success = false;
+
+        // Falls User in Datenbank enthalten alles ok
+        // Sonst catch Fall und Stop
+        Account myaccount = dbBean.getAccount(account.getACCName());
+        System.out.println("Acc Name :" + myaccount.getACCName());
+
+        if (myaccount.getACCName() == null) {
+            // User existiert noch nicht
+            // Nehme diesen in Datenbank auf
+            success = dbBean.insertRegisterData(account, kunde, adresse);
+        } else {
+            // User schon vorhanden 
+            success = false;
+        }
 
         if (success) {
             // User OK für login und redirect
             this.isLoggedIn = true;
-            
+
             // Sorgt dafür, dass die Fehlermeldung auf der Seite erhalten bleibt
             // und zu sehen ist.       
             // Variables stored in the flash scope will survive a redirection and they will be discarded afterwards. 
@@ -93,7 +105,7 @@ public class registerBean {
             // .getFlash().setKeepMessages(true): 
             // This line tells JSF you want to keep the FacesMessage in the flash scope. That's a requirement when making a redirection
             context.getExternalContext().getFlash().setKeepMessages(true);  // Return the ExternalContext instance for this FacesContext instance.
-                                                                            // This class allows the Faces API to be unaware of the nature of its containing application environment.
+            // This class allows the Faces API to be unaware of the nature of its containing application environment.
             context.getExternalContext().getSessionMap().put("user", account.getACCName());
             // Setze den Ausgabetext der Fehlermeldung
             FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registrierung erfolgreich", "login");
@@ -112,7 +124,7 @@ public class registerBean {
             // .getFlash().setKeepMessages(true): 
             // This line tells JSF you want to keep the FacesMessage in the flash scope. That's a requirement when making a redirection
             context.getExternalContext().getFlash().setKeepMessages(true); // Return the ExternalContext instance for this FacesContext instance.
-                                                                           // This class allows the Faces API to be unaware of the nature of its containing application environment.
+            // This class allows the Faces API to be unaware of the nature of its containing application environment.
             // Setze den Ausgabetext der Fehlermeldung
             FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Account bereits vorhanden!", "Reg");
             context.addMessage("errorInfo", faceMsg);
