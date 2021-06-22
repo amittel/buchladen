@@ -71,7 +71,7 @@
                             <p:dialog header="Neues Konto anlegen" showEffect="fade" modal="true"
                                       widgetVar="registerDialog" responsive="true">
                                 <p:outputPanel id="manage-register-content" class="ui-fluid">
-                                    <p:outputPanel rendered="true">
+                                    <p:outputPanel rendered="true" id="register-test">
                                         <div class="p-field">
                                             <p:outputLabel for="accname-reg">Username</p:outputLabel>
                                             <p:inputText value="#{registerBean.account.ACCName}" 
@@ -175,7 +175,7 @@
 
                                 <f:facet name="footer">
                                     <p:commandButton value="Registrieren" icon="pi pi-check" actionListener="#{registerBean.registerUser()}"
-                                                     update="manage-register-content" process="manage-register-content @this"/>
+                                                     update="manage-register-content register-test" process="manage-register-content register-test @this"/>
                                     <p:commandButton value="Abbrechen" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
                                                      class="ui-button-secondary"/>
                                 </f:facet>

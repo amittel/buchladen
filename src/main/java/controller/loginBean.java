@@ -8,6 +8,7 @@ package controller;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
@@ -41,11 +42,11 @@ public class loginBean {
     private String username;
     private String password;
     private String vname;
-    //  private boolean isLoggedIn = false;
-    
+
     // If you want to store an object in jsf session do the following:
     private boolean isLoggedIn = context != null && context.getExternalContext().getSessionMap().get("user") != null;
-
+    private boolean isAdmin;
+    
     private List<Account> accountList;
 
     @Inject
@@ -62,6 +63,14 @@ public class loginBean {
 
     }
 
+    public boolean getAdminStatus(){
+        if (context.getExternalContext().getSessionMap().get("isAdmin") != null){
+            return (boolean) context.getExternalContext().getSessionMap().get("isAdmin");
+        }else{
+            return false;
+        }
+    }
+    
     public List<Account> getAccountList() {
         this.accountList = dbBean.getAccountList();
         return accountList;
@@ -79,8 +88,19 @@ public class loginBean {
                 context.getExternalContext().getFlash().setKeepMessages(true);
                 context.getExternalContext().getSessionMap().put("user", username);
                 context.getExternalContext().getSessionMap().put("userID", userID);
-                FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Login erfolgreich", "login");
-                context.addMessage("sucessInfo", faceMsg);
+                FacesMessage faceMsg; 
+                
+                if (userDB.getACCAdmin().equals("Admin")) {
+                    this.isAdmin = true;
+                    context.getExternalContext().getSessionMap().put("isAdmin", isAdmin);
+                    faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Login als Administrator", "Willkommen!");
+                    context.addMessage("sucessInfo", faceMsg);
+                }else{
+                    this.isAdmin = false;
+                    context.getExternalContext().getSessionMap().put("isAdmin", isAdmin);
+                    faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Login erfolgreich", "Willkommen");
+                    context.addMessage("sucessInfo", faceMsg);
+                }
 
                 try {
                     // mit Bootstrap: hallo.xhtml, faces/hallo.xhtml workaround
@@ -91,7 +111,7 @@ public class loginBean {
                 }
             } else {
                 context.getExternalContext().getFlash().setKeepMessages(true);
-                FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login fehlgeschlagen!", "login");
+                FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login fehlgeschlagen!", "Error");
                 context.addMessage("errorInfo", faceMsg);
             }
         }
@@ -106,6 +126,25 @@ public class loginBean {
             context.getExternalContext().redirect("index.xhtml");
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void redirectBestellung() {
+
+        System.out.println("Bestellen ()!");
+        if (isLoggedIn) {
+            try {
+                //context.getExternalContext().getSessionMap().get("user") != null) {
+                context.getExternalContext().redirect("bestellen.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(WarenkorbBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println("Login OK!");
+        } else {
+            FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bitte zuerst anmelden!", "login");
+            System.out.println("Login NICHT ok!");
+            context.addMessage("sucessInfo", faceMsg);
+            //context.getExternalContext().redirect("warenkorb.xhtml");
         }
     }
 
@@ -133,23 +172,12 @@ public class loginBean {
         this.isLoggedIn = isLoggedIn;
     }
 
-    public void redirectBestellung() {
-
-        System.out.println("Bestellen ()!");
-        if (isLoggedIn) {
-            try {
-                //context.getExternalContext().getSessionMap().get("user") != null) {
-                context.getExternalContext().redirect("bestellen.xhtml");
-            } catch (IOException ex) {
-                Logger.getLogger(WarenkorbBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            System.out.println("Login OK!");
-        } else {
-            FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bitte zuerst anmelden!", "login");
-            System.out.println("Login NICHT ok!");
-            context.addMessage("sucessInfo", faceMsg);
-            //context.getExternalContext().redirect("warenkorb.xhtml");
-        }
-
+    public boolean isIsAdmin() {
+        return isAdmin;
     }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
 }

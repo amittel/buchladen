@@ -57,7 +57,6 @@ public class bookBean implements Serializable {
     // welches im Forumular neu erzeugt wird
     public void createNewBook() {
         log.info("Creating new Book!");
-        System.out.println("Creating new Book!");
         this.selectedProduct = new Buch();
     }
 
@@ -65,9 +64,9 @@ public class bookBean implements Serializable {
         if (this.selectedProduct.getBisbn() == null) {
             this.selectedProduct.setBisbn(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 9));
             this.products.add(this.selectedProduct);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Added"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Produkt hinzugefügt"));
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Updated"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Produkt aktualisiert"));
         }
 
         PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
@@ -77,14 +76,14 @@ public class bookBean implements Serializable {
     public void deleteProduct() {
         this.products.remove(this.selectedProduct);
         this.selectedProduct = null;
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Removed"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Produkt entfernt"));
         PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
     }
 
     public String getDeleteButtonMessage() {
         if (hasSelectedProducts()) {
             int size = this.selectedProducts.size();
-            return size > 1 ? size + " products selected" : "1 product selected";
+            return size > 1 ? size + " Produkte ausgewählt" : "1 Produkt ausgewählt";
         }
 
         return "Delete";
@@ -97,7 +96,7 @@ public class bookBean implements Serializable {
     public void deleteSelectedProducts() {
         this.products.removeAll(this.selectedProducts);
         this.selectedProducts = null;
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Products Removed"));
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Producte entfernt"));
         PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
         PrimeFaces.current().executeScript("PF('dtProducts').clearFilters()");
     }
