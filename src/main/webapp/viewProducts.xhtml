@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Products</title>
+        html {
+        font-size: 14px;
+        }
+        </style>
+    </h:head>
+
+    <h:body>
+        <p:dataTable var="product" value="#{bookBean.bookList}">
+            <p:column headerText="Name">
+                <h:outputText value="#{product.BName}"/>
+            </p:column>
+
+            <p:column headerText="ISBN">
+                <h:outputText value="#{product.bisbn}"/>
+            </p:column>
+        </p:dataTable>
+    </h:body>
+
+</html>

@@ -83,7 +83,9 @@ public class loginBean {
                 context.addMessage("sucessInfo", faceMsg);
 
                 try {
-                    context.getExternalContext().redirect("hallo.xhtml");
+                    // mit Bootstrap: hallo.xhtml, faces/hallo.xhtml workaround
+                    // für PrimeFaces
+                    context.getExternalContext().redirect("faces/hallo.xhtml");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

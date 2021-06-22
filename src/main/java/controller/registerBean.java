@@ -111,7 +111,7 @@ public class registerBean {
             context.addMessage("sucessInfo", faceMsg);
 
             try {
-                context.getExternalContext().redirect("hallo.xhtml");
+                context.getExternalContext().redirect("faces/hallo.xhtml");
             } catch (IOException e) {
                 e.printStackTrace();
             }

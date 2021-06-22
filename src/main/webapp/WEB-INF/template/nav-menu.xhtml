@@ -4,14 +4,15 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
-
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
 
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <h:link class="navbar-brand" outcome="index.xhtml">Startseite</h:link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
                 <li class="nav-item">
@@ -21,60 +22,40 @@
                                Hier steht der Inhalt des Modals
     
                     *********************************** -->
-                    <div class="modal" id="myModal-login">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-
-                                <!-- Modal Header -->
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Benutzer Login</h4>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-
-                                <!-- Modal body -->
-                                <div class="modal-body">
-                                    <h:form>
-                                        <div class="mb-3">
-                                            <label for="user" class="form-label">Benutzer</label>
-                                            <!--<h:message for="user-login"/> -->
-                                            <h:inputText value="#{loginBean.username}" 
-                                                         class="form-control" 
-                                                         id="user-login" 
-                                                         required="true" 
-                                                         requiredMessage="Benutzername eingeben!" >
-                                               <f:validateLength 
-                                                   minimum ="3" 
-                                                   maximum ="10" 
-                                                   for="user-login"/>
-                                            </h:inputText>
-
+                    <div>
+                        <h:form id="myform">
+                            <p:growl id="messages" showDetail="true"/>
+                            <p:dialog header="Benutzer Login" showEffect="fade" modal="true"
+                                      widgetVar="loginDialog" responsive="true">
+                                <p:outputPanel id="manage-product-content" class="ui-fluid">
+                                    <p:outputPanel rendered="true">
+                                        <div class="p-field">
+                                            <p:outputLabel for="name-form">Benutzer</p:outputLabel>
+                                            <p:inputText 
+                                                id="name-form" 
+                                                value="#{loginBean.username}" 
+                                                required="true"
+                                                requiredMessage="Benutzername eingeben!"/>
+                                        </div> 
+                                        <div class="p-field">
+                                            <p:outputLabel for="password-form">Passwort</p:outputLabel>
+                                            <p:password 
+                                                id="password-form" 
+                                                value="#{loginBean.password}" 
+                                                required="true"
+                                                requiredMessage="Passwort eingeben!"/>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="password-login" class="form-label">Passwort</label>
-                                            <h:inputSecret value="#{loginBean.password}" 
-                                                           class="form-control" 
-                                                           id="password-login" 
-                                                           required="true" 
-                                                           requiredMessage="Passwort eingeben!" >
-                                            </h:inputSecret>
+                                    </p:outputPanel>
+                                </p:outputPanel>
 
-                                        </div>
-                                        <h:commandButton
-                                            value="Anmelden"
-                                            action="#{loginBean.loginUser}"
-                                            class="btn btn-primary"
-                                            />
-
-                                    </h:form>
-                                </div>
-
-                                <!-- Modal footer -->
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                                </div>
-
-                            </div>
-                        </div>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Anmelden" icon="pi pi-check" actionListener="#{loginBean.loginUser}"
+                                                     update="manage-product-content" process="manage-product-content @this"/>
+                                    <p:commandButton value="Abbrechen" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                                                     class="ui-button-secondary"/>
+                                </f:facet>
+                            </p:dialog>
+                        </h:form>
                     </div>
 
                     <!-- *******************************
@@ -83,49 +64,73 @@
                                Hier steht der Inhalt des Modals
     
                     *********************************** -->
-                    <div class="modal" id="myModal-reg">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
 
-                                <!-- Modal Header -->
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Neues Konto anlegen</h4>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
+                    <div>
+                        <h:form id="registerForm">
+                            <p:growl id="messages" showDetail="true"/>
+                            <p:dialog header="Neues Konto anlegen" showEffect="fade" modal="true"
+                                      widgetVar="registerDialog" responsive="true">
+                                <p:outputPanel id="manage-register-content" class="ui-fluid">
+                                    <p:outputPanel rendered="true">
+                                        <div class="p-field">
+                                            <p:outputLabel for="accname-reg">Username</p:outputLabel>
+                                            <p:inputText value="#{registerBean.account.ACCName}" 
+                                                         class="form-control" 
+                                                         id="accname-reg"
+                                                         required="true" 
+                                                         requiredMessage="Benutzername eingeben!" />
+                                        </div>
 
-                                <!-- Modal body -->
-                                <div class="modal-body">
-                                    <h:form>
-                                        <div class="mb-3">
-                                            <label for="accname-reg" class="form-label">Username</label>
-                                            <h:inputText value="#{registerBean.account.ACCName}" class="form-control" id="accname-reg" required="true" requiredMessage="Benutzername eingeben!" />
+                                        <div class="p-field">
+                                            <p:outputLabel for="vorname-reg">Vorname</p:outputLabel>
+                                            <p:inputText value="#{registerBean.kunde.KVName}" 
+                                                         class="form-control" 
+                                                         id="vorname-reg" 
+                                                         required="true" 
+                                                         requiredMessage="Vorname eingeben!"/>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="vorname-reg" class="form-label">Vorname</label>
-                                            <h:inputText value="#{registerBean.kunde.KVName}" class="form-control" id="vorname-reg" required="true" requiredMessage="Vorname eingeben!"/>
+
+                                        <div class="p-field">
+                                            <p:outputLabel for="nachname-reg">Nachname</p:outputLabel>
+                                            <p:inputText value="#{registerBean.kunde.KName}"
+                                                         class="form-control" 
+                                                         id="nachname-reg" 
+                                                         required="true"
+                                                         requiredMessage="Nachname eingeben!"/>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="nachname-reg" class="form-label">Nachname</label>
-                                            <h:inputText value="#{registerBean.kunde.KName}" class="form-control" id="nachname-reg" required="true" requiredMessage="Nachname eingeben!"/>
+
+                                        <div class="p-field">
+                                            <p:outputLabel for="strasse-reg">Straße</p:outputLabel>
+                                            <p:inputText value="#{registerBean.adresse.AStrasse}" 
+                                                         class="form-control" 
+                                                         id="strasse-reg" 
+                                                         required="true" 
+                                                         requiredMessage="Straße eingeben!"/>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="strasse-reg" class="form-label">Straße</label>
-                                            <h:inputText value="#{registerBean.adresse.AStrasse}" class="form-control" id="strasse-reg" required="true" requiredMessage="Straße eingeben!"/>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="ort-reg" class="form-label">Ort</label>
-                                            <h:inputText value="#{registerBean.adresse.AOrt}" class="form-control" id="ort-reg" required="true" requiredMessage="Ort eingeben!">
+
+                                        <div class="p-field">
+                                            <p:outputLabel for="ort-reg">Ort</p:outputLabel>
+                                            <p:inputText value="#{registerBean.adresse.AOrt}" 
+                                                         class="form-control" 
+                                                         id="ort-reg" 
+                                                         required="true" 
+                                                         requiredMessage="Ort eingeben!">
                                                 <f:validator validatorId="buchladen.validateOrt" />
-                                            </h:inputText>
+                                            </p:inputText>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="plz-reg" class="form-label">PLZ</label>
-                                            <h:inputText value="#{registerBean.adresse.aplz}" class="form-control" id="plz-reg" required="true" requiredMessage="PLZ eingeben!"/>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="bundesland-reg" class="form-label">Bundesland</label>
-                                            <h:selectOneMenu class="custom-select mr-sm-2" value="#{registerBean.adresse.ABundesland}">
 
+                                        <div class="p-field">
+                                            <p:outputLabel for="plz-reg">PLZ</p:outputLabel>
+                                            <p:inputText value="#{registerBean.adresse.aplz}" 
+                                                         class="form-control" 
+                                                         id="plz-reg" 
+                                                         required="true" 
+                                                         requiredMessage="PLZ eingeben!"/>
+                                        </div>
+
+                                        <div class="p-field">
+                                            <p:outputLabel>Bundesland</p:outputLabel>
+                                            <p:selectOneMenu class="custom-select mr-sm-2" value="#{registerBean.adresse.ABundesland}">
                                                 <f:selectItem itemValue="NRW" itemLabel="NRW" />
                                                 <f:selectItem itemValue="Bayern" itemLabel="Bayern" />
                                                 <f:selectItem itemValue="Niedersachsen" itemLabel="Niedersachsen" />
@@ -134,39 +139,50 @@
                                                 <f:selectItem itemValue="Rheinland-Pfalz" itemLabel="Rheinland-Pfalz" />
                                                 <f:selectItem itemValue="Baden-Württemberg" itemLabel="Baden-Württemberg" />
                                                 <f:selectItem itemValue="Sachsen-Anhalt" itemLabel="Sachsen-Anhalt" />
-                                            </h:selectOneMenu>
+                                            </p:selectOneMenu>
+                                        </div>
 
+                                        <div class="p-field">
+                                            <p:outputLabel>Land</p:outputLabel>
+                                            <p:selectOneMenu class="custom-select mr-sm-2" value="#{registerBean.adresse.ALand}">
+                                                <f:selectItem itemValue="Deutschland" itemLabel="Deutschland" />
+                                                <f:selectItem itemValue="Schweiz" itemLabel="Schweiz" />
+                                                <f:selectItem itemValue="Österreich" itemLabel="Österreich" />
+                                            </p:selectOneMenu>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="land-reg" class="form-label">Land</label>
-                                            <h:inputText value="#{registerBean.adresse.ALand}" class="form-control" id="land-reg" required="true" requiredMessage="Land eingeben!"/>
+
+                                        <div class="p-field">
+                                            <p:outputLabel for="email-reg">Email</p:outputLabel>
+                                            <p:inputText value="#{registerBean.kunde.KEmail}" 
+                                                         class="form-control" 
+                                                         id="email-reg" 
+                                                         required="true" 
+                                                         requiredMessage="Email eingeben!"/>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="email-reg" class="form-label">Email</label>
-                                            <h:inputText value="#{registerBean.kunde.KEmail}" class="form-control" id="email-reg" required="true" requiredMessage="Email eingeben!"/>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="passwort-reg" class="form-label">Passwort</label>
-                                            <h:inputSecret value="#{registerBean.account.accpwd}" class="form-control" id="passwort-reg" required="true" requiredMessage="Passwort eingeben!">
+
+                                        <div class="p-field">
+                                            <p:outputLabel for="passwort-reg">Passwort</p:outputLabel>
+                                            <p:password value="#{registerBean.account.accpwd}" 
+                                                        class="form-control" 
+                                                        id="passwort-reg" 
+                                                        required="true" 
+                                                        requiredMessage="Passwort eingeben!">
                                                 <f:validator validatorId="validatePasswort" />
-                                            </h:inputSecret>
+                                            </p:password>
                                         </div>
-                                        <h:commandButton
-                                            value="Registrieren"
-                                            action="#{registerBean.registerUser}"
-                                            class="btn btn-primary"
-                                            />
-                                    </h:form>
-                                </div>
+                                    </p:outputPanel>
+                                </p:outputPanel>
 
-                                <!-- Modal footer -->
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Abbrechen</button>
-                                </div>
-
-                            </div>
-                        </div>
+                                <f:facet name="footer">
+                                    <p:commandButton value="Registrieren" icon="pi pi-check" actionListener="#{registerBean.registerUser()}"
+                                                     update="manage-register-content" process="manage-register-content @this"/>
+                                    <p:commandButton value="Abbrechen" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                                                     class="ui-button-secondary"/>
+                                </f:facet>
+                            </p:dialog>
+                        </h:form>
                     </div>
+
                     <!-- *******************************
     
                             Nav Menu Button fürs Login
@@ -174,10 +190,18 @@
                     *********************************** -->
                     <h:form>
                         <a class="nav-link" href="#">
-                            <h:commandButton type="button" value="Anmelden" class="btn btn-primary" onclick="$('#myModal-login').modal('show')" rendered="#{!loginBean.isLoggedIn}">
+                            <h:commandButton type="button" 
+                                             value="Anmelden" 
+                                             class="btn btn-primary" 
+                                             onclick="PF('loginDialog').show()" 
+                                             rendered="#{!loginBean.isLoggedIn}">
 
                             </h:commandButton>
-                            <h:commandButton value="Abmelden" class="btn btn-primary" action="#{loginBean.logoutUser()}" rendered="#{loginBean.isLoggedIn}"/>
+
+                            <h:commandButton value="Abmelden" 
+                                             class="btn btn-primary" 
+                                             action="#{loginBean.logoutUser()}" 
+                                             rendered="#{loginBean.isLoggedIn}"/>
                         </a>
                     </h:form>
 
@@ -191,7 +215,11 @@
                     *********************************** -->
                     <h:form>
                         <a class="nav-link" href="#">
-                            <h:commandButton type="button" value="Registrieren" class="btn btn-primary" onclick="$('#myModal-reg').modal('show')" rendered="#{!loginBean.isLoggedIn}"/>                            
+                            <h:commandButton type="button" 
+                                             value="Registrieren" 
+                                             class="btn btn-primary" 
+                                             onclick="PF('registerDialog').show()" 
+                                             rendered="#{!loginBean.isLoggedIn}"/>                            
                         </a>
                     </h:form>             
 
