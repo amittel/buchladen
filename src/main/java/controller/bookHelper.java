@@ -31,7 +31,7 @@ public class bookHelper implements Serializable {
     private Buch mybook;
     @Inject
     private DbAPIBean dbBean;
-    
+
     private Buch selectedBook;
     private String category;
 
@@ -42,25 +42,28 @@ public class bookHelper implements Serializable {
      * Creates a new instance of newItemBean
      */
     public bookHelper() {
-        log.info("bookHelper start ...");    
+        log.info("bookHelper start ...");
     }
 
     // @PostConstruct
-    public void initBook(){
+    public void initBook() {
         log.info("Init new book!");
         this.mybook = new Buch();
-        this.selectedBook = mybook;   
+        this.selectedBook = mybook;
     }
+
     // Erstelle neues Buchobjekt
     // welches im Forumular neu erzeugt wird
     public void createNewBook() {
         log.info("Creating new Book!");
         this.mybook = new Buch();
-        this.selectedBook = mybook;     
+        this.selectedBook = mybook;
     }
-    
+
     public void saveProduct() {
         System.out.println("saveProduct ...");
+
+        boolean success = false;
 
         if (this.selectedBook == null) {
             System.out.println("selectedProduct is null");
@@ -76,13 +79,18 @@ public class bookHelper implements Serializable {
         if (dbBook == null) {
             // Buch mit gleicher ISBN ex. noch nicht
             // Buch kann in Datenbank aufgenommen werden
-            // success = dbBean.insertRegisterData(account, kunde, adresse);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Produkt hinzugefügt"));
+            success = dbBean.insertNewBook(this.selectedBook, this.category);
+
+            if (success) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Produkt hinzugefügt", ""));
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Produkt nicht hinzugefügt", ""));
+            }
+
         } else {
             // Buch mit gleicher ISBN schon vorhanden 
             // success = false;
-            System.out.println("ISBN vorhanden: " + this.selectedBook.getBisbn());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Produkt aktualisiert"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Buch bereits vorhanden!", ""));
         }
 
         PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
@@ -91,17 +99,53 @@ public class bookHelper implements Serializable {
         this.createNewBook();
     }
     
+    public void updateProduct() {
+        System.out.println("saveProduct ...");
+
+        boolean success = false;
+
+        if (this.selectedBook == null) {
+            System.out.println("selectedProduct is null");
+        } else {
+            System.out.println("Alles ok");
+
+            System.out.println("ISBN: " + this.selectedBook.getBisbn());
+            System.out.println("Titel: " + this.selectedBook.getBName());
+        }
+
+        Buch dbBook = dbBean.getBookByISBN(this.selectedBook.getBisbn());
+
+        if (dbBook != null) {
+            
+            success = dbBean.updateBook(this.selectedBook, this.category);
+
+            if (success) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Produkt aktualisiert"));
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Produkt nicht aktualisiert"));
+            }
+
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Buch nicht in Datenbank vorhanden!"));
+        }
+
+        PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
+        PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
+
+        this.createNewBook();
+    }
+
     public void deselectProduct() {
         System.out.println("Deselecting product!");
         this.selectedBook = null;
     }
-                
+
     public void onRowSelect(SelectEvent<Buch> event) {
         this.selectedBook = event.getObject();
         FacesMessage msg = new FacesMessage("Produkt wurde ausgewält!", String.valueOf(event.getObject().getBName()));
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void onRowSelect(Buch selectedItem) {
         FacesMessage msg = new FacesMessage("Produkt in Warenkorb hinzugefügt!", selectedItem.getBName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -130,10 +174,14 @@ public class bookHelper implements Serializable {
         return category;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
     public void setCategory(String category) {
         this.category = category;
     }
-    
+
     public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
         FacesContext.getCurrentInstance().
                 addMessage(null, new FacesMessage(severity, summary, detail));
@@ -150,4 +198,5 @@ public class bookHelper implements Serializable {
     public void showError() {
         addMessage(FacesMessage.SEVERITY_ERROR, "Error Message", "Message Content");
     }
+
 }

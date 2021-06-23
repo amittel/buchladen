@@ -33,11 +33,14 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import model.Account;
 import model.Adresse;
+import model.Autor;
 import model.Bestelldetail;
 import model.Bestellung;
 import model.Buch;
+import model.Buchautor;
 import model.Kategorie;
 import model.Kunde;
+import model.Verlag;
 import model.WarenkorbItem;
 
 /**
@@ -55,6 +58,10 @@ public class DbAPIBean implements Serializable {
     private List<Adresse> adressList;
 
     @Inject
+    private Autor autor;
+    @Inject
+    private Buchautor buchautor;
+    @Inject
     private Account account;
     @Inject
     private Buch book;
@@ -66,6 +73,8 @@ public class DbAPIBean implements Serializable {
     private Bestelldetail bestelldetail;
     @Inject
     private Kategorie category;
+    @Inject
+    private Verlag verlag;
 
     @PersistenceUnit
     private EntityManagerFactory emf;
@@ -170,6 +179,90 @@ public class DbAPIBean implements Serializable {
             }
         } finally {
             entityManager.close();
+        }
+
+        return false;
+    }
+    
+    public boolean insertNewBook(Buch book, String myCategory) {
+
+        log.info("trying to insert new book...");
+        
+        EntityManager em = emf.createEntityManager();
+                 
+        // Autor Entity holen
+        TypedQuery<Autor> queryAutor
+                = em.createNamedQuery("Autor.findByAid", Autor.class);
+        queryAutor.setParameter("aid", 1);
+        autor = queryAutor.getSingleResult();
+        buchautor.setFkAid(autor);
+        buchautor.setFkBid(book);
+               
+        // Kategory Entity holen
+        TypedQuery<Kategorie> queryCategory
+                = em.createNamedQuery("Kategorie.findByKKategorie", Kategorie.class);
+        queryCategory.setParameter("kKategorie", myCategory);
+        category = queryCategory.getSingleResult();
+        book.setFkKatid(category);
+        
+        // Verlag Entity holen
+        TypedQuery<Verlag> queryVerlag
+                = em.createNamedQuery("Verlag.findByVid", Verlag.class);
+        queryVerlag.setParameter("vid", 2);
+        verlag = queryVerlag.getSingleResult();
+        book.setFkVid(verlag);
+       
+        try {
+            ut.begin();
+            em.joinTransaction();
+            em.persist(book);
+            em.persist(buchautor);
+            ut.commit();
+
+            return true;
+        } catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException | NotSupportedException | RollbackException | SystemException e) {
+            System.out.println("Insert Book: " + e.toString());
+            try {
+                ut.rollback();
+            } catch (IllegalStateException | SecurityException | SystemException ex) {
+                //do nothing
+            }
+        } finally {
+            em.close();
+        }
+
+        return false;
+    }
+    
+    public boolean updateBook(Buch book, String myCategory) {
+
+        log.info("trying to update new book...");
+        
+        EntityManager em = emf.createEntityManager();
+        
+        // Kategory Entity holen
+        TypedQuery<Kategorie> queryCategory
+                = em.createNamedQuery("Kategorie.findByKKategorie", Kategorie.class);
+        queryCategory.setParameter("kKategorie", myCategory);
+        category = queryCategory.getSingleResult();
+        book.setFkKatid(category);
+       
+        try {
+            ut.begin();
+            em.joinTransaction();
+            em.merge(book);
+            ut.commit();
+
+            return true;
+        } catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException | NotSupportedException | RollbackException | SystemException e) {
+            System.out.println("Insert Book: " + e.toString());
+            try {
+                ut.rollback();
+            } catch (IllegalStateException | SecurityException | SystemException ex) {
+                //do nothing
+            }
+        } finally {
+            em.close();
         }
 
         return false;

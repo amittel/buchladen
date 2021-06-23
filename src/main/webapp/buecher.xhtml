@@ -8,11 +8,8 @@
 
     <ui:composition template="WEB-INF/template/mytemplate.xhtml">
         <ui:define name="content">
-            <!-- <h1>Bücherliste</h1> -->
-
             <h:form id="form">
                 <div class="card crud-demo">
-
                     <p:growl id="messages" showDetail="true"/>
                     <p:growl id="growl" showDetail="true" />
 
@@ -27,11 +24,8 @@
                                              style="margin-right: .5rem">
                                 <p:resetInput target=":form:manage-product-content"/>
                             </p:commandButton>
-
                         </p:toolbarGroup>
-
                     </p:toolbar>
-
                     <p:dataTable id="dt-products" 
                                  widgetVar="dtProducts" 
                                  var="product" 
@@ -49,19 +43,19 @@
                                 <span style="font-weight: bold">Bücherliste</span>
                             </div>
                         </f:facet>
-
                         <p:ajax event="rowSelect" 
                                 listener="#{bookHelper.onRowSelect}" 
                                 update="@form :form:manage-product-content"/>
-
                         <p:column headerText="Titel">
                             <h:outputText value="#{product.BName}"/>
                         </p:column>
                         <p:column headerText="Cover" exportable="false">
-                            <p:graphicImage name="images/product/#{product.BName}.jpg" library="demo"
-                                            styleClass="product-image" height="120" width="90"/>
+                            <p:graphicImage name="images/product/#{product.BName}.jpg"
+                                            library="demo"
+                                            styleClass="product-image" 
+                                            height="120" 
+                                            width="85"/>
                         </p:column>
-
                         <p:column headerText="Preis">
                             <h:outputText value="#{product.BPreis}" style="font-weight: 700">
                                 <f:convertNumber currencySymbol="€" type="currency"/>
@@ -74,7 +68,6 @@
                             <p:rating value="#{product.bid}" readonly="true"/>
                         </p:column>                       
                         <p:column exportable="false">
-
                             <p:commandButton value="Add To Cart" 
                                              icon="pi pi-shopping-cart"
                                              rendered="#{!loginBean.adminStatus}"
@@ -93,11 +86,8 @@
                                                              target="{bookBean.selectedProduct}"/>
                                 <p:resetInput target=":form:manage-product-content"/>
                             </p:commandButton>
-
                         </p:column>
-
                     </p:dataTable>
-
 
                     <!-- HINZUFÜGEN EINES NEUEN PRODUKTS -->
 
@@ -106,9 +96,13 @@
                         <p:outputPanel id="manage-product-content" class="ui-fluid">                            
                             <p:outputPanel rendered="#{not empty bookHelper.selectedBook}">
                                 <!-- #{bookBean.selectedProduct.BName}.jpg -->
-                                <p:graphicImage name="images/product/placeholder.jpg" library="demo"
+                                <p:graphicImage name="images/product/#{bookBean.selectedProduct.BName}.jpg" 
+                                                library="demo"
                                                 styleClass="product-image"
-                                                rendered="true"/>
+                                                rendered="true"
+                                                height="50%" 
+                                                width="50%"
+                                                style="display: block; margin: 0px auto;"/>
                                 <!-- Muss not empty bookBean.selectedProduct.image sein-->
                                 <div class="p-field">
                                     <p:outputLabel for="titel">Titel</p:outputLabel>
@@ -129,7 +123,8 @@
                                 <div class="p-field">
                                     <p:outputLabel for="category">Kategorie</p:outputLabel>
                                 </div>
-                                <p:selectOneMenu id="category">
+                                <p:selectOneMenu id="category"
+                                                 value="#{bookHelper.category}">
                                     <f:selectItem itemLabel="#{bookHelper.getCategoryByFK(bookHelper.selectedBook.fkKatid.katid)}" 
                                                   itemValue="" 
                                                   noSelectionOption="true"/>
@@ -149,12 +144,17 @@
                                 </div>
                             </p:outputPanel>
                         </p:outputPanel>
-
                         <f:facet name="footer">
                             <p:commandButton value="Save" icon="pi pi-check" 
                                              actionListener="#{bookHelper.saveProduct()}"
                                              update=":form:manage-product-content" 
-                                             process=":form:manage-product-content @this"/>
+                                             process=":form:manage-product-content @this"
+                                             rendered="#{empty bookHelper.selectedBook}"/>
+                            <p:commandButton value="Update" icon="pi pi-check" 
+                                             actionListener="#{bookHelper.updateProduct()}"
+                                             update=":form:manage-product-content" 
+                                             process=":form:manage-product-content @this"
+                                             rendered="#{not empty bookHelper.selectedBook}"/>
                             <p:commandButton value="Cancel" 
                                              action="#{bookHelper.deselectProduct()}"
                                              icon="pi pi-times" 
