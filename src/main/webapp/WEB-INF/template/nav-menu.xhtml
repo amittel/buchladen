@@ -213,7 +213,7 @@
                             Nav Menu Button fürs Registrieren
     
                     *********************************** -->
-                    <h:form>
+                    <h:form rendered="#{!loginBean.isLoggedIn}">
                         <a class="nav-link" href="#">
                             <h:commandButton type="button" 
                                              value="Registrieren" 
