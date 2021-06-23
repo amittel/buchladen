@@ -103,6 +103,14 @@ public class WarenkorbBean implements Serializable {
 
     public void addToCart(Buch book, String strNumberOfItems) {
 
+        log.info("adding item to cart ...");
+        
+        if (book == null){
+            log.info("book is null");
+            System.out.println("book: " + book);
+            return;
+        }
+        
         int intNumberOfItems = Integer.parseInt(strNumberOfItems);
 
         // Menge an ausgewählten Büchern ist 0

@@ -35,6 +35,7 @@ import model.Adresse;
 import model.Bestelldetail;
 import model.Bestellung;
 import model.Buch;
+import model.Kategorie;
 import model.Kunde;
 import model.WarenkorbItem;
 
@@ -55,11 +56,15 @@ public class DbAPIBean implements Serializable {
     @Inject
     private Account account;
     @Inject
+    private Buch book;
+    @Inject
     private Kunde kunde;
     @Inject
     private Bestellung bestellung;
     @Inject
     private Bestelldetail bestelldetail;
+    @Inject
+    private Kategorie category;
 
     @PersistenceUnit
     private EntityManagerFactory emf;
@@ -73,6 +78,33 @@ public class DbAPIBean implements Serializable {
     public DbAPIBean() {
     }
 
+    
+    public void _getBookByISBN(String isbn){
+        try {
+            EntityManager em = emf.createEntityManager();
+            TypedQuery<Buch> query
+                    = em.createNamedQuery("Buch.findByBisbn", Buch.class);
+            query.setParameter("bisbn", isbn);
+
+            book = query.getSingleResult();
+            log.info("Buch mit ISBN gefunden");
+        } catch (Exception ex) {
+            log.info("Es gibt kein Buch mit dieser ISBN");
+        }
+    }
+    
+    public Buch getBookByISBN(String isbn) {
+        this._getBookByISBN(isbn);
+        return book;
+    }
+            
+    public List<Buch> getBookList() {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Buch> query
+                = em.createNamedQuery("Buch.findAll", Buch.class);
+        return query.getResultList();
+    }
+    
     private void findAnAccount(String username) {
         try {
             EntityManager em = emf.createEntityManager();
@@ -85,6 +117,18 @@ public class DbAPIBean implements Serializable {
         } catch (Exception ex) {
             log.info("Es gibt keinen Account für diesen Benutzernamen");
         }
+    }
+    
+    public Account getAccount(String username) {
+        this.findAnAccount(username);
+        return account;
+    }
+    
+    public List<Account> getAccountList() {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Account> query
+                = em.createNamedQuery("Account.findAll", Account.class);
+        return query.getResultList();
     }
 
     public boolean insertRegisterData(Account account, Kunde kunde, Adresse adresse) {
@@ -222,23 +266,12 @@ public class DbAPIBean implements Serializable {
         return log;
     }
 
-    public List<Buch> getBookList() {
+    public List<Kategorie> getCategoryList() {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Buch> query
-                = em.createNamedQuery("Buch.findAll", Buch.class);
+        TypedQuery<Kategorie> query
+                = em.createNamedQuery("Kategorie.findAll", Kategorie.class);
+        
         return query.getResultList();
-    }
-
-    public List<Account> getAccountList() {
-        EntityManager em = emf.createEntityManager();
-        TypedQuery<Account> query
-                = em.createNamedQuery("Account.findAll", Account.class);
-        return query.getResultList();
-    }
-
-    public Account getAccount(String username) {
-        this.findAnAccount(username);
-        return account;
     }
 
     public List<Adresse> getAdressList() {
@@ -260,5 +293,5 @@ public class DbAPIBean implements Serializable {
 
         return "Test";
 
-    }
+    } 
 }
