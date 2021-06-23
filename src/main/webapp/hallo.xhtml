@@ -9,6 +9,17 @@
             
             <div class="jumbotron">
                 <h1 class="display-4">Willkommen #{user}</h1>
+                
+                
+                <ui:fragment rendered="#{!admin}">
+                    <h3>eingeloggt als <span class="badge badge-info">Benutzer</span></h3>
+                </ui:fragment>
+                
+                <ui:fragment rendered="#{admin}">
+                    <h3>eingeloggt als <span class="badge badge-danger">Admin</span></h3>
+                </ui:fragment>
+        
+                
                 <p class="lead">Schön dass Sie wieder da sind!</p>
                 <hr class="my-4"/>
                  <p class="lead">

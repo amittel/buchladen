@@ -40,11 +40,11 @@ public class loginBean {
 
     private String username;
     private String password;
-    private String vname;
-    //  private boolean isLoggedIn = false;
     
     // If you want to store an object in jsf session do the following:
     private boolean isLoggedIn = context != null && context.getExternalContext().getSessionMap().get("user") != null;
+    
+    private boolean isAdmin = false;
 
     private List<Account> accountList;
 
@@ -73,12 +73,19 @@ public class loginBean {
 
         if (userDB.getAcid() != null) {
             if (userDB.getACCName().equals(username) && userDB.getAccpwd().equals(password)) {
+                //Check for role of user
+                if(userDB.getACCAdmin().equals("Admin")) {
+                    System.out.println("LoginBean: Benutzer ist Admin!");
+                    this.isAdmin = true;
+                }
+                
                 // User OK für login und redirect
                 this.isLoggedIn = true;
                 int userID = userDB.getAcid();
                 context.getExternalContext().getFlash().setKeepMessages(true);
                 context.getExternalContext().getSessionMap().put("user", username);
                 context.getExternalContext().getSessionMap().put("userID", userID);
+                context.getExternalContext().getSessionMap().put("admin", isAdmin);
                 FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Login erfolgreich", "login");
                 context.addMessage("sucessInfo", faceMsg);
 
@@ -103,7 +110,6 @@ public class loginBean {
         try {
             context.getExternalContext().redirect("index.xhtml");
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -149,5 +155,13 @@ public class loginBean {
             //context.getExternalContext().redirect("warenkorb.xhtml");
         }
 
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

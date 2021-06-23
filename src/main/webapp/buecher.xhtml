@@ -50,7 +50,7 @@
                     </p:column>
 
                     <f:facet name="footer">
-                        <p:commandButton icon="bi bi-pencil-fill" class=" btn btn-primary" value="Editiere Produkt" action="#{warenkorbBean.addToCart(book, abc.value)}" update=""/>
+                        <p:commandButton rendered="#{admin}" icon="bi bi-pencil-fill" class=" btn btn-primary" value="Editiere Produkt" action="#{warenkorbBean.addToCart(book, abc.value)}" update=""/>
                     </f:facet>
 
                 </p:dataTable>
