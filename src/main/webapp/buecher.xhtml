@@ -3,35 +3,32 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
     <ui:composition template="WEB-INF/template/mytemplate.xhtml">
         <ui:define name="content">
             <h1>Bücherliste</h1>
             <h:form id="buch">
-                <h:dataTable 
+                <p:dataTable 
                     id="buchtbl"
 
                     styleClass="table table-striped table-hover table-bordered"
                     value="#{bookBean.bookList}" var="book">
-                    <h:column>
-                        <f:facet name="header">Buchtitel</f:facet>
+                    <p:column headerText="Buchtitel">
                         <h:outputText value="#{book.BName}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Preis</f:facet>
-                        <h:outputText value="#{book.BPreis}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">ISBN</f:facet>
-                        <h:outputText value="#{book.bisbn}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Menge</f:facet>                       
-                        <!--<h:inputText  binding="#{abc}" value="anzahl"/> -->
+                    </p:column>
 
+                    <p:column headerText="Preis">
+                        <h:outputText value="#{book.BPreis}"/>
+                    </p:column>
+
+                    <p:column headerText="ISBN">
+                        <h:outputText value="#{book.bisbn}"/>
+                    </p:column>
+
+                    <p:column headerText="Menge">
                         <h:selectOneMenu class="custom-select mr-sm-2" binding="#{abc}" value="anzahl">
-                            <f:selectItem itemValue="0" itemLabel="0" />
                             <f:selectItem itemValue="1" itemLabel="1" />
                             <f:selectItem itemValue="2" itemLabel="2" />
                             <f:selectItem itemValue="3" itemLabel="3" />
@@ -41,18 +38,22 @@
                             <f:selectItem itemValue="7" itemLabel="7" />
                             <f:selectItem itemValue="8" itemLabel="8" />
                         </h:selectOneMenu>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header"></f:facet>
+                    </p:column>
 
+                    <p:column headerText="">
                         <h:commandButton value="in den Warenkorb" 
                                          action="#{warenkorbBean.addToCart(book, abc.value)}" 
                                          class="btn btn-primary"
                                          >
                            <!-- <f:setPropertyActionListener target="#{warenkorbBean.numberOfItems}" value="anzahl"  />    -->
                         </h:commandButton>
-                    </h:column>
-                </h:dataTable>
+                    </p:column>
+
+                    <f:facet name="footer">
+                        <p:commandButton icon="bi bi-pencil-fill" class=" btn btn-primary" value="Editiere Produkt" action="#{warenkorbBean.addToCart(book, abc.value)}" update=""/>
+                    </f:facet>
+
+                </p:dataTable>
             </h:form>
 
             <h:form>
