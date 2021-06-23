@@ -53,7 +53,7 @@ public class WarenkorbBean implements Serializable {
     private String numberOfItems;
     private double totalSum = 0;
     private boolean minusButtonDisabled = false;
-
+    
     // Stellt den gesamten Warenkorb dar.
     // Jedes Element in <items> bildet ein kaufbares Produkt ab.
     List<WarenkorbItem> items = new ArrayList<>();

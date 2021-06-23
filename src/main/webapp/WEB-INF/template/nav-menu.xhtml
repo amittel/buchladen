@@ -174,10 +174,8 @@
                     *********************************** -->
                     <h:form>
                         <a class="nav-link" href="#">
-                            <h:commandButton type="button" value="Anmelden" class="btn btn-primary" onclick="$('#myModal-login').modal('show')" rendered="#{!loginBean.isLoggedIn}">
-
-                            </h:commandButton>
-                            <h:commandButton value="Abmelden" class="btn btn-primary" action="#{loginBean.logoutUser()}" rendered="#{loginBean.isLoggedIn}"/>
+                            <h:commandButton type="button" value="Anmelden" class="btn btn-primary" onclick="$('#myModal-login').modal('show')" rendered="#{!loginBean.isLoggedIn}"/>
+                            <h:commandButton value="Abmelden als #{user}" class="btn btn-primary" action="#{loginBean.logoutUser()}" rendered="#{loginBean.isLoggedIn}"/>
                         </a>
                     </h:form>
 

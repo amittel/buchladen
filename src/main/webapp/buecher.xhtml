@@ -10,11 +10,17 @@
         <ui:define name="content">
             <h1>Bücherliste</h1>
             <h:form id="buch">
-                <p:dataTable 
-                    id="buchtbl"
-
+                <p:dataTable
+                    id="tabelle"
                     styleClass="table table-striped table-hover table-bordered"
-                    value="#{bookBean.bookList}" var="book">
+                    value="#{bookBean.bookList}" var="book"
+                    selection="#{bookBean.selectedBook}"
+                    selectionMode="single"
+                    rowKey="#{book.bid}">
+
+                    <p:ajax event="rowDblselect" listener="#{bookBean.showEditButton()}" update="@form" />
+
+
                     <p:column headerText="Buchtitel">
                         <h:outputText value="#{book.BName}"/>
                     </p:column>
@@ -45,15 +51,19 @@
                                          action="#{warenkorbBean.addToCart(book, abc.value)}" 
                                          class="btn btn-primary"
                                          >
-                           <!-- <f:setPropertyActionListener target="#{warenkorbBean.numberOfItems}" value="anzahl"  />    -->
                         </h:commandButton>
                     </p:column>
 
-                    <f:facet name="footer">
-                        <p:commandButton rendered="#{admin}" icon="bi bi-pencil-fill" class=" btn btn-primary" value="Editiere Produkt" action="#{warenkorbBean.addToCart(book, abc.value)}" update=""/>
+                    <f:facet name="footer" rendered="#{bookBean.isAdmin}">
+                        <p:commandButton rendered="#{bookBean.isAdmin}" icon="bi bi-pencil-fill" class=" btn btn-primary" value="Editiere Produkt"/>
                     </f:facet>
-
+                    
                 </p:dataTable>
+                
+                <p:dialog header="Product Details" showEffect="fade" modal="true"
+                    widgetVar="manageProductDialog" responsive="true">
+                              
+                </p:dialog>
             </h:form>
 
             <h:form>
