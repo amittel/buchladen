@@ -12,31 +12,22 @@
 
             <h:form id="form">
                 <div class="card crud-demo">
+
                     <p:growl id="messages" showDetail="true"/>
+                    <p:growl id="growl" showDetail="true" />
 
                     <p:toolbar rendered="#{loginBean.adminStatus}">
                         <p:toolbarGroup>
                             <p:commandButton value="Neu" 
                                              icon="pi pi-plus" 
-                                             actionListener="#{bookBean.createNewBook()}"
+                                             actionListener="#{bookHelper.createNewBook()}"
                                              update=":form:manage-product-content" 
                                              oncomplete="PF('manageProductDialog').show()"
                                              styleClass="ui-button-success" 
                                              style="margin-right: .5rem">
                                 <p:resetInput target=":form:manage-product-content"/>
                             </p:commandButton>
-                            <!--
-                            <p:commandButton id="delete-products-button" 
-                                             value="{bookBean.deleteButtonMessage}"
-                                             icon="pi pi-trash" 
-                                             actionListener="{bookBean.deleteSelectedProducts}"
-                                             styleClass="ui-button-danger" 
-                                             disabled="{!bookBean.hasSelectedProducts()}"
-                                             update="@this">
-                                <p:confirm header="Bestätigung" message="Ausgewähltes Objekt löschen?"
-                                           icon="pi pi-exclamation-triangle"/>
-                            </p:commandButton>
-                            -->
+
                         </p:toolbarGroup>
 
                     </p:toolbar>
@@ -48,7 +39,7 @@
                                  reflow="true" 
                                  styleClass="products-table"
                                  selectionMode="single"
-                                 selection="#{bookBean.selectedProduct}" 
+                                 selection="#{bookBean.selectedProduct}"
                                  rowKey="#{product.bid}" 
                                  paginator="true"
                                  rows="10"
@@ -59,14 +50,9 @@
                             </div>
                         </f:facet>
 
-                        <!-- <p:ajax event="rowSelect" update=":form:delete-products-button"/> 
-                        <p:ajax event="rowUnselect" update=":form:delete-products-button"/>
-                        <p:ajax event="rowSelectCheckbox" update=":form:delete-products-button"/>
-                        <p:ajax event="rowUnselectCheckbox" update=":form:delete-products-button"/>
-                        <p:ajax event="toggleSelect" update=":form:delete-products-button"/>
-                        -->
-
-                        <!-- <p:column selectionMode="multiple" exportable="false"></p:column> -->
+                        <p:ajax event="rowSelect" 
+                                listener="#{bookHelper.onRowSelect}" 
+                                update="@form :form:manage-product-content"/>
 
                         <p:column headerText="Titel">
                             <h:outputText value="#{product.BName}"/>
@@ -86,12 +72,15 @@
                         </p:column>
                         <p:column headerText="Bewertungen">
                             <p:rating value="#{product.bid}" readonly="true"/>
-                        </p:column>
+                        </p:column>                       
                         <p:column exportable="false">
+
                             <p:commandButton value="Add To Cart" 
                                              icon="pi pi-shopping-cart"
                                              rendered="#{!loginBean.adminStatus}"
-                                             action="#{warenkorbBean.addToCart(bookBean.selectedProduct, 1)}">
+                                             action="#{warenkorbBean.addToCart(bookBean.selectedProduct, 1)}"
+                                             update=":form:messages">
+                                <!-- actionListener="{bookHelper.onRowSelect(bookBean.selectedProduct)}" -->
                             </p:commandButton>
                             <p:commandButton icon="pi pi-pencil" 
                                              update=":form:manage-product-content"
@@ -99,18 +88,12 @@
                                              styleClass="edit-button rounded-button ui-button-success" 
                                              process="@this"
                                              rendered="#{loginBean.adminStatus}">
-                                <f:setPropertyActionListener value="#{product}" 
-                                                             target="#{bookBean.selectedProduct}"/>
+
+                                <f:setPropertyActionListener value="{product}" 
+                                                             target="{bookBean.selectedProduct}"/>
                                 <p:resetInput target=":form:manage-product-content"/>
                             </p:commandButton>
-                            <p:commandButton class="ui-button-warning rounded-button" 
-                                             icon="pi pi-trash"
-                                             process="@this"
-                                             oncomplete="PF('deleteProductDialog').show()"
-                                             rendered="#{loginBean.adminStatus}">
-                                <f:setPropertyActionListener value="#{product}" 
-                                                             target="#{bookBean.selectedProduct}"/>
-                            </p:commandButton>
+
                         </p:column>
 
                     </p:dataTable>
@@ -120,34 +103,36 @@
 
                     <p:dialog header="Produkt Details" showEffect="fade" modal="true"
                               widgetVar="manageProductDialog" responsive="true">
-                        <p:outputPanel id="manage-product-content" class="ui-fluid">
-                            <p:outputPanel rendered="#{not empty bookBean.selectedProduct}">
+                        <p:outputPanel id="manage-product-content" class="ui-fluid">                            
+                            <p:outputPanel rendered="#{not empty bookHelper.selectedBook}">
                                 <!-- #{bookBean.selectedProduct.BName}.jpg -->
                                 <p:graphicImage name="images/product/placeholder.jpg" library="demo"
                                                 styleClass="product-image"
-                                                rendered="#{not empty bookBean.selectedProduct.BName}"/>
+                                                rendered="true"/>
                                 <!-- Muss not empty bookBean.selectedProduct.image sein-->
                                 <div class="p-field">
                                     <p:outputLabel for="titel">Titel</p:outputLabel>
-                                    <p:inputText id="titel" value="#{bookBean.selectedProduct.BName}" required="true"/>
+                                    <p:inputText id="titel" value="#{bookHelper.selectedBook.BName}" required="true"/>
                                 </div>
                                 <div class="p-field">
                                     <p:outputLabel for="isbn">ISBN</p:outputLabel>
-                                    <p:inputText id="isbn" value="#{bookBean.selectedProduct.bisbn}" required="true"/>
+                                    <p:inputText id="isbn" value="#{bookHelper.selectedBook.bisbn}" required="true"/>
                                 </div>
                                 <div class="p-field">
                                     <p:outputLabel for="auflage">Auflage</p:outputLabel>
-                                    <p:inputText id="auflage" value="#{bookBean.selectedProduct.BAuflage}" required="true"/>
+                                    <p:inputText id="auflage" value="#{bookHelper.selectedBook.BAuflage}" required="true"/>
                                 </div>
                                 <div class="p-field">
                                     <p:outputLabel for="pubjahr">Publikationsjahr</p:outputLabel>
-                                    <p:inputText id="pubjahr" value="#{bookBean.selectedProduct.BPublikationsjahr}" required="true"/>
-                                </div>   
-
-                                <p:outputLabel for="category" value="Kategorie"/>
-                                <p:selectOneMenu id="category" 
-                                                 value="#{bookBean.category}" 
-                                                 style="width:150px">
+                                    <p:inputText id="pubjahr" value="#{bookHelper.selectedBook.BPublikationsjahr}" required="true"/>
+                                </div> 
+                                <div class="p-field">
+                                    <p:outputLabel for="category">Kategorie</p:outputLabel>
+                                </div>
+                                <p:selectOneMenu id="category">
+                                    <f:selectItem itemLabel="#{bookHelper.getCategoryByFK(bookHelper.selectedBook.fkKatid.katid)}" 
+                                                  itemValue="" 
+                                                  noSelectionOption="true"/>
                                     <f:selectItems value="#{bookBean.categoriesFoo}"/>
                                 </p:selectOneMenu>
 
@@ -155,7 +140,7 @@
                                     <div class="p-field p-col">
                                         <p:outputLabel for="price">Preis</p:outputLabel>
                                         <p:inputNumber id="price" 
-                                                       value="#{bookBean.selectedProduct.BPreis}"
+                                                       value="#{bookHelper.selectedBook.BPreis}"
                                                        symbol=" €" 
                                                        symbolPosition="s"
                                                        decimalSeparator="." 
@@ -167,86 +152,19 @@
 
                         <f:facet name="footer">
                             <p:commandButton value="Save" icon="pi pi-check" 
-                                             actionListener="#{bookBean.saveProduct}"
-                                             update="manage-product-content" 
-                                             process="manage-product-content @this"/>
+                                             actionListener="#{bookHelper.saveProduct()}"
+                                             update=":form:manage-product-content" 
+                                             process=":form:manage-product-content @this"/>
                             <p:commandButton value="Cancel" 
-                                             action="#{bookBean.deselectProduct()}"
+                                             action="#{bookHelper.deselectProduct()}"
                                              icon="pi pi-times" 
                                              onclick="PF('manageProductDialog').hide()"
-                                             class="ui-button-secondary"/>
+                                             class="ui-button-secondary"
+                                             update="manage-product-content"/>
                         </f:facet>
                     </p:dialog>
-
-                    <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
-                                     message="Produkt löschen?" header="Confirm" severity="warn">
-                        <p:commandButton value="Ja" icon="pi pi-check" actionListener="#{bookBean.deleteProduct}"
-                                         process="@this" oncomplete="PF('deleteProductDialog').hide()"/>
-                        <p:commandButton value="Nein" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-                                         onclick="PF('deleteProductDialog').hide()"/>
-                    </p:confirmDialog>
-
-                    <p:confirmDialog global="true" showEffect="fade" width="300">
-                        <p:commandButton value="Ja" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"/>
-                        <p:commandButton value="Nein" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
-                                         icon="pi pi-times"/>
-                    </p:confirmDialog>
                 </div>
             </h:form>
-
-
-            <!--BOOTS TRAP VERSION
-
-            <h:form id="buch">
-                <h:dataTable 
-                    id="buchtbl"
-                    styleClass="table table-striped table-hover table-bordered"
-                    value="#{bookBean.bookList}" 
-                    var="book">
-                    <p:column>
-                        <f:facet name="header">Buchtitel</f:facet>
-                        <h:outputText value="#{book.BName}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">Preis</f:facet>
-                        <h:outputText value="#{book.BPreis}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">ISBN</f:facet>
-                        <h:outputText value="#{book.bisbn}"/>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header">Menge</f:facet>        
-                        <h:selectOneMenu class="custom-select mr-sm-2" binding="{abc}" value="anzahl">
-                            <f:selectItem itemValue="0" itemLabel="0" />
-                            <f:selectItem itemValue="1" itemLabel="1" />
-                            <f:selectItem itemValue="2" itemLabel="2" />
-                            <f:selectItem itemValue="3" itemLabel="3" />
-                            <f:selectItem itemValue="4" itemLabel="4" />
-                            <f:selectItem itemValue="5" itemLabel="5" />
-                            <f:selectItem itemValue="6" itemLabel="6" />
-                            <f:selectItem itemValue="7" itemLabel="7" />
-                            <f:selectItem itemValue="8" itemLabel="8" />
-                        </h:selectOneMenu>
-                    </p:column>
-                    <p:column>
-                        <f:facet name="header"></f:facet>
-
-                        <h:commandButton value="in den Warenkorb" 
-                                         action="{warenkorbBean.addToCart(book, abc.value)}" 
-                                         class="btn btn-primary"
-                                         >
-                        </h:commandButton>
-                    </p:column>
-                </h:dataTable>
-            </h:form>
-
-            <h:form>
-                <h:button value="Zum Warenkorb" outcome="warenkorb.xhtml" class="btn btn-primary"/>
-            </h:form>
-
-            ENDE BOOTS TRAP VESRION-->
-
         </ui:define>
     </ui:composition> 
 </html>

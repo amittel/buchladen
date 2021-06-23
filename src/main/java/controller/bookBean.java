@@ -21,6 +21,7 @@ import model.Account;
 import model.Buch;
 import model.Kategorie;
 import org.primefaces.PrimeFaces;
+import org.primefaces.event.SelectEvent;
 import util.DbAPIBean;
 
 /**
@@ -30,13 +31,15 @@ import util.DbAPIBean;
 //@RequestScoped
 @Named(value = "bookBean")
 //@ViewScoped
-// @RequestScoped
-@SessionScoped
-public class bookBean implements Serializable {
+@RequestScoped
+// @SessionScoped implements Serializable
+public class bookBean {
 
     private static final Logger log
             = Logger.getLogger(bookBean.class.getName());
 
+    FacesContext context = FacesContext.getCurrentInstance();
+    
     private List<Buch> bookList;
     private List<Buch> products;
     private Buch selectedProduct;
@@ -62,44 +65,6 @@ public class bookBean implements Serializable {
         // this.selectedProduct = new Buch();
     }
 
-    // Erstelle neues Buchobjekt
-    // welches im Forumular neu erzeugt wird
-    public void createNewBook() {
-        log.info("Creating new Book!");
-        this.selectedProduct = new Buch();
-    }
-
-    public void saveProduct() {
-        System.out.println("saveProduct ...");
-        if (this.selectedProduct == null) {
-            System.out.println("selectedProduct is null");
-        } else {
-            System.out.println("Alles ok");
-
-            System.out.println("ISBN: " + this.selectedProduct.getBisbn());
-            System.out.println("Titel: " + this.selectedProduct.getBName());
-        }
-
-        Buch mybook = dbBean.getBookByISBN(this.selectedProduct.getBisbn());
-        System.out.println("Book Name :" + mybook.getBName());
-
-        if (mybook.getBisbn() == null) {
-            // Buch mit gleicher ISBN ex. noch nicht
-            // Buch kann in Datenbank aufgenommen werden
-            // success = dbBean.insertRegisterData(account, kunde, adresse);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Produkt hinzugefügt"));
-        } else {
-            // Buch mit gleicher ISBN schon vorhanden 
-            // success = false;
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Produkt aktualisiert"));
-        }
-
-        PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
-
-        this.selectedProduct = null;
-    }
-
     public void deleteProduct() {
         this.products.remove(this.selectedProduct);
         this.selectedProduct = null;
@@ -114,11 +79,6 @@ public class bookBean implements Serializable {
         }
 
         return "Delete";
-    }
-
-    public void deselectProduct() {
-        System.out.println("Deselecting product!");
-        this.selectedProduct = null;
     }
 
     public boolean hasSelectedProducts() {
@@ -170,10 +130,19 @@ public class bookBean implements Serializable {
     }
 
     public Buch getSelectedProduct() {
+
+        FacesMessage faceMsg;
+        
+        if (selectedProduct == null) {
+            faceMsg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Kein Artikel ausgewählt", "");
+            context.addMessage("warnInfo", faceMsg);
+        } else {
+        }
         return selectedProduct;
     }
 
     public void setSelectedProduct(Buch selectedProduct) {
+        log.info("Buch wurde ausgewählt: " + selectedProduct.getBName());
         this.selectedProduct = selectedProduct;
     }
 

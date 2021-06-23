@@ -21,6 +21,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -78,8 +79,7 @@ public class DbAPIBean implements Serializable {
     public DbAPIBean() {
     }
 
-    
-    public void _getBookByISBN(String isbn){
+    public Buch getBookByISBN(String isbn) {
         try {
             EntityManager em = emf.createEntityManager();
             TypedQuery<Buch> query
@@ -88,23 +88,33 @@ public class DbAPIBean implements Serializable {
 
             book = query.getSingleResult();
             log.info("Buch mit ISBN gefunden");
-        } catch (Exception ex) {
+            return book;
+        } catch (Exception e) {
             log.info("Es gibt kein Buch mit dieser ISBN");
+            return null;
         }
     }
-    
-    public Buch getBookByISBN(String isbn) {
-        this._getBookByISBN(isbn);
-        return book;
-    }
-            
+
     public List<Buch> getBookList() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Buch> query
                 = em.createNamedQuery("Buch.findAll", Buch.class);
         return query.getResultList();
     }
-    
+
+    public String getCategoryByFK(int fkid) {
+        try {
+            EntityManager em = emf.createEntityManager();
+            TypedQuery<Kategorie> query
+                    = em.createNamedQuery("Kategorie.findByKatid", Kategorie.class);
+            query.setParameter("katid", fkid);
+
+            return query.getSingleResult().getKKategorie();
+        } catch (NoResultException e) {
+            return "Kategorie";
+        }
+    }
+
     private void findAnAccount(String username) {
         try {
             EntityManager em = emf.createEntityManager();
@@ -118,12 +128,12 @@ public class DbAPIBean implements Serializable {
             log.info("Es gibt keinen Account für diesen Benutzernamen");
         }
     }
-    
+
     public Account getAccount(String username) {
         this.findAnAccount(username);
         return account;
     }
-    
+
     public List<Account> getAccountList() {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Account> query
@@ -138,7 +148,7 @@ public class DbAPIBean implements Serializable {
         account.setACCAdmin("User");
         kunde.setKTel("0000");
         EntityManager entityManager = emf.createEntityManager();
-   
+
         try {
             ut.begin();
             //Ablauf: Erst Account, dann Adresse anlegen, dann Kunde (hat beide Fremdschlüssel!)
@@ -161,7 +171,7 @@ public class DbAPIBean implements Serializable {
         } finally {
             entityManager.close();
         }
-      
+
         return false;
     }
 
@@ -221,7 +231,7 @@ public class DbAPIBean implements Serializable {
             }
             // In Datenbank übertragen
             ut.commit();
-            
+
             // em.close();
             return true;
         } catch (IllegalStateException | SecurityException | HeuristicMixedException | HeuristicRollbackException | NotSupportedException | RollbackException | SystemException e) {
@@ -270,7 +280,7 @@ public class DbAPIBean implements Serializable {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Kategorie> query
                 = em.createNamedQuery("Kategorie.findAll", Kategorie.class);
-        
+
         return query.getResultList();
     }
 
@@ -293,5 +303,5 @@ public class DbAPIBean implements Serializable {
 
         return "Test";
 
-    } 
+    }
 }

@@ -104,7 +104,7 @@ public class WarenkorbBean implements Serializable {
     public void addToCart(Buch book, String strNumberOfItems) {
 
         log.info("adding item to cart ...");
-        
+                
         if (book == null){
             log.info("book is null");
             System.out.println("book: " + book);
@@ -129,6 +129,8 @@ public class WarenkorbBean implements Serializable {
                 for (int i = 0; i < intNumberOfItems; i++) {
                     increaseTotalPrice(myItem);
                 }
+                
+                this.showInfo(book);
                 return;
             }
         }
@@ -143,6 +145,21 @@ public class WarenkorbBean implements Serializable {
         for (int i = 0; i < intNumberOfItems; i++) {
             increaseTotalPrice(newItem);
         }
+        
+        this.showInfo(book);
+    }
+    
+    public void addMessage(FacesMessage.Severity severity, String summary, String detail) {
+        FacesContext.getCurrentInstance().
+                addMessage(null, new FacesMessage(severity, summary, detail));
+    }
+    
+    public void showInfo(Buch book) {
+        addMessage(FacesMessage.SEVERITY_INFO, "Artikel wurde dem Warenkorb hinzugefügt", book.getBName());
+    }
+    
+    public void showWarn() {
+        addMessage(FacesMessage.SEVERITY_WARN, "Warn Message", "Message Content");
     }
 
     public void deleteItemFromCart(WarenkorbItem currentItem) {
