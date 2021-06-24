@@ -17,6 +17,7 @@
                         <p:toolbarGroup>
                             <p:commandButton value="Neu" 
                                              icon="pi pi-plus" 
+                                             id="my-button"
                                              actionListener="#{bookHelper.createNewBook()}"
                                              update=":form:manage-product-content" 
                                              oncomplete="PF('manageProductDialog').show()"
@@ -43,9 +44,15 @@
                                 <span style="font-weight: bold">Bücherliste</span>
                             </div>
                         </f:facet>
+
                         <p:ajax event="rowSelect" 
                                 listener="#{bookHelper.onRowSelect}" 
                                 update="@form :form:manage-product-content"/>
+
+                        <p:ajax event="rowUnselect" 
+                                listener="#{bookHelper.onRowUnselect}" 
+                                update="@form :form:manage-product-content"/>
+
                         <p:column headerText="Titel">
                             <h:outputText value="#{product.BName}"/>
                         </p:column>
@@ -82,10 +89,12 @@
                                              process="@this"
                                              rendered="#{loginBean.adminStatus}">
 
-                                <f:setPropertyActionListener value="{product}" 
-                                                             target="{bookBean.selectedProduct}"/>
+                                <f:setPropertyActionListener value="#{product}" 
+                                                             target="#{bookBean.selectedProduct}"/>
+                                <f:setPropertyActionListener value="#{product}" 
+                                                             target="#{bookHelper.selectedBook}"/>
                                 <p:resetInput target=":form:manage-product-content"/>
-                            </p:commandButton>
+                            </p:commandButton>                         
                         </p:column>
                     </p:dataTable>
 
@@ -94,31 +103,31 @@
                     <p:dialog header="Produkt Details" showEffect="fade" modal="true"
                               widgetVar="manageProductDialog" responsive="true">
                         <p:outputPanel id="manage-product-content" class="ui-fluid">                            
-                            <p:outputPanel rendered="#{not empty bookHelper.selectedBook}">
-                                <!-- #{bookBean.selectedProduct.BName}.jpg -->
+                            <p:outputPanel rendered="#{bookHelper.selectedBook != null}">
+                                <!-- {bookBean.selectedProduct.BName}.jpg -->
                                 <p:graphicImage name="images/product/#{bookBean.selectedProduct.BName}.jpg" 
                                                 library="demo"
                                                 styleClass="product-image"
-                                                rendered="true"
+                                                rendered="#{bookHelper.selectedBook.bid != null}"
                                                 height="50%" 
                                                 width="50%"
                                                 style="display: block; margin: 0px auto;"/>
                                 <!-- Muss not empty bookBean.selectedProduct.image sein-->
                                 <div class="p-field">
                                     <p:outputLabel for="titel">Titel</p:outputLabel>
-                                    <p:inputText id="titel" value="#{bookHelper.selectedBook.BName}" required="true"/>
+                                    <p:inputText id="titel" value="#{bookHelper.selectedBook.BName}" required="false"/>
                                 </div>
                                 <div class="p-field">
-                                    <p:outputLabel for="isbn">ISBN</p:outputLabel>
-                                    <p:inputText id="isbn" value="#{bookHelper.selectedBook.bisbn}" required="true"/>
+                                    <p:outputLabel for="myisbn">ISBN</p:outputLabel>
+                                    <p:inputText id="myisbn" value="#{bookHelper.selectedBook.bisbn}" required="false"/>
                                 </div>
                                 <div class="p-field">
                                     <p:outputLabel for="auflage">Auflage</p:outputLabel>
-                                    <p:inputText id="auflage" value="#{bookHelper.selectedBook.BAuflage}" required="true"/>
+                                    <p:inputText id="auflage" value="#{bookHelper.selectedBook.BAuflage}" required="false"/>
                                 </div>
                                 <div class="p-field">
                                     <p:outputLabel for="pubjahr">Publikationsjahr</p:outputLabel>
-                                    <p:inputText id="pubjahr" value="#{bookHelper.selectedBook.BPublikationsjahr}" required="true"/>
+                                    <p:inputText id="pubjahr" value="#{bookHelper.selectedBook.BPublikationsjahr}" required="false"/>
                                 </div> 
                                 <div class="p-field">
                                     <p:outputLabel for="category">Kategorie</p:outputLabel>
@@ -135,32 +144,35 @@
                                     <div class="p-field p-col">
                                         <p:outputLabel for="price">Preis</p:outputLabel>
                                         <p:inputNumber id="price" 
+                                                       required="false"
                                                        value="#{bookHelper.selectedBook.BPreis}"
                                                        symbol=" €" 
                                                        symbolPosition="s"
-                                                       decimalSeparator="." 
-                                                       thousandSeparator=","/>
+                                                       decimalSeparator="," 
+                                                       thousandSeparator="."/>
                                     </div>
                                 </div>
                             </p:outputPanel>
                         </p:outputPanel>
-                        <f:facet name="footer">
+                        <f:facet name="footer"
+                                 id="myfooter">
                             <p:commandButton value="Save" icon="pi pi-check" 
                                              actionListener="#{bookHelper.saveProduct()}"
-                                             update=":form:manage-product-content" 
-                                             process=":form:manage-product-content @this"
-                                             rendered="#{empty bookHelper.selectedBook}"/>
+                                             rendered="#{bookHelper.selectedBook.bid == null}"
+                                             onclick="PF('dtProducts').unselectAllRows()"
+                                             update=":form"/>
                             <p:commandButton value="Update" icon="pi pi-check" 
                                              actionListener="#{bookHelper.updateProduct()}"
-                                             update=":form:manage-product-content" 
-                                             process=":form:manage-product-content @this"
-                                             rendered="#{not empty bookHelper.selectedBook}"/>
+                                             rendered="#{bookHelper.selectedBook.bid != null}"
+                                             onclick="PF('dtProducts').unselectAllRows()"
+                                             update=":form" />
                             <p:commandButton value="Cancel" 
                                              action="#{bookHelper.deselectProduct()}"
+                                             actionListener="#{bookBean.deselectProduct()}"
                                              icon="pi pi-times" 
-                                             onclick="PF('manageProductDialog').hide()"
+                                             onclick="PF('manageProductDialog').hide(); PF('dtProducts').unselectAllRows();"
                                              class="ui-button-secondary"
-                                             update="manage-product-content"/>
+                                             update=":form" />
                         </f:facet>
                     </p:dialog>
                 </div>

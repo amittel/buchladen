@@ -9,7 +9,12 @@ import static com.sun.faces.facelets.util.Path.context;
 import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -59,6 +64,7 @@ public class WarenkorbBean implements Serializable {
     List<WarenkorbItem> items = new ArrayList<>();
 
     private String lieferdatum;
+    private LocalDate localLieferDatum;
 
     /**
      * Creates a new instance of WarenkorbBean
@@ -73,7 +79,7 @@ public class WarenkorbBean implements Serializable {
         String currentUser;
         String currentUserId;
         boolean state = false;
-
+        
         // Magie um aktuell angemeldeten User zu erhalten
         // The SessionMap is a Map<String, Object> and you can access your stored objects 
         // with the help of the get(Object key) method
@@ -81,6 +87,12 @@ public class WarenkorbBean implements Serializable {
         FacesContext facescontext = FacesContext.getCurrentInstance();
         ExternalContext externalcontext = facescontext.getExternalContext();
         Map sessionMap = externalcontext.getSessionMap();
+        
+        Date myDate = new Date();
+        myDate = java.sql.Date.valueOf(this.localLieferDatum);
+        
+        log.info("Lieferdatum: " + this.localLieferDatum);
+        log.info("myDate: " + myDate);
         if (sessionMap != null) {
             sessionAttribute = sessionMap.get("user");
             currentUser = (String) sessionAttribute;
@@ -88,14 +100,13 @@ public class WarenkorbBean implements Serializable {
             sessionAttribute = sessionMap.get("userID");
             currentUserId = sessionAttribute.toString();
 
-            state = dbBean.insertWarenkorbinDB(this.items, this.totalSum, currentUserId, lieferdatum);
+            state = dbBean.insertWarenkorbinDB(this.items, this.totalSum, currentUserId, myDate);
 
             // Löschen den gesamten Warenkorb
             if (state == true) {
                 this.items.removeAll(items);
                 this.totalSum = 0;
-                return "/danke.xhtml";
-                //context.getExternalContext().redirect("bestellen.xhtml");  
+                return "/danke.xhtml"; 
             }
         }
         return "";
@@ -264,4 +275,13 @@ public class WarenkorbBean implements Serializable {
         this.minusButtonDisabled = minusButtonDisabled;
     }
 
+    public LocalDate getLocalLieferDatum() {
+        return localLieferDatum;
+    }
+
+    public void setLocalLieferDatum(LocalDate localLieferDatum) {
+        this.localLieferDatum = localLieferDatum;
+    }
+
+    
 }

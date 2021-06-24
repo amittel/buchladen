@@ -60,7 +60,7 @@ public class Buch implements Serializable {
     private int bPublikationsjahr;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 13)
+    // @Size(min = 1, max = 13)
     @Column(name = "BISBN")
     private String bisbn;
     @Basic(optional = false)

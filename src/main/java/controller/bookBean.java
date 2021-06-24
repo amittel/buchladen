@@ -58,9 +58,10 @@ public class bookBean {
      * Creates a new instance of bookBean
      */
     public bookBean() {
+        log.info("[bookBean] -> bookBean constructor ...");
     }
 
-    @PostConstruct
+    // @PostConstruct
     public void init() {
         // this.selectedProduct = new Buch();
     }
@@ -83,6 +84,11 @@ public class bookBean {
 
     public boolean hasSelectedProducts() {
         return this.selectedProducts != null && !this.selectedProducts.isEmpty();
+    }
+    
+    public void deselectProduct() {
+        log.info("[bookBean] -> Deselecting book ...");
+        this.selectedProduct = null;
     }
 
     public void deleteSelectedProducts() {
@@ -130,7 +136,7 @@ public class bookBean {
     }
 
     public Buch getSelectedProduct() {
-
+        log.info("[bookBean] -> getSelectedBook: " + selectedProduct);
         FacesMessage faceMsg;
         
         if (selectedProduct == null) {
@@ -142,7 +148,7 @@ public class bookBean {
     }
 
     public void setSelectedProduct(Buch selectedProduct) {
-        log.info("Buch wurde ausgewählt: " + selectedProduct.getBName());
+        log.info("[bookBean] -> setSelectedBook: " + selectedProduct.getBName());
         this.selectedProduct = selectedProduct;
     }
 

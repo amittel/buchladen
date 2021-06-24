@@ -42,36 +42,39 @@ public class bookHelper implements Serializable {
      * Creates a new instance of newItemBean
      */
     public bookHelper() {
-        log.info("bookHelper start ...");
+        log.info("[bookHelper] -> bookHelper constructor ...");
     }
 
     // @PostConstruct
     public void initBook() {
-        log.info("Init new book!");
+        log.info("[bookHelper] -> Init new book ...");
         this.mybook = new Buch();
-        this.selectedBook = mybook;
+        // this.selectedBook = mybook;
+        this.selectedBook = null;
     }
 
     // Erstelle neues Buchobjekt
     // welches im Forumular neu erzeugt wird
     public void createNewBook() {
-        log.info("Creating new Book!");
+        log.info("[bookHelper] -> Creating new Book!");
         this.mybook = new Buch();
         this.selectedBook = mybook;
     }
 
     public void saveProduct() {
-        System.out.println("saveProduct ...");
+        log.info("[bookHelper] -> saveProduct ...");
 
         boolean success = false;
 
         if (this.selectedBook == null) {
-            System.out.println("selectedProduct is null");
+            System.out.println("[bookHelper] -> selectedProduct is null");
         } else {
-            System.out.println("Alles ok");
-
-            System.out.println("ISBN: " + this.selectedBook.getBisbn());
-            System.out.println("Titel: " + this.selectedBook.getBName());
+            if(this.selectedBook.getBName().isEmpty() || this.selectedBook.getBisbn().isEmpty()){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Eingabe unvollständig", ""));
+                PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
+                PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
+                return;
+            }
         }
 
         Buch dbBook = dbBean.getBookByISBN(this.selectedBook.getBisbn());
@@ -100,20 +103,20 @@ public class bookHelper implements Serializable {
     }
     
     public void updateProduct() {
-        System.out.println("saveProduct ...");
+        log.info("[bookHelper] -> updateProduct ...");
 
         boolean success = false;
 
         if (this.selectedBook == null) {
-            System.out.println("selectedProduct is null");
+            System.out.println("[bookHelper] -> selectedProduct is null");
         } else {
-            System.out.println("Alles ok");
+            System.out.println("[bookHelper] -> Alles ok");
 
-            System.out.println("ISBN: " + this.selectedBook.getBisbn());
-            System.out.println("Titel: " + this.selectedBook.getBName());
+            System.out.println("[bookHelper] -> ISBN: " + this.selectedBook.getBisbn());
+            System.out.println("[bookHelper] -> Titel: " + this.selectedBook.getBName());
         }
 
-        Buch dbBook = dbBean.getBookByISBN(this.selectedBook.getBisbn());
+        Buch dbBook = dbBean.getBookByID(this.selectedBook.getBid());
 
         if (dbBook != null) {
             
@@ -136,11 +139,12 @@ public class bookHelper implements Serializable {
     }
 
     public void deselectProduct() {
-        System.out.println("Deselecting product!");
+        log.info("[bookHelper] -> Deselecting book ...");
         this.selectedBook = null;
     }
 
     public void onRowSelect(SelectEvent<Buch> event) {
+        log.info("[bookHelper] -> onRowSelect ...");
         this.selectedBook = event.getObject();
         FacesMessage msg = new FacesMessage("Produkt wurde ausgewält!", String.valueOf(event.getObject().getBName()));
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -150,21 +154,33 @@ public class bookHelper implements Serializable {
         FacesMessage msg = new FacesMessage("Produkt in Warenkorb hinzugefügt!", selectedItem.getBName());
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
+    
+    public void onRowUnselect(SelectEvent<Buch> event) {
+        log.info("[bookHelper] -> onRowUnSelect ...");
+        FacesMessage msg = new FacesMessage("Product Unselected", String.valueOf(event.getObject().getBName()));
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
 
     public Buch getMybook() {
         return mybook;
     }
 
     public void setMybook(Buch mybook) {
-        log.info("Neues Buch wurde ausgewählt: " + mybook.getBName());
+        log.info("[bookHelper] -> setMyBook: " + mybook.getBName());
         this.mybook = mybook;
     }
 
     public Buch getSelectedBook() {
+        log.info("[bookHelper] -> getSelectedBook: " + selectedBook);
+        
+        if (selectedBook == null){      
+        }
+        
         return selectedBook;
     }
 
     public void setSelectedBook(Buch selectedBook) {
+        log.info("[bookHelper] -> setSelectedBook: " + selectedBook.getBName());
         this.selectedBook = selectedBook;
     }
 

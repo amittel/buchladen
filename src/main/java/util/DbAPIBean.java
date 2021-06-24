@@ -103,6 +103,22 @@ public class DbAPIBean implements Serializable {
             return null;
         }
     }
+    
+    public Buch getBookByID(int id) {
+        try {
+            EntityManager em = emf.createEntityManager();
+            TypedQuery<Buch> query
+                    = em.createNamedQuery("Buch.findByBid", Buch.class);
+            query.setParameter("bid", id);
+
+            book = query.getSingleResult();
+            log.info("Buch mit ID gefunden");
+            return book;
+        } catch (Exception e) {
+            log.info("Es gibt kein Buch mit dieser ID");
+            return null;
+        }
+    }
 
     public List<Buch> getBookList() {
         EntityManager em = emf.createEntityManager();
@@ -268,7 +284,7 @@ public class DbAPIBean implements Serializable {
         return false;
     }
 
-    public boolean insertWarenkorbinDB(List<WarenkorbItem> items, double totalSum, String currentUserId, String lieferdatum) {
+    public boolean insertWarenkorbinDB(List<WarenkorbItem> items, double totalSum, String currentUserId, Date lieferdatum) {
 
         EntityManager em = emf.createEntityManager();
         // Workaround damit query klappt - wie anders lösen (?)
@@ -282,22 +298,6 @@ public class DbAPIBean implements Serializable {
         // Erhalte Kundenobjekt
         kunde = query.getSingleResult();
 
-        // Debugging - gleiches Lieferdatum
-        //String slieferDatum = "1998-12-30";
-        Date dLieferDatum = new Date();
-        DateFormat myDate = new SimpleDateFormat("dd.MM.yyyy");
-        try {
-            dLieferDatum = myDate.parse(lieferdatum);
-        } catch (ParseException ex) {
-            Logger.getLogger(DbAPIBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        // Debugging - Testing
-        java.util.Date date = new java.util.Date();
-        java.sql.Date lieferDatum = new java.sql.Date(date.getTime());
-        System.out.println("date.getTime(): " + date.getTime());
-        System.out.println("Lieferdatum: " + lieferDatum);
-
         try {
             ut.begin();
 
@@ -305,9 +305,9 @@ public class DbAPIBean implements Serializable {
             // und speicher diesen als eigene Bestellung ab
             em.joinTransaction();   // innerhalb der for-Schleife?
 
-            bestellung.setBLieferDatum(dLieferDatum);
+            bestellung.setBLieferDatum(lieferdatum);
             bestellung.setBStatus("offen");
-            bestellung.setBKommentar("Platzhalter");
+            bestellung.setBKommentar(" ");
             bestellung.setFkKid(kunde);
             em.persist(bestellung);
 

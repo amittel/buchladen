@@ -24,11 +24,12 @@
                             </h:column>                    
                             <h:column>
                                 <f:facet name="header">Einzelpreis</f:facet>
-                                <h:outputText value="#{pitem.book.BPreis}"/>
+                                <h:outputText value="#{pitem.book.BPreis}">
+                                    <f:convertNumber type="currency" currencySymbol="€" locale="de_DE" />
+                                </h:outputText>
                             </h:column>                                      
                             <h:column>
                                 <f:facet name="header">Menge</f:facet> 
-
 
                                 <!-- 
                                     Anzeige der derzeitig ausgewählen Stückmenge
@@ -42,51 +43,56 @@
                             </h:column>
                             <h:column>
                                 <f:facet name="header">Gesamtpreis</f:facet>
-                                <h:outputText id="gesamtpreis" value="#{pitem.book.BPreis * pitem.numberOfItems}"/>
+                                <h:outputText id="gesamtpreis" 
+                                              value="#{pitem.book.BPreis * pitem.numberOfItems}">
+                                    <f:convertNumber type="currency" currencySymbol="€" locale="de_DE" />
+                                </h:outputText>
                             </h:column> 
                         </h:dataTable>
                     </h:form>
                 </div>
             </div>
             <h:form>
-            <div class="row">
-                <div class="col">
-                    <h2>Lieferung</h2> 
-                    
-                    <h:panelGrid styleClass="table table-striped table-hover table-bordered">
+                <div class="row">
+                    <div class="col">
+                        <h2>Lieferdatum</h2> 
+                        <h:panelGrid>
 
-                        <f:facet name="header">Lieferdatum</f:facet>
-                        
+                            <ui:insert name="date-picker">
+                                <ui:include src="datePicker.xhtml" />
+                            </ui:insert> 
+                            <!--
                             <h:inputText  value="#{warenkorbBean.lieferdatum}"  validatorMessage="Datumsformat: DD.MM.YYYY">
                                 <f:validateRegex pattern="^\s*(3[01]|[12][0-9]|0?[1-9])\.(1[012]|0?[1-9])\.((?:19|20)\d{2})\s*$" />
                             </h:inputText>
-                        
-                    </h:panelGrid>
-                </div>
-                <div class="col">
-                    <h2>Gesamt</h2>
-                    <h:panelGrid
-                        columns = "2"
-                        styleClass="table table-striped table-hover table-bordered">
+                            -->
+                        </h:panelGrid>
+                    </div>
+                    <div class="col">
+                        <h2>Gesamt</h2>
+                        <h:panelGrid
+                            columns = "2"
+                            styleClass="table table-striped table-hover table-bordered">
 
-                        <h:outputLabel value = "Gesamtpreis: " />
-                        <h:outputText  value="#{warenkorbBean.totalSum}"/>
-
-                    </h:panelGrid>
+                            <h:outputLabel value = "Gesamtpreis: " />
+                            <h:outputText  value="#{warenkorbBean.totalSum}">
+                                <f:convertNumber type="currency" currencySymbol="€" locale="de_DE" />
+                            </h:outputText>
+                        </h:panelGrid>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    
+                <div class="row">
+                    <div class="col">
+
                         <h:commandButton 
                             value="Kaufen!"
                             action="#{warenkorbBean.insertWarenkorbinDB()}"  
                             class="btn btn-primary"
                             disabled="#{warenkorbBean.toggleBuyButton}"
-                            />                   
+                            />                         
+                    </div>
                 </div>
-            </div>
-                </h:form>
+            </h:form>
         </ui:define>
     </ui:composition> 
 </html>
