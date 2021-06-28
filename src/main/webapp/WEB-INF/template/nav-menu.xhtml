@@ -49,9 +49,14 @@
                                 </p:outputPanel>
 
                                 <f:facet name="footer">
-                                    <p:commandButton value="Anmelden" icon="pi pi-check" actionListener="#{loginBean.loginUser}"
-                                                     update="manage-product-content" process="manage-product-content @this"/>
-                                    <p:commandButton value="Abbrechen" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                                    <p:commandButton value="Anmelden" 
+                                                     icon="pi pi-check" 
+                                                     actionListener="#{loginBean.loginUser}"
+                                                     update="messages"
+                                                     process="manage-product-content @this"/>
+                                    <p:commandButton value="Abbrechen" 
+                                                     icon="pi pi-times" 
+                                                     onclick="PF('manageProductDialog').hide()"
                                                      class="ui-button-secondary"/>
                                 </f:facet>
                             </p:dialog>
@@ -174,9 +179,13 @@
                                 </p:outputPanel>
 
                                 <f:facet name="footer">
-                                    <p:commandButton value="Registrieren" icon="pi pi-check" actionListener="#{registerBean.registerUser()}"
-                                                     update="manage-register-content register-test" process="manage-register-content register-test @this"/>
-                                    <p:commandButton value="Abbrechen" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                                    <p:commandButton value="Registrieren" 
+                                                     icon="pi pi-check" 
+                                                     actionListener="#{registerBean.registerUser()}"
+                                                     update="manage-register-content register-test messages" 
+                                                     process="manage-register-content register-test @this"/>
+                                    <p:commandButton value="Abbrechen" icon="pi pi-times" 
+                                                     onclick="PF('manageProductDialog').hide()"
                                                      class="ui-button-secondary"/>
                                 </f:facet>
                             </p:dialog>

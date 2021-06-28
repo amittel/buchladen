@@ -23,6 +23,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.TypedQuery;
 import model.Account;
+import org.primefaces.PrimeFaces;
 import util.DbAPIBean;
 
 /**
@@ -111,10 +112,12 @@ public class loginBean {
                 }
             } else {
                 context.getExternalContext().getFlash().setKeepMessages(true);
-                FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login fehlgeschlagen!", "Error");
+                FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login fehlgeschlagen!", "");
                 context.addMessage("errorInfo", faceMsg);
             }
         }
+        
+        PrimeFaces.current().ajax().addCallbackParam("isLoggedIn", isLoggedIn);
     }
 
     public void logoutUser() {
@@ -141,7 +144,7 @@ public class loginBean {
             }
             System.out.println("Login OK!");
         } else {
-            FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bitte zuerst anmelden!", "login");
+            FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bitte zuerst anmelden!", "");
             System.out.println("Login NICHT ok!");
             context.addMessage("sucessInfo", faceMsg);
             //context.getExternalContext().redirect("warenkorb.xhtml");

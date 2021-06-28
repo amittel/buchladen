@@ -106,6 +106,7 @@ public class registerBean {
             context.getExternalContext().getFlash().setKeepMessages(true);  // Return the ExternalContext instance for this FacesContext instance.
             // This class allows the Faces API to be unaware of the nature of its containing application environment.
             context.getExternalContext().getSessionMap().put("user", account.getACCName());
+            context.getExternalContext().getSessionMap().put("userID", account.getAcid());
             // Setze den Ausgabetext der Fehlermeldung
             FacesMessage faceMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registrierung erfolgreich", "login");
             context.addMessage("sucessInfo", faceMsg);
